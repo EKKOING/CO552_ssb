@@ -1,4 +1,3 @@
-
 /**
 Class to run the Super Smash Bros Game
 @author Nicholas Lorentzen
@@ -6,5 +5,5 @@ Class to run the Super Smash Bros Game
 */
 public class SmashGame
 {
-
+    
 }
