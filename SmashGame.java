@@ -5,5 +5,9 @@ Class to run the Super Smash Bros Game
 */
 public class SmashGame
 {
-    
+
+    public static void main(String[] args) 
+    {
+        System.out.println("Hello, Would you like to play a game?");
+    }
 }

@@ -2,6 +2,24 @@
     "configurations": [
         {
             "type": "java",
+            "name": "CodeLens (Launch) - SmashGame",
+            "request": "launch",
+            "mainClass": "SmashGame"
+        },
+        {
+            "type": "java",
+            "name": "CodeLens (Launch) - Coord",
+            "request": "launch",
+            "mainClass": "Coord"
+        },
+        {
+            "type": "java",
+            "name": "CodeLens (Launch) - Pharah",
+            "request": "launch",
+            "mainClass": "Pharah"
+        },
+        {
+            "type": "java",
             "name": "CodeLens (Launch) - Player",
             "request": "launch",
             "mainClass": "Player"

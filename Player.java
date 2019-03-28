@@ -12,9 +12,9 @@ public class Player
 
     public static final int STARTHEALTH = 100;
     
-    public void Player() 
+    public Player() 
     {
-        Coord myPos = new Coord(0,0);
+        myPos = new Coord(0,0);
         healthAmt = STARTHEALTH;
         dmgDone = 0;
         dmgTaken = 0;

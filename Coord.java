@@ -8,7 +8,7 @@ public class Coord
     private int posX;
     private int posY;
 
-    public void Coord(int x, int y) 
+    public Coord(int x, int y) 
     {
         posX = x;
         posY = y;
@@ -32,5 +32,10 @@ public class Coord
     public boolean setY(int y) 
     {
         posY = y;
+    }
+
+    public static void main(String[] args) 
+    {
+        System.out.println("java");
     }
 }
