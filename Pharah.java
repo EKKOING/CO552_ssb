@@ -1,5 +1,3 @@
-import jdk.internal.cmm.SystemResourcePressureImpl;
-
 /**
 Class for the Pharah character inherits from player
 @author Nicholas Lorentzen

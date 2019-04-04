@@ -12,6 +12,7 @@ public class Coord
     {
         posX = x;
         posY = y;
+        
     }
 
     public int getX() 
@@ -24,12 +25,12 @@ public class Coord
         return posY;
     }
 
-    public boolean setX(int x) 
+    public void setX(int x) 
     {
         posX = x;
     }
 
-    public boolean setY(int y) 
+    public void setY(int y) 
     {
         posY = y;
     }
@@ -37,5 +38,16 @@ public class Coord
     public static void main(String[] args) 
     {
         System.out.println("java");
+
+        Coord where = new Coord(1,1);
+
+        System.out.println(where.getX());
+        System.out.println(where.getY());
+
+        where.setX(2);
+        where.setY(3);
+
+        System.out.println(where.getX());
+        System.out.println(where.getY());
     }
 }
