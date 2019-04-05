@@ -15,6 +15,7 @@ public class Pharah extends Player
         System.out.println("Pharah Player Created");
 
     }
+    
     /*
     Attack method
     @return true if successful attack
@@ -46,5 +47,6 @@ public class Pharah extends Player
 
         /* Tests all methods in class**/
         System.out.println(player1.attack() + ": Attack Successful");
+        System.out.println(player1.block() + ": Block Successful");
     }
 }

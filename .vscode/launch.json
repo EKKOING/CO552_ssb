@@ -2,6 +2,13 @@
     "configurations": [
         {
             "type": "java",
+            "name": "CodeLens (Launch) - Keyput",
+            "request": "launch",
+            "mainClass": "Keyput",
+            "projectName": "ssb_CO552"
+        },
+        {
+            "type": "java",
             "name": "CodeLens (Launch) - SmashGame",
             "request": "launch",
             "mainClass": "SmashGame"

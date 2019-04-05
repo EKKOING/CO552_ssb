@@ -44,6 +44,26 @@ public class Player
         return dmgDone;
     }
 
+    /*
+    Attack method
+    @return true if successful attack
+    **/
+    public boolean attack()
+    {
+        /* This method will always be overidden **/
+        return true;
+    }
+
+    /*
+    Block method
+    @return true if successful block
+    **/
+    public boolean block()
+    {
+        /* This method will always be overidden **/
+        return true;
+    }
+
     public static void main(String[] args) 
     {
         Player player1 = new Player();
@@ -53,5 +73,7 @@ public class Player
         System.out.println(player1.getDmgDone() + ": Damage Done");
         System.out.println(player1.getDmgTaken() + ": Damage Taken");
         System.out.println(player1.getPos());
+        System.out.println(player1.attack() + ": Attack Successful");
+        System.out.println(player1.block() + ": Block Successful");
     }
 }
