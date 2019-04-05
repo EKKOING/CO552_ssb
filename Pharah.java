@@ -9,12 +9,13 @@ public class Pharah extends Player
     {
         super();
 
-        System.out.println("New Pharah created");
+        System.out.println("Pharah Player Created");
 
     }
 
     public boolean attack()
     {
+        /* Shell Method (Obviously) - Will get more later **/
         return true;
     }
     
@@ -22,7 +23,13 @@ public class Pharah extends Player
     {
         Pharah player1 = new Pharah();
 
-        System.out.println(player1.attack());
+        /* Tests all inherited methods**/
+        System.out.println(player1.getHealth() + ": Current Health");
+        System.out.println(player1.getDmgDone() + ": Damage Done");
+        System.out.println(player1.getDmgTaken() + ": Damage Taken");
+        System.out.println(player1.getPos());
 
+        /* Tests all methods in class**/
+        System.out.println(player1.attack() + ": Attack Successful");
     }
 }

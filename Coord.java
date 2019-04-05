@@ -35,12 +35,14 @@ public class Coord
         posY = y;
     }
 
+    public String toString(){
+        return "Current Position (" + posX + "," + posY + ")";
+    }
     public static void main(String[] args) 
     {
-        System.out.println("java");
-
         Coord where = new Coord(1,1);
 
+        /* Testing Code **/
         System.out.println(where.getX());
         System.out.println(where.getY());
 
@@ -49,5 +51,7 @@ public class Coord
 
         System.out.println(where.getX());
         System.out.println(where.getY());
+
+        System.out.println(where);
     }
 }
