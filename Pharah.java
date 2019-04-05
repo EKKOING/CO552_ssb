@@ -5,6 +5,9 @@ Class for the Pharah character inherits from player
 */
 public class Pharah extends Player
 {
+    /*
+    Constructor for a Pharah player
+    **/
     public Pharah()
     {
         super();
@@ -12,10 +15,22 @@ public class Pharah extends Player
         System.out.println("Pharah Player Created");
 
     }
-
+    /*
+    Attack method
+    @return true if successful attack
+    **/
     public boolean attack()
     {
         /* Shell Method (Obviously) - Will get more later **/
+        return true;
+    }
+
+    /*
+    Block method
+    @return true if successful block
+    **/
+    public boolean block()
+    {
         return true;
     }
     

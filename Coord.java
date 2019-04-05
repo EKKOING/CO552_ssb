@@ -5,36 +5,62 @@ Class to hold a set of XY Coordinates
 */
 public class Coord
 {
+    /* Int to hold the X position **/
     private int posX;
+    /* Int to hold the Y position **/
     private int posY;
 
+    /*
+    Constructor for a Coord
+    @param x The x coordinate
+    @param y The y coordinate
+    **/
     public Coord(int x, int y) 
     {
         posX = x;
         posY = y;
-        
     }
 
+    /*
+    Returns x position
+    @return the integer x postion
+    **/
     public int getX() 
     {
         return posX;
     }
 
+    /*
+    Returns y position
+    @return the integer y postion
+    **/
     public int getY()
     {
         return posY;
     }
 
+    /*
+    Sets x position
+    @param x the integer x postion
+    **/
     public void setX(int x) 
     {
         posX = x;
     }
 
+    /*
+    Sets y position
+    @param y the integer y postion
+    **/
     public void setY(int y) 
     {
         posY = y;
     }
 
+    /*
+    Returns coord as a string
+    @return the string form of a Coord
+    **/
     public String toString(){
         return "Current Position (" + posX + "," + posY + ")";
     }
