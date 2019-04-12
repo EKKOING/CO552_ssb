@@ -1,5 +1,6 @@
 import java.awt.*;
 import javax.swing.*;
+import javax.swing.event.*;
 import java.awt.event.*;
 
 /**
@@ -7,14 +8,17 @@ Class for the Pharah character inherits from player
 @author Nicholas Lorentzen
 @version 2019/04/05
 */
-public class Keyput
+public class Keyput extends JPanel
 {
-    public Keyput()
+   private SmashGame myGame;
+
+    public Keyput(SmashGame game)
     {
-        KeyHandler kh = new KeyHandler();
-        //this.addKeyListener(kh);
-        //this.setFocusable(true);
-        //this.requestFocusInWindow();
+      myGame = game;
+
+      addKeyListener(new KeyHandler());
+      requestFocusInWindow();
+
     }
 
     private class KeyHandler implements KeyListener
@@ -38,6 +42,6 @@ public class Keyput
    }
 
     public static void main(String[] args) {
-        Keyput test = new Keyput();
+        
     }
 }
