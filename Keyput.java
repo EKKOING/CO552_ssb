@@ -2,6 +2,7 @@ import java.awt.*;
 import javax.swing.*;
 import javax.swing.event.*;
 import java.awt.event.*;
+import java.util.ArrayList;
 
 /**
 Class for the Pharah character inherits from player
@@ -10,15 +11,37 @@ Class for the Pharah character inherits from player
 */
 public class Keyput extends JPanel
 {
+   public ArrayList<Key> dictionary;
+   public Key keyTemp;
    private SmashGame myGame;
 
     public Keyput(SmashGame game)
     {
       myGame = game;
-
+      createList();
       addKeyListener(new KeyHandler());
       requestFocusInWindow();
+    }
 
+    public void createList()
+    {
+      for(int idx = 0; idx < 525; idx++)
+      {
+         Key tempKey = new Key(idx, false);
+         dictionary.add(tempKey);
+      }
+    }
+
+    public Key getKey(int num)
+    {
+       for(Key temp : dictionary)
+       {
+          if(temp.keyNumber == num)
+          {
+             return temp;
+          }
+       }
+       return null;
     }
 
     private class KeyHandler implements KeyListener
@@ -26,8 +49,8 @@ public class Keyput extends JPanel
       public void keyPressed(KeyEvent e)
       {         
          int code = e.getKeyCode();
+         keyTemp = getKey(code);
          
-         System.out.println(code);
       }
       
       public void keyReleased(KeyEvent e)
@@ -39,6 +62,11 @@ public class Keyput extends JPanel
       {
          //nothing
       }
+   }
+
+   public ArrayList<Key> getKeys()
+   {
+      return dictionary;
    }
 
     public static void main(String[] args) {
