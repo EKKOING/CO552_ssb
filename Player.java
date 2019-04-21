@@ -6,7 +6,7 @@ Class from which all characters inherit properties from
 public class Player
 {
     /* Coord object that holds the postion of the player **/
-    private Coord myPos;
+    public Coord myPos;
 
     /* Int to hold the health stat **/
     private int healthAmt;

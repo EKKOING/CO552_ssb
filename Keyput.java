@@ -25,7 +25,8 @@ public class Keyput extends JPanel
 
     public void createList()
     {
-      for(int idx = 0; idx < 525; idx++)
+      ArrayList<Key> dictionary = new ArrayList<Key>();
+      for(int idx = 0; idx < 200; idx++)
       {
          Key tempKey = new Key(idx, false);
          dictionary.add(tempKey);
@@ -41,7 +42,9 @@ public class Keyput extends JPanel
              return temp;
           }
        }
-       return null;
+       Key tempKey = new Key(num, false);
+       dictionary.add(tempKey);
+       return tempKey;
     }
 
     private class KeyHandler implements KeyListener
@@ -49,13 +52,14 @@ public class Keyput extends JPanel
       public void keyPressed(KeyEvent e)
       {         
          int code = e.getKeyCode();
-         keyTemp = getKey(code);
+         getKey(code).updatekey(true);
          
       }
       
       public void keyReleased(KeyEvent e)
       {
-         //nothing
+         int code = e.getKeyCode();
+         getKey(code).updatekey(false);
       }
       
       public void keyTyped(KeyEvent e)
@@ -70,6 +74,11 @@ public class Keyput extends JPanel
    }
 
     public static void main(String[] args) {
-        
+       /** I have determined that it would take longer to write out test code than to have to set breakpoints 
+        * for the debugger each time I open the program, hence there is no code to test this method here.
+        * This is due to the fact that attempting to instantiate the keyput class requires creating the game class
+        * which creates its own Keyput class. You also wouldn't be able to imitate keystrokes here which renders 
+        * everything useless that this class has.
+       */
     }
 }

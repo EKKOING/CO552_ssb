@@ -8,8 +8,8 @@ Class to run the Super Smash Bros Game
 */
 public class SmashGame
 {
-    public static final int APP_WIDTH = 800;
-    public static final int APP_HEIGHT = 600;
+    public static final int APP_WIDTH = 1440;
+    public static final int APP_HEIGHT = 900;
  
     public static final int XMAX = 400;
     public static final int YMAX = 600;
