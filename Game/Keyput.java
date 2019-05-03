@@ -3,6 +3,7 @@ import javax.swing.*;
 import javax.swing.event.*;
 import java.awt.event.*;
 import java.util.ArrayList;
+import CO552_ssb.Key;
 
 /**
 Class for the Pharah character inherits from player
@@ -26,7 +27,7 @@ public class Keyput extends JPanel
     public void createList()
     {
       ArrayList<Key> dictionary = new ArrayList<Key>();
-      for(int idx = 0; idx < 200; idx++)
+      for(int idx = 0; idx < 400; idx++)
       {
          Key tempKey = new Key(idx, false);
          dictionary.add(tempKey);

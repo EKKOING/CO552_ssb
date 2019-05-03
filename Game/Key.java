@@ -1,3 +1,4 @@
+package Key;
 /**
 Key Class to hold pressed down keys and their lengths
 @author Nicholas Lorentzen
