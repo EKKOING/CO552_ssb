@@ -15,55 +15,60 @@ public class Keyput extends JPanel
    public ArrayList<Key> dictionary;
    public Key keyTemp;
    private SmashGame myGame;
+   public int lastKeyIdx;
 
     public Keyput(SmashGame game)
     {
+      dictionary = new ArrayList<Key>();
       myGame = game;
-      createList();
+      //createList();
       addKeyListener(new KeyHandler());
       requestFocusInWindow();
     }
 
     public void createList()
     {
-      ArrayList<Key> dictionary = new ArrayList<Key>();
       for(int idx = 0; idx < 600; idx++)
       {
          Key tempKey = new Key(idx, false);
          dictionary.add(tempKey);
       }
-      
     }
 
     public Key getKey(int num)
     {
-       for(var temp : dictionary)
+      
+      for (int idx = 0; idx < dictionary.size(); idx++)
        {
-          if(temp.keyNumber == num)
+          if(dictionary.get(idx).keyNumber == num)
           {
-             return temp;
+             lastKeyIdx = idx;
+             return dictionary.get(idx);
           }
        }
        Key tempKey = new Key(num, false);
        dictionary.add(tempKey);
-       return tempKey;
+       return getKey(num);
     }
 
     private class KeyHandler implements KeyListener
    {
       public void keyPressed(KeyEvent e)
       {
-         System.out.println(e);
+         //System.out.println(e);
          int code = e.getKeyCode();
-         getKey(code).updatekey(true);
-         
+         Key temp = getKey(code);
+         temp.updatekey(true);
+         dictionary.set(lastKeyIdx, temp);
       }
       
       public void keyReleased(KeyEvent e)
       {
-         System.out.println(e);
+         //System.out.println(e);
          int code = e.getKeyCode();
-         getKey(code).updatekey(false);
+         Key temp = getKey(code);
+         temp.updatekey(false);
+         dictionary.set(lastKeyIdx, temp);
       }
       
       public void keyTyped(KeyEvent e)
@@ -84,5 +89,6 @@ public class Keyput extends JPanel
         * which creates its own Keyput class. You also wouldn't be able to imitate keystrokes here which renders 
         * everything useless that this class has.
        */
+
     }
 }

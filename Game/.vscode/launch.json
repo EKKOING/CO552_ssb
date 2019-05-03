@@ -4,7 +4,7 @@
             "type": "java",
             "name": "CodeLens (Launch) - Keyput",
             "request": "launch",
-            "mainClass": "Keyput"
+            "mainClass": "SmashGame"
         },
         {
             "type": "java",
