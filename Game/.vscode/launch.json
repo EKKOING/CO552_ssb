@@ -1,0 +1,16 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "CodeLens (Launch) - Keyput",
+            "request": "launch",
+            "mainClass": "Keyput"
+        },
+        {
+            "type": "java",
+            "name": "CodeLens (Launch) - SmashGame",
+            "request": "launch",
+            "mainClass": "SmashGame"
+        }
+    ]
+}

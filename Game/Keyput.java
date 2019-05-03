@@ -27,16 +27,17 @@ public class Keyput extends JPanel
     public void createList()
     {
       ArrayList<Key> dictionary = new ArrayList<Key>();
-      for(int idx = 0; idx < 400; idx++)
+      for(int idx = 0; idx < 600; idx++)
       {
          Key tempKey = new Key(idx, false);
          dictionary.add(tempKey);
       }
+      
     }
 
     public Key getKey(int num)
     {
-       for(Key temp : dictionary)
+       for(var temp : dictionary)
        {
           if(temp.keyNumber == num)
           {
@@ -51,7 +52,8 @@ public class Keyput extends JPanel
     private class KeyHandler implements KeyListener
    {
       public void keyPressed(KeyEvent e)
-      {         
+      {
+         System.out.println(e);
          int code = e.getKeyCode();
          getKey(code).updatekey(true);
          
@@ -59,6 +61,7 @@ public class Keyput extends JPanel
       
       public void keyReleased(KeyEvent e)
       {
+         System.out.println(e);
          int code = e.getKeyCode();
          getKey(code).updatekey(false);
       }
