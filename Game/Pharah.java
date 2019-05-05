@@ -8,12 +8,10 @@ public class Pharah extends Player
     /*
     Constructor for a Pharah player
     **/
-    public Pharah()
+    public Pharah(int myId, int xStart, int yStart)
     {
-        super();
-
+        super(myId, xStart, yStart);
         System.out.println("Pharah Player Created");
-
     }
     
     /*

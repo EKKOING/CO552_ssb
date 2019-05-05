@@ -1,7 +1,7 @@
 /**
 Key Class to hold pressed down keys and their lengths
 @author Nicholas Lorentzen
-@version 2019/04/18
+@version 2019/05/04
 */
 public class Key
 {

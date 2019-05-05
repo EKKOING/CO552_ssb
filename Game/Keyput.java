@@ -7,9 +7,9 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 /**
-Class for the Pharah character inherits from player
+Class to be able to understand multiple keystrokes and store them in an ArrayList for exporting
 @author Nicholas Lorentzen
-@version 2019/04/05
+@version 2019/05/04
 */
 public class Keyput extends JPanel
 {
@@ -69,7 +69,15 @@ public class Keyput extends JPanel
          //System.out.println(e);
          int code = e.getKeyCode();
          Key temp = getKey(code);
-         temp.updatekey(true);
+
+         if(!(temp.keyState))
+         {
+            temp.updatekey(true);
+
+            //Debug Code
+            System.out.println("Key #" + temp.keyNumber + " has been pressed");
+         }
+
          dictionary.set(lastKeyIdx, temp);
       }
       
@@ -80,6 +88,9 @@ public class Keyput extends JPanel
          Key temp = getKey(code);
          temp.updatekey(false);
          dictionary.set(lastKeyIdx, temp);
+
+         //Debug Code
+         System.out.println("Key #" + temp.keyNumber + " was held down for " + temp.pressLength + " seconds");
       }
       
       public void keyTyped(KeyEvent e)
@@ -100,6 +111,9 @@ public class Keyput extends JPanel
          for(Key myKey : dictionary)
          {
             myKey.updatekey(myKey.keyState);
+
+            //Debug Code
+            if(myKey.keyState) {System.out.println("Key #" + myKey.keyNumber + " is still being held down");}
          }
       }
    }

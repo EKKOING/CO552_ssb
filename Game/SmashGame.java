@@ -4,15 +4,12 @@ import javax.swing.*;
 /**
 Class to run the Super Smash Bros Game
 @author Nicholas Lorentzen
-@version 2019/03/25
+@version 2019/05/04
 */
 public class SmashGame
 {
     public static final int APP_WIDTH = 1440;
     public static final int APP_HEIGHT = 900;
- 
-    public static final int XMAX = 400;
-    public static final int YMAX = 600;
     
     public static final double SPEED_MIN = 0.0;
     public static final double SPEED_MAX = 20.0;
@@ -25,8 +22,11 @@ public class SmashGame
  
     private JFrame myApp;
     private Keyput myKeyput;
+
+    /** App panel */
+   private JPanel myAppPanel;
     
-    //private OrbCollection myCollection;
+   private Players myPlayers;
     
     private boolean isPaused;
     
@@ -48,7 +48,7 @@ public class SmashGame
     
     public void run()
     {
-       //myCollection = new OrbCollection(this);
+       myPlayers = new Players(this);
        isPaused = true;
        setupFrame();
     }
@@ -62,7 +62,20 @@ public class SmashGame
        myKeyput = new Keyput(this);
        myKeyput.setFocusable(true);
        
-       myApp.add(myKeyput);
+
+       //myApp = new JFrame();
+      
+       //myTitlePanel = new OrbTitleScreen(this);
+      
+       //myGameScreen = new GameScreen(this, myPlayers, myKeyput);
+       //myGameScreen.setFocusable(true);
+      
+       //myAppPanel = new JPanel(new CardLayout());
+       //myAppPanel.add(myTitlePanel, TITLE);
+       //myAppPanel.add(myOrbPanel, ORB);
+      
+       //myApp.add(myAppPanel);
+       //myApp.add(myKeyput);
        myApp.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
        myApp.setVisible(true);
     } 
