@@ -3,7 +3,8 @@ import javax.swing.*;
 import javax.swing.event.*;
 import java.awt.event.*;
 import java.util.ArrayList;
-import CO552_ssb.Key;
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
 Class for the Pharah character inherits from player
@@ -17,10 +18,20 @@ public class Keyput extends JPanel
    private SmashGame myGame;
    public int lastKeyIdx;
 
+   private static final long INCREMENT = 10;
+
+   //private Clock keyUpdater;
+   private Timer t;
+
     public Keyput(SmashGame game)
     {
       dictionary = new ArrayList<Key>();
       myGame = game;
+
+      
+      t = new Timer();
+      t.scheduleAtFixedRate(new Clock(), (long) 0, INCREMENT);
+
       //createList();
       addKeyListener(new KeyHandler());
       requestFocusInWindow();
@@ -82,6 +93,17 @@ public class Keyput extends JPanel
       return dictionary;
    }
 
+   private class Clock extends TimerTask
+   {
+      public void run()
+      {
+         for(Key myKey : dictionary)
+         {
+            myKey.updatekey(myKey.keyState);
+         }
+      }
+   }
+
     public static void main(String[] args) {
        /** I have determined that it would take longer to write out test code than to have to set breakpoints 
         * for the debugger each time I open the program, hence there is no code to test this method here.
@@ -89,6 +111,5 @@ public class Keyput extends JPanel
         * which creates its own Keyput class. You also wouldn't be able to imitate keystrokes here which renders 
         * everything useless that this class has.
        */
-
     }
 }

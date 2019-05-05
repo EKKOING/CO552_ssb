@@ -5,7 +5,6 @@ Key Class to hold pressed down keys and their lengths
 */
 public class Key
 {
-
     private static final double INCREMENT = 0.01;
     public int keyNumber;
     public double pressLength;
