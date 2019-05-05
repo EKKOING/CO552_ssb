@@ -10,23 +10,13 @@ public class SmashGame
 {
     public static final int APP_WIDTH = 1440;
     public static final int APP_HEIGHT = 900;
-    
-    public static final double SPEED_MIN = 0.0;
-    public static final double SPEED_MAX = 20.0;
-    
-    public static final int ORB_MIN = 5;
-    public static final int ORB_MAX = 25;
-    
-    public static final String TITLE = "Title";
-    public static final String ORB = "Orb";
  
     private JFrame myApp;
-    private Keyput myKeyput;
+
+    private GameScreen myGameScreen;
 
     /** App panel */
-   private JPanel myAppPanel;
-    
-   private Players myPlayers;
+    private JPanel myAppPanel;
     
     private boolean isPaused;
     
@@ -48,8 +38,7 @@ public class SmashGame
     
     public void run()
     {
-       myPlayers = new Players(this);
-       isPaused = true;
+       isPaused = false;
        setupFrame();
     }
  
@@ -57,24 +46,15 @@ public class SmashGame
     {
        myApp = new JFrame();
        myApp.setSize(APP_WIDTH, APP_HEIGHT);
-    
-       
-       myKeyput = new Keyput(this);
-       myKeyput.setFocusable(true);
-       
-
-       //myApp = new JFrame();
       
-       //myTitlePanel = new OrbTitleScreen(this);
-      
-       //myGameScreen = new GameScreen(this, myPlayers, myKeyput);
+       myGameScreen = new GameScreen(this);
        //myGameScreen.setFocusable(true);
       
-       //myAppPanel = new JPanel(new CardLayout());
+       myAppPanel = new JPanel(new CardLayout());
        //myAppPanel.add(myTitlePanel, TITLE);
-       //myAppPanel.add(myOrbPanel, ORB);
+       myAppPanel.add("Game", myGameScreen);
       
-       //myApp.add(myAppPanel);
+       myApp.add(myAppPanel);
        //myApp.add(myKeyput);
        myApp.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
        myApp.setVisible(true);

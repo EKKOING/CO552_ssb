@@ -1,4 +1,9 @@
 import java.awt.event.KeyEvent;
+import java.awt.*;
+import java.awt.image.*;
+import java.awt.geom.*;
+import java.io.*;
+import javax.imageio.*;
 
 /**
 Class from which all characters inherit properties from
@@ -20,6 +25,8 @@ public class Player
     /* Int to hold the damage taken stat **/
     private int dmgTaken;
 
+    /* Image Representation **/
+    public BufferedImage myImage;
 
     /*Key Bindings - Will be updated to become variable later **/
     public int moveLeft;
@@ -130,9 +137,18 @@ public class Player
         }
     }
 
+    /**
+    Draws orb
+    @param g2 Graphics object passthrough
+    */
+    public void drawMe(Graphics2D g2)
+    {
+        //Always Overidden
+    }
+
     public static void main(String[] args) 
     {
-        Player player1 = new Player();
+        Player player1 = new Player(1, 1, 1);
 
         /* Test all methods **/
         System.out.println(player1.getHealth() + ": Current Health");
