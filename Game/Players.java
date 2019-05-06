@@ -82,8 +82,8 @@ public class Players {
      */
     public void setupPlayers() {
         myPlayers.clear();
-        myPlayers.add(new Pharah(1, 10, 676));
-        // myPlayers.add(new Pharah(2, 1430, 10));
+        myPlayers.add(new Pharah(1, 93, 867, this));
+        myPlayers.add(new Pharah(2, 1350, 867, this));
     }
 
     /**
@@ -99,9 +99,7 @@ public class Players {
                     Player o = myPlayers.get(idx);
                     // checkForCollision(o);
                     // o.checkForBounce();
-                    for (Key temp : myKeyput.getKeys()) {
-                        o.move(temp);
-                    }
+                    o.move(myKeyput.getKeys());
                     //o.drawMe(Graphics2D);
                 }
             }

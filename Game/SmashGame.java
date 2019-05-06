@@ -48,7 +48,7 @@ public class SmashGame
        myApp.setSize(APP_WIDTH, APP_HEIGHT);
       
        myGameScreen = new GameScreen(this);
-       //myGameScreen.setFocusable(true);
+       myGameScreen.setFocusable(true);
       
        myAppPanel = new JPanel(new CardLayout());
        //myAppPanel.add(myTitlePanel, TITLE);

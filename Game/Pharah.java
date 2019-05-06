@@ -18,9 +18,9 @@ public class Pharah extends Player
     /*
     Constructor for a Pharah player
     **/
-    public Pharah(int myId, int xStart, int yStart)
+    public Pharah(int myId, int xStart, int yStart, Players list)
     {
-        super(myId, xStart, yStart);
+        super(myId, xStart, yStart, list);
         try
         {
             //InputStream is = getClass().getResourceAsStream("graphics/characters/pharah/pharah.png");
@@ -63,7 +63,7 @@ public class Pharah extends Player
         //g2.setColor(myColor);
         //g2.fill(spot);
 
-        g2.drawImage(myImage, (int) myPos.getX(), (int) myPos.getY(), null);
+        g2.drawImage(myImage, (int) myPos.getX() - 83, (int) myPos.getY() + 191, null);
     }
     
     public static void main(String[] args) 

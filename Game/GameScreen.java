@@ -25,6 +25,7 @@ public class GameScreen extends JPanel {
 
         this.add(myGamePanel);
         this.add(myKeyput);
+        this.setVisible(true);
         this.setFocusable(true);
         this.requestFocusInWindow();
     }
