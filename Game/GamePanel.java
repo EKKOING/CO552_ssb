@@ -25,6 +25,9 @@ public class GamePanel extends JPanel {
         myPlayers = player;
         myApp = app;
 
+        this.setVisible(true);
+        this.setFocusable(true);
+
         FieldUpdater updater = new FieldUpdater();
         updater.start();
     }

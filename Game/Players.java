@@ -86,6 +86,18 @@ public class Players {
         myPlayers.add(new Pharah(2, 1350, 867, this));
     }
 
+    public Player findPlayer(int id)
+    {
+        for(Player temp : myPlayers)
+        {
+            if(temp.myId == id)
+            {
+                return temp;
+            }
+        }
+        return null;
+    }
+
     /**
      * Runs tasks on the players
      */

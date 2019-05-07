@@ -57,6 +57,11 @@ public class Coord
         posY = y;
     }
 
+    public Coord checkDistance(Coord otherCoord)
+    {
+        return new Coord(posX - otherCoord.getX(), posY - otherCoord.getY());
+    }
+
     /*
     Returns coord as a string
     @return the string form of a Coord

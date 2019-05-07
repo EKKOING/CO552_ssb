@@ -19,12 +19,15 @@ public class Player {
     /* Id number to identify which player this represents **/
     public int myId;
 
+    /* Id number of opponent **/
+    public int enemyId;
+
     /* Int to hold the health stat **/
     public int healthAmt;
     /* Int to hold the damage done stat **/
-    private int dmgDone;
+    public int dmgDone;
     /* Int to hold the damage taken stat **/
-    private int dmgTaken;
+    public int dmgTaken;
 
     /* Image Representation **/
     public BufferedImage myImage;
@@ -33,6 +36,9 @@ public class Player {
     public int moveLeft;
     public int moveRight;
     public int moveAttack;
+
+    /* Direction currently facing **/
+    public boolean facingRight;
 
     /* Cooldowns for moves (Currently not implemented) **/
     public boolean canWalk;
@@ -47,7 +53,11 @@ public class Player {
 
     public Player(int playerNum, int xStart, int yStart, Players list) {
         myId = playerNum;
+        enemyId = 2;
+        if(myId == 2) {enemyId = 1;}
+
         myPos = new Coord(xStart, yStart);
+
         healthAmt = STARTHEALTH;
         canWalk = true;
         canAttack = true;
@@ -111,6 +121,7 @@ public class Player {
         if (myPos.getX() > 10) {
             myPos.setX(myPos.getX() - 1);
             canWalk = false;
+            facingRight = false;
             new CooldownTracker(this, walkCD, "canWalk");
         }
     }
@@ -119,6 +130,7 @@ public class Player {
         if (myPos.getX() < 1430) {
             myPos.setX(myPos.getX() + 1);
             canWalk = false;
+            facingRight = true;
             new CooldownTracker(this, 3, "canWalk");
         }
     }
@@ -149,14 +161,16 @@ public class Player {
     }
 
     public static void main(String[] args) {
-        Player player1 = new Player(1, 1, 1);
+        //Player player1 = new Player(1, 1, 1);
 
         /* Test all methods **/
+        /*
         System.out.println(player1.getHealth() + ": Current Health");
         System.out.println(player1.getDmgDone() + ": Damage Done");
         System.out.println(player1.getDmgTaken() + ": Damage Taken");
         System.out.println(player1.getPos());
         System.out.println(player1.attack() + ": Attack Successful");
         System.out.println(player1.block() + ": Block Successful");
+        **/
     }
 }
