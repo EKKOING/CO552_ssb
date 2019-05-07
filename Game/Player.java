@@ -17,7 +17,7 @@ public class Player {
     /** Default Height and Width */
     public static final int MY_HEIGHT = 191;
     public static final int MY_WIDTH = 166;
-    
+
     /* Coord object that holds the postion of the player **/
     public Coord myPos;
 
@@ -56,6 +56,12 @@ public class Player {
     /* Int to hold the default health to start with **/
     public static final int STARTHEALTH = 100;
 
+    /**
+     * @param playerNum Id number to assign the player (1 or 2)
+     * @param xStart X location to start player at
+     * @param yStart Y location to start player at
+     * @param list Players class passthrough
+     */
     public Player(int playerNum, int xStart, int yStart, Players list) {
         myId = playerNum;
         enemyId = 2;
@@ -72,6 +78,9 @@ public class Player {
         System.out.print("Player of type ");
     }
 
+    /**
+     * Sets keybindings based off of ID num
+     */
     private void setKeybindings() {
         if (myId == 1) {
             moveLeft = KeyEvent.VK_A;
@@ -86,42 +95,59 @@ public class Player {
         }
     }
 
+    /**
+     * Gets current health
+     * @return the current health amount
+     */
     public int getHealth() {
         return healthAmt;
     }
 
+    /**
+     * Gets current postion
+     * @return the current position as a Coord object
+     */
     public Coord getPos() {
         return myPos;
     }
 
+    /**
+     * Gets the damage taken
+     * @return the damage taken as an int
+     */
     public int getDmgTaken() {
         return dmgTaken;
     }
 
+    /**
+     * Gets the damage done
+     * @return the damage done as an int
+     */
     public int getDmgDone() {
         return dmgDone;
     }
 
-    /*
-     * Attack method
-     * 
+    /**
+     * Attack method (Just a shell)
      * @return true if successful attack
-     **/
+     */
     public boolean attack() {
         /* This method will always be overidden **/
         return true;
     }
 
-    /*
-     * Block method
-     * 
+    /**
+     * Block method (Just a shell)
      * @return true if successful block
-     **/
+     */
     public boolean block() {
         /* This method will always be overidden **/
         return true;
     }
 
+    /**
+     * Default walk left method
+     */
     public void walkLeft() {
         if (myPos.getX() > 10) {
             myPos.setX(myPos.getX() - 1);
@@ -131,6 +157,9 @@ public class Player {
         }
     }
 
+    /**
+     * Default walk right method
+     */
     public void walkRight() {
         if (myPos.getX() < 1430) {
             myPos.setX(myPos.getX() + 1);
@@ -140,6 +169,10 @@ public class Player {
         }
     }
 
+    /**
+     * Executes moves on the player based off of key input
+     * @param myList Key list generated from Keyput class
+     */
     public void move(ArrayList<Key> myList) {
         for (Key currentKey : myList) {
             if (!(currentKey.keyState)) {

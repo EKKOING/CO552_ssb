@@ -14,16 +14,27 @@ import java.util.TimerTask;
  * @version 2019/05/04
  */
 public class Keyput extends JPanel {
+   /** List of keys pressed */
    public ArrayList<Key> dictionary;
+   /** Temporary key used in multimethod operations */
    public Key keyTemp;
+   /** SmashGame passthrough for gamestate */
    private SmashGame myGame;
+   /** Index of the last key used */
    public int lastKeyIdx;
 
+   /** Delay between adding time to each keys press */
    private static final long INCREMENT = 10;
 
    // private Clock keyUpdater;
+
+   /** Thread to update keypress lengths */
    private Timer t;
 
+   /**
+    * Constructor
+    * @param game SmashGame passthrough for pausing
+    */
    public Keyput(SmashGame game) {
       dictionary = new ArrayList<Key>();
       myGame = game;
@@ -36,6 +47,7 @@ public class Keyput extends JPanel {
       requestFocusInWindow();
    }
 
+   /** Initilasizes list (Not In Use) */
    public void createList() {
       for (int idx = 0; idx < 600; idx++) {
          Key tempKey = new Key(idx, false);
@@ -43,6 +55,12 @@ public class Keyput extends JPanel {
       }
    }
 
+   /**
+    * Looks for a key in the dictionary and returns it
+    * If the key isnt found it creates a new key with the number specified
+    * @param num the keynumber of the key to look for
+    * @return the Key found
+    */
    public Key getKey(int num) {
 
       for (int idx = 0; idx < dictionary.size(); idx++) {
@@ -56,7 +74,9 @@ public class Keyput extends JPanel {
       return getKey(num);
    }
 
+   /** Keyhandler class */
    private class KeyHandler implements KeyListener {
+      /** Manages what happens on a keypress */
       public void keyPressed(KeyEvent e) {
          // System.out.println(e);
          int code = e.getKeyCode();
@@ -72,6 +92,7 @@ public class Keyput extends JPanel {
          dictionary.set(lastKeyIdx, temp);
       }
 
+      /** Manages what happens on a key release */
       public void keyReleased(KeyEvent e) {
          // System.out.println(e);
          int code = e.getKeyCode();
@@ -88,10 +109,15 @@ public class Keyput extends JPanel {
       }
    }
 
+   /**
+    * Returns the dictionary for external processing
+    * @return the dictionary of keys as an ArrayList
+    */
    public ArrayList<Key> getKeys() {
       return dictionary;
    }
 
+   /** Thread to handle updating Keys */
    private class Clock extends TimerTask {
       public void run() {
          for (Key myKey : dictionary) {

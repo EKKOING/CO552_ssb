@@ -7,22 +7,24 @@ import javax.swing.*;
  * displayed
  * 
  * @author Nicholas Lorentzen
- * @version 04/28/2019
+ * @version 05/05/2019
  */
 public class GamePanel extends JPanel {
+    /** Game passthrough */
     private SmashGame myApp;
 
+    /** Players passthrough */
     private Players myPlayers;
 
     /**
-     * checks to see if the game is paused
+     * Creates new GamePanel
      * 
      * @param app  the App passthrough
-     * @param orbs the Orb Collection
+     * @param players the Players passthrough
      */
-    public GamePanel(SmashGame app, Players player) {
+    public GamePanel(SmashGame app, Players players) {
         super();
-        myPlayers = player;
+        myPlayers = players;
         myApp = app;
 
         this.setVisible(true);
@@ -52,7 +54,7 @@ public class GamePanel extends JPanel {
     }
 
     /**
-     * Thread to repaint screen
+     * Thread to handle repainting screen
      */
     private class FieldUpdater extends Thread {
         /**

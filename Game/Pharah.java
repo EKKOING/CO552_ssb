@@ -13,15 +13,22 @@ Class for the Pharah character inherits from player
 */
 public class Pharah extends Player
 {
+    /** Image to draw */
     public BufferedImage myImage;
 
+    /** Height of Pharah in pixels */
     public static final int MY_HEIGHT = 191;
-
+    /** Width of Pharah in pixels */
     public static final int MY_WIDTH = 166;
     
-    /*
-    Constructor for a Pharah player
-    **/
+
+    /**
+     * Constructs a player of type pharah
+     * @param myId the id of the player (1 or 2)
+     * @param xStart the x start location
+     * @param yStart the y start location
+     * @param list Players class passthrough to be able to access enemies
+     */
     public Pharah(int myId, int xStart, int yStart, Players list)
     {
         super(myId, xStart, yStart, list);
@@ -38,16 +45,16 @@ public class Pharah extends Player
         System.out.println("Pharah Created \n");
     }
     
-    /*
-    Basic Melee attack
-    @return true if successful attack
-    **/
+    /**
+    * Basic Melee attack
+    * @return true if successful attack
+    */
     public boolean attack()
     {
         Player enemy = otherPlayers.findPlayer(enemyId);
         Coord enemyPos = enemy.getPos();
         Coord distToEnemy = myPos.checkDistance(enemy.getPos());
-        int damage = 0;
+        //int damage = 0;
         if(facingRight && distToEnemy.getX() > 0 && distToEnemy.getX() < MY_WIDTH)
         {
             if(myPos.getY() + MY_HEIGHT >= enemyPos.getY() && myPos.getY() <= enemyPos.getY() + enemy.MY_HEIGHT)
@@ -66,20 +73,21 @@ public class Pharah extends Player
                 return true;
             }
         }
+        return false;
     }
 
-    /*
-    Block method
-    @return true if successful block
-    **/
+    /**
+    * Block method
+    * @return true if successful block
+    */
     public boolean block()
     {
         return true;
     }
 
     /**
-    Draws orb
-    @param g2 Graphics object passthrough
+    * Draws Pharah
+    * @param g2 Graphics object passthrough
     */
     public void drawMe(Graphics2D g2)
     {
@@ -87,7 +95,7 @@ public class Pharah extends Player
         //g2.setColor(myColor);
         //g2.fill(spot);
 
-        g2.drawImage(myImage, (int) myPos.getX() - 83, (int) myPos.getY() + 191, null);
+        g2.drawImage(myImage, (int) myPos.getX() - (MY_WIDTH / 2), (int) myPos.getY() + MY_HEIGHT, null);
     }
     
     public static void main(String[] args) 

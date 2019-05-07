@@ -7,13 +7,21 @@ import javax.swing.*;
  * @version 2019/05/05
  */
 public class GameScreen extends JPanel {
+    /** Keyput class for handling User Input */
     public Keyput myKeyput;
+    /** Players class for managing the players */
     public Players myPlayers;
+    /** Passthrough of the SmashGame class to allow reference to the gamestate */
     public SmashGame myGame;
 
+    /** JPanel to use */
     private GamePanel myGamePanel;
     //private Keyput myKeyPanel;
 
+    /**
+     * Constructs a GameScreen
+     * @param game Game passthrough
+     */
     public GameScreen(SmashGame game) {
         myGame = game;
         myKeyput = new Keyput(myGame);

@@ -8,17 +8,15 @@ import java.awt.geom.*;
  * Manages the players in a Smash Game
  * 
  * @author Nicholas Lorentzen
- * @version 04/28/2019
+ * @version 05/06/2019
  */
 public class Players {
-    /** Start speed */
+    /** State of the game */
     public static boolean gameRunning;
-    /** Num orbs */
+    /** Number of players */
     public static final int NUM_PLAYERS = 2;
     /** Time between updates in ms */
     public static final int UPDATE_DELAY = 10;
-    /** Amount to bounce */
-    // public static final double BOUNCE_AMT = (Orb.SIZE / 2);
 
     /** List of players */
     private ArrayList<Player> myPlayers;
@@ -30,12 +28,14 @@ public class Players {
     /** Orb App */
     private SmashGame myGame;
 
+    /** Keyput passthrough */
     public Keyput myKeyput;
 
     /**
      * Creates new collection
      * 
      * @param game SmashGame passthrough
+     * @param keyput Keyput passthrough
      */
     public Players(SmashGame game, Keyput keyput) {
         myGame = game;
@@ -50,17 +50,15 @@ public class Players {
     }
 
     /**
-     * Gets num orbs
-     * 
-     * @return number of orbs
+     * Gets the current number of players
+     * @return number of players
      */
     public int getNumPlayers() {
         return myNumPlayers;
     }
 
     /**
-     * Returns arraylist of orbs
-     * 
+     * Returns arraylist of players
      * @return Player arraylist
      */
     public ArrayList<Player> getPlayers() {
@@ -68,17 +66,7 @@ public class Players {
     }
 
     /**
-     * Sets the number of orbs
-     * 
-     * @param num number to set
-     */
-    public void setNumOrbs(int num) {
-        myNumPlayers = num;
-        setupPlayers();
-    }
-
-    /**
-     * Sets up orbs
+     * Sets up players
      */
     public void setupPlayers() {
         myPlayers.clear();
@@ -86,6 +74,11 @@ public class Players {
         myPlayers.add(new Pharah(2, 1350, 867, this));
     }
 
+    /**
+     * Finds a player based on id num
+     * @param id id of the player to search for
+     * @return the Player found or null if none
+     */
     public Player findPlayer(int id)
     {
         for(Player temp : myPlayers)
@@ -103,16 +96,13 @@ public class Players {
      */
     private class UpdateTask extends TimerTask {
         /**
-         * runs actions on the orbs
+         * runs actions on the players
          */
         public void run() {
             if (!myGame.isPaused()) {
                 for (int idx = 0; idx < myPlayers.size(); idx++) {
                     Player o = myPlayers.get(idx);
-                    // checkForCollision(o);
-                    // o.checkForBounce();
                     o.move(myKeyput.getKeys());
-                    //o.drawMe(Graphics2D);
                 }
             }
         }
