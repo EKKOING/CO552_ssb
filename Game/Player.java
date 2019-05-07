@@ -45,7 +45,7 @@ public class Player {
     /* Direction currently facing **/
     public boolean facingRight;
 
-    /* Cooldowns for moves (Currently not implemented) **/
+    /* Cooldowns for moves **/
     public boolean canWalk;
     public static final long walkCD = 50;
     public boolean canAttack;
@@ -190,8 +190,7 @@ public class Player {
     }
 
     /**
-     * Draws orb
-     * 
+     * Draws Player
      * @param g2 Graphics object passthrough
      */
     public void drawMe(Graphics2D g2) {

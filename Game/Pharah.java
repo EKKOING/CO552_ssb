@@ -20,6 +20,9 @@ public class Pharah extends Player
     public static final int MY_HEIGHT = 191;
     /** Width of Pharah in pixels */
     public static final int MY_WIDTH = 166;
+
+    /** Cooldowns for Pharah */
+    public static final long attackCD = 500;
     
 
     /**
@@ -61,6 +64,8 @@ public class Pharah extends Player
             {
                 dmgDone += 25;
                 enemy.healthAmt -= 25;
+                canAttack = false;
+                new CooldownTracker(this, attackCD, "canAttack");
                 return true;
             }
         }
@@ -70,6 +75,8 @@ public class Pharah extends Player
             {
                 dmgDone += 25;
                 enemy.healthAmt -= 25;
+                canAttack = false;
+                new CooldownTracker(this, attackCD, "canAttack");
                 return true;
             }
         }
