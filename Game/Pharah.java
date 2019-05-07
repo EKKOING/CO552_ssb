@@ -35,7 +35,7 @@ public class Pharah extends Player
         {
             System.out.println(ioe);
         }
-        System.out.println("Pharah Player Created");
+        System.out.println("Pharah Created \n");
     }
     
     /*

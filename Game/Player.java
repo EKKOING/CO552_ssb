@@ -13,6 +13,11 @@ import java.util.ArrayList;
  * @version 2019/03/25
  */
 public class Player {
+
+    /** Default Height and Width */
+    public static final int MY_HEIGHT = 191;
+    public static final int MY_WIDTH = 166;
+    
     /* Coord object that holds the postion of the player **/
     public Coord myPos;
 
@@ -64,7 +69,7 @@ public class Player {
         dmgDone = 0;
         dmgTaken = 0;
         setKeybindings();
-        System.out.println("Player Created");
+        System.out.print("Player of type ");
     }
 
     private void setKeybindings() {
