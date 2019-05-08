@@ -1,6 +1,7 @@
 import java.util.ArrayList;
 import java.awt.*;
 import javax.swing.*;
+import java.awt.geom.*;
 
 /**
  * Panel class for the orb app to handle the frame in which the orbs are
@@ -41,6 +42,9 @@ public class GamePanel extends JPanel {
      */
     public void paintComponent(Graphics g) {
         Graphics2D g2 = (Graphics2D) g;
+
+        //Rectangle2D.Double test = new Rectangle2D.Double(0, 0, 200, 200);
+        //g2.fill(test);
 
         //g2.clearRect(0, 0, getWidth(), getHeight());
 

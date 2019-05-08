@@ -23,6 +23,8 @@ public class GameScreen extends JPanel {
      * @param game Game passthrough
      */
     public GameScreen(SmashGame game) {
+        System.out.println("GameScreen.GameScreen called");
+
         myGame = game;
         myKeyput = new Keyput(myGame);
         myPlayers = new Players(myGame, myKeyput);
@@ -32,7 +34,7 @@ public class GameScreen extends JPanel {
         //myGamePanel.add()
 
         this.add(myGamePanel);
-        this.add(myKeyput);
+        //this.add(myKeyput);
         this.setVisible(true);
         this.setFocusable(true);
         this.requestFocusInWindow();

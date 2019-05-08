@@ -73,7 +73,10 @@ public class SmashGame
        //myAppPanel.add(myTitlePanel, TITLE);
        myAppPanel.add("Game", myGameScreen);
       
-       myApp.add(myAppPanel);
+      GamePanel gp = new GamePanel(this, new Players(this, new Keyput(this)));
+      myApp.add(gp);
+
+       //myApp.add(myAppPanel);
        //myApp.add(myKeyput);
        myApp.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
        myApp.setVisible(true);

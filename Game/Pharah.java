@@ -38,7 +38,7 @@ public class Pharah extends Player
         try
         {
             //InputStream is = getClass().getResourceAsStream("graphics/characters/pharah/pharah.png");
-            File image = new File("graphics/characters/pharah/pharah.png");
+            File image = new File("./graphics/characters/pharah/pharah.png");
             myImage = ImageIO.read(image);
         }
         catch(IOException ioe)
@@ -98,11 +98,11 @@ public class Pharah extends Player
     */
     public void drawMe(Graphics2D g2)
     {
-        //Ellipse2D.Double spot = new Ellipse2D.Double(topX, topY, SIZE, SIZE);
+        //Ellipse2D.Double spot = new Ellipse2D.Double((int) myPos.getX() - (MY_WIDTH / 2), (int) myPos.getY() - MY_HEIGHT, 50, 50);
         //g2.setColor(myColor);
         //g2.fill(spot);
 
-        g2.drawImage(myImage, (int) myPos.getX() - (MY_WIDTH / 2), (int) myPos.getY() + MY_HEIGHT, null);
+        g2.drawImage(myImage, (int) myPos.getX() - (MY_WIDTH / 2), (int) myPos.getY() - MY_HEIGHT, null);
     }
     
     public static void main(String[] args) 
