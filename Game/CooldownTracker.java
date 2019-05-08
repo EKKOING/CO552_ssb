@@ -16,7 +16,7 @@ public class CooldownTracker {
 
     /**
      * Constructs a new CD activator
-     * @param myPlayer Player to act upon
+     * @param tempPlayer Player to act upon
      * @param ms Ms of CD time
      * @param myCD CD to act upon
      */
