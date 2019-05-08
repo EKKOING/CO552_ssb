@@ -13,7 +13,7 @@ import java.util.TimerTask;
  * @author Nicholas Lorentzen
  * @version 2019/05/04
  */
-public class Keyput extends JPanel {
+public class Keyput implements KeyListener {
    /** List of keys pressed */
    public ArrayList<Key> dictionary;
    /** Temporary key used in multimethod operations */
@@ -26,25 +26,19 @@ public class Keyput extends JPanel {
    /** Delay between adding time to each keys press */
    private static final long INCREMENT = 10;
 
-   // private Clock keyUpdater;
-
    /** Thread to update keypress lengths */
    private Timer t;
 
    /**
     * Constructor
+    * 
     * @param game SmashGame passthrough for pausing
     */
    public Keyput(SmashGame game) {
       dictionary = new ArrayList<Key>();
       myGame = game;
-
       t = new Timer();
       t.scheduleAtFixedRate(new Clock(), (long) 0, INCREMENT);
-
-      // createList();
-      addKeyListener(new KeyHandler());
-      requestFocusInWindow();
    }
 
    /** Initilasizes list (Not In Use) */
@@ -56,8 +50,9 @@ public class Keyput extends JPanel {
    }
 
    /**
-    * Looks for a key in the dictionary and returns it
-    * If the key isnt found it creates a new key with the number specified
+    * Looks for a key in the dictionary and returns it If the key isnt found it
+    * creates a new key with the number specified
+    * 
     * @param num the keynumber of the key to look for
     * @return the Key found
     */
@@ -74,43 +69,53 @@ public class Keyput extends JPanel {
       return getKey(num);
    }
 
-   /** Keyhandler class */
-   private class KeyHandler implements KeyListener {
-      /** Manages what happens on a keypress */
-      public void keyPressed(KeyEvent e) {
-         // System.out.println(e);
-         int code = e.getKeyCode();
-         Key temp = getKey(code);
+   /**
+    * Runs on key pressed
+    * 
+    * @param e KeyEvent to process
+    */
+   public void keyPressed(KeyEvent e) {
+      // System.out.println(e);
+      int code = e.getKeyCode();
+      Key temp = getKey(code);
 
-         if (!(temp.keyState)) {
-            temp.updatekey(true);
-
-            // Debug Code
-            System.out.println("Key #" + temp.keyNumber + " has been pressed");
-         }
-
-         dictionary.set(lastKeyIdx, temp);
-      }
-
-      /** Manages what happens on a key release */
-      public void keyReleased(KeyEvent e) {
-         // System.out.println(e);
-         int code = e.getKeyCode();
-         Key temp = getKey(code);
-         temp.updatekey(false);
-         dictionary.set(lastKeyIdx, temp);
+      if (!(temp.keyState)) {
+         temp.updatekey(true);
 
          // Debug Code
-         System.out.println("Key #" + temp.keyNumber + " was held down for " + temp.pressLength + " seconds");
+         System.out.println("Key #" + temp.keyNumber + " has been pressed");
       }
 
-      public void keyTyped(KeyEvent e) {
-         // nothing
-      }
+      dictionary.set(lastKeyIdx, temp);
+   }
+
+   /**
+    * Runs on key release
+    * 
+    * @param e KeyEvent to process
+    */
+   public void keyReleased(KeyEvent e) {
+      // System.out.println(e);
+      int code = e.getKeyCode();
+      Key temp = getKey(code);
+      temp.updatekey(false);
+      dictionary.set(lastKeyIdx, temp);
+
+      // Debug Code
+      System.out.println("Key #" + temp.keyNumber + " was held down for " + temp.pressLength + " seconds");
+   }
+
+   /**
+    * Doesn't do anything
+    * @param e KeyEvent to process
+    */
+   public void keyTyped(KeyEvent e) {
+      // nothing
    }
 
    /**
     * Returns the dictionary for external processing
+    * 
     * @return the dictionary of keys as an ArrayList
     */
    public ArrayList<Key> getKeys() {
@@ -129,16 +134,5 @@ public class Keyput extends JPanel {
             }
          }
       }
-   }
-
-   public static void main(String[] args) {
-      /**
-       * I have determined that it would take longer to write out test code than to
-       * have to set breakpoints for the debugger each time I open the program, hence
-       * there is no code to test this method here. This is due to the fact that
-       * attempting to instantiate the keyput class requires creating the game class
-       * which creates its own Keyput class. You also wouldn't be able to imitate
-       * keystrokes here which renders everything useless that this class has.
-       */
    }
 }

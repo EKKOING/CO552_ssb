@@ -8,11 +8,11 @@ Creates a cooldown timer that will set the state of a cooldown after a time peri
 */
 public class CooldownTracker {
     /** Timer thread */
-    Timer timer;
+    public Timer timer;
     /** Name of CD being tracked */
-    String whichCD;
+    public String whichCD;
     /** Player whom the CD belongs to */
-    Player myPlayer;
+    public Player myPlayer;
 
     /**
      * Constructs a new CD activator
@@ -20,8 +20,10 @@ public class CooldownTracker {
      * @param ms Ms of CD time
      * @param myCD CD to act upon
      */
-    public CooldownTracker(Player myPlayer, long ms, String myCD) {
+    public CooldownTracker(Player tempPlayer, long ms, String myCD) {
+
         timer = new Timer();
+        myPlayer = tempPlayer;
         whichCD = myCD;
         timer.schedule(new RemindTask(), ms);
 	}
@@ -36,6 +38,10 @@ public class CooldownTracker {
             if(whichCD == "canAttack")
             {
                 myPlayer.canAttack = true;
+            }
+            if(whichCD == "respawn")
+            {
+                myPlayer.healthAmt = myPlayer.STARTHEALTH;
             }
             timer.cancel();
         }

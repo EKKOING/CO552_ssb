@@ -15,6 +15,7 @@ public class Pharah extends Player
 {
     /** Image to draw */
     public BufferedImage myImage;
+    public BufferedImage dead;
 
     /** Height of Pharah in pixels */
     public static final int MY_HEIGHT = 191;
@@ -37,12 +38,17 @@ public class Pharah extends Player
         super(myId, xStart, yStart, list);
         try
         {
-            //InputStream is = getClass().getResourceAsStream("graphics/characters/pharah/pharah.png");
             File image = new File("./graphics/characters/pharah/pharah.png");
             myImage = ImageIO.read(image);
         }
         catch(IOException ioe)
         {
+            System.out.println(ioe);
+        }
+        try {
+            File image = new File("./graphics/characters/pharah/dead.png");
+            dead = ImageIO.read(image);
+        } catch (IOException ioe) {
             System.out.println(ioe);
         }
         System.out.println("Pharah Created \n");
@@ -102,7 +108,14 @@ public class Pharah extends Player
         //g2.setColor(myColor);
         //g2.fill(spot);
 
-        g2.drawImage(myImage, (int) myPos.getX() - (MY_WIDTH / 2), (int) myPos.getY() - MY_HEIGHT, null);
+        if(healthAmt > 0)
+        {
+            g2.drawImage(myImage, (int) myPos.getX() - (MY_WIDTH / 2), (int) myPos.getY() - MY_HEIGHT, null);
+        }
+        else
+        {
+            g2.drawImage(dead, (int) myPos.getX() - (MY_WIDTH / 2), (int) myPos.getY() - MY_HEIGHT, null);
+        }
     }
     
     public static void main(String[] args) 

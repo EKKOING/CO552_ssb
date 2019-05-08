@@ -26,7 +26,7 @@ public class Players {
     /** Timer reference */
     private Timer myTimer;
     /** Orb App */
-    private SmashGame myGame;
+    public SmashGame myGame;
 
     /** Keyput passthrough */
     public Keyput myKeyput;
@@ -100,9 +100,8 @@ public class Players {
          */
         public void run() {
             if (!myGame.isPaused()) {
-                for (int idx = 0; idx < myPlayers.size(); idx++) {
-                    Player o = myPlayers.get(idx);
-                    o.move(myKeyput.getKeys());
+                for (Player temp: myPlayers) {
+                    temp.move(myKeyput.getKeys());
                 }
             }
         }
