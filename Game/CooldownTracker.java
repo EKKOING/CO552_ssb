@@ -31,18 +31,29 @@ public class CooldownTracker {
     /** Thread to manage cooldown */
     class RemindTask extends TimerTask {
         public void run() {
-            if(whichCD == "canWalk")
+            switch (whichCD)
             {
+                case "canWalk":
                 myPlayer.canWalk = true;
-            }
-            if(whichCD == "canAttack")
-            {
+                break;
+
+                case "canAttack":
                 myPlayer.canAttack = true;
-            }
-            if(whichCD == "respawn")
-            {
+                break;
+
+                case "doubleJump":
+                myPlayer.doubleJump = true;
+                break;
+
+                case "respawn":
                 myPlayer.healthAmt = myPlayer.STARTHEALTH;
+                break;
+
+                default:
+                System.err.println("No Such Cooldown Found for Input: \"" + whichCD + "\"");
+                break;
             }
+
             timer.cancel();
         }
     }

@@ -4,6 +4,8 @@ import java.awt.image.*;
 import java.awt.geom.*;
 import java.io.*;
 import javax.imageio.*;
+import javax.lang.model.util.ElementScanner6;
+
 import java.util.ArrayList;
 
 /**
@@ -18,8 +20,11 @@ public class Player {
     public static final int MY_HEIGHT = 191;
     public static final int MY_WIDTH = 166;
 
-    /* Coord object that holds the postion of the player **/
+    /** Coord object that holds the postion of the player */
     public Coord myPos;
+
+    /** Velocity vector for physics based movement system */
+    public Coord myVector;
 
     /* Id number to identify which player this represents **/
     public int myId;
@@ -42,9 +47,17 @@ public class Player {
     public int moveRight;
     public int moveAttack;
     public int moveSpecial;
+    public int moveJump;
+    public int moveDown;
 
     /* Direction currently facing **/
     public boolean facingRight;
+
+    /** On the ground or not */
+    public boolean onGround;
+
+    /** Has the double jump available */
+    public boolean doubleJump;
 
     /* Cooldowns for moves **/
     public boolean canWalk;
@@ -52,6 +65,9 @@ public class Player {
     public boolean canAttack;
     public static final long attackCD = 500;
     public static final long respawnCD = 3000;
+
+    /* Max walk speed **/
+    public static final int MAX_WALKV = 20;
 
     /* Passthrough of Players class to be able to interact with others **/
     public Players otherPlayers;
@@ -73,11 +89,13 @@ public class Player {
         }
         otherPlayers = list;
 
-        myPos = new Coord(xStart, yStart);
+        myPos = new Coord((double) xStart, (double) yStart);
+        myVector = new Coord(0.0,0.0);
 
         healthAmt = STARTHEALTH;
         canWalk = true;
         canAttack = true;
+        onGround = true;
         dmgDone = 0;
         dmgTaken = 0;
         setKeybindings();
@@ -91,6 +109,8 @@ public class Player {
         if (myId == 1) {
             moveLeft = KeyEvent.VK_A;
             moveRight = KeyEvent.VK_D;
+            moveJump = KeyEvent.VK_W;
+            moveDown = KeyEvent.VK_S;
             moveAttack = KeyEvent.VK_E;
             moveSpecial = KeyEvent.VK_Q;
         }
@@ -98,6 +118,8 @@ public class Player {
         if (myId == 2) {
             moveLeft = KeyEvent.VK_J;
             moveRight = KeyEvent.VK_L;
+            moveJump = KeyEvent.VK_I;
+            moveDown = KeyEvent.VK_K;
             moveAttack = KeyEvent.VK_O;
             moveSpecial = KeyEvent.VK_U;
         }
@@ -163,11 +185,16 @@ public class Player {
      * Default walk left method
      */
     public void walkLeft() {
-        if (myPos.getX() > MY_WIDTH) {
-            myPos.setX(myPos.getX() - 1);
-            canWalk = false;
-            facingRight = false;
-            new CooldownTracker(this, walkCD, "canWalk");
+        if (myPos.getX() > MY_WIDTH / 2) {
+            if (myPos.getX() < otherPlayers.myGame.APP_WIDTH - (MY_WIDTH / 2)) {
+                if (myVector.getX() > -MAX_WALKV)
+                {
+                    myVector.setX(myVector.getX() - 2);
+                    canWalk = false;
+                    facingRight = false;
+                    new CooldownTracker(this, walkCD, "canWalk");
+                }
+            }
         }
     }
 
@@ -175,11 +202,80 @@ public class Player {
      * Default walk right method
      */
     public void walkRight() {
-        if (myPos.getX() < otherPlayers.myGame.APP_WIDTH - MY_WIDTH) {
-            myPos.setX(myPos.getX() + 1);
-            canWalk = false;
-            facingRight = true;
-            new CooldownTracker(this, walkCD, "canWalk");
+        if (myPos.getX() < otherPlayers.myGame.APP_WIDTH - (MY_WIDTH / 2)) {
+            if (myVector.getX() < MAX_WALKV)
+            {
+                myVector.setX(myVector.getX() + 2);
+                canWalk = false;
+                facingRight = true;
+                new CooldownTracker(this, walkCD, "canWalk");
+            }
+        }
+    }
+
+    public void jump() {
+        if (onGround)
+        {
+            myVector.setY(- 35);
+            onGround = false;
+            new CooldownTracker(this, (long) 250, "doubleJump");
+        }
+        else if (doubleJump)
+        {
+            myVector.setY(-20);
+            doubleJump = false;
+            new CooldownTracker(this, (long) 150, "doubleJump");
+        }
+    }
+
+    public void checkGround() {
+        if(myPos.getY() > 867)
+        {
+            myPos.setY(867);
+            if (myVector.getY() > 0)
+            {
+                myVector.setY(0);
+            }
+            onGround = true;
+            doubleJump = true;
+        }
+    }
+
+    public void resistance() {
+        if (onGround)
+        {
+            if (myVector.getX() >= 2)
+            {
+                myVector.setX(myVector.getX() * 0.8);
+            }
+            else if (myVector.getX() <= -2)
+            {
+                myVector.setX(myVector.getX() * 0.8);
+            }
+            else
+            {
+                myVector.setX(0);
+            }
+        }
+        else
+        {
+            if (myVector.getY() < 10)
+            {
+                myVector.setY(myVector.getY() + 1);
+            }
+
+            if (myVector.getX() >= 0.5)
+            {
+                myVector.setX(myVector.getX() - 0.5);
+            }
+            else if (myVector.getX() <= 0.5)
+            {
+                myVector.setX(myVector.getX() + 0.5);
+            }
+            else
+            {
+                myVector.setX(0);
+            }
         }
     }
 
@@ -189,6 +285,8 @@ public class Player {
      * @param myList Key list generated from Keyput class
      */
     public void move(ArrayList<Key> myList) {
+        checkGround();
+        resistance();
         if (healthAmt <= 0) {
             new CooldownTracker(this, respawnCD, "respawn");
         } 
@@ -202,11 +300,19 @@ public class Player {
                         walkRight();
                     }
 
+                    if (currentKey.keyNumber == moveJump)
+                    {
+                        jump();
+                    }
+
                     if (currentKey.keyNumber == moveAttack && canAttack) {
                         attack();
                     }
                 }
             }
+
+            myPos.setX(myPos.getX() + myVector.getX() / 10);
+            myPos.setY(myPos.getY() + myVector.getY() / 10);
         }
     }
 

@@ -5,10 +5,10 @@
  * @version 2019/03/25
  */
 public class Coord {
-    /* Int to hold the X position **/
-    private int posX;
-    /* Int to hold the Y position **/
-    private int posY;
+    /* Double to hold the X position **/
+    private double posX;
+    /* Double to hold the Y position **/
+    private double posY;
 
     /**
      * Constructor for a Coord
@@ -16,7 +16,7 @@ public class Coord {
      * @param x The x coordinate
      * @param y The y coordinate
      */
-    public Coord(int x, int y) {
+    public Coord(double x, double y) {
         posX = x;
         posY = y;
     }
@@ -26,7 +26,7 @@ public class Coord {
      * 
      * @return the integer x postion
      */
-    public int getX() {
+    public double getX() {
         return posX;
     }
 
@@ -35,7 +35,7 @@ public class Coord {
      * 
      * @return the integer y postion
      */
-    public int getY() {
+    public double getY() {
         return posY;
     }
 
@@ -44,7 +44,7 @@ public class Coord {
      * 
      * @param x the integer x postion
      */
-    public void setX(int x) {
+    public void setX(double x) {
         posX = x;
     }
 
@@ -53,7 +53,7 @@ public class Coord {
      * 
      * @param y the integer y postion
      */
-    public void setY(int y) {
+    public void setY(double y) {
         posY = y;
     }
 
@@ -71,7 +71,7 @@ public class Coord {
     }
 
     public static void main(String[] args) {
-        Coord where = new Coord(1, 1);
+        Coord where = new Coord(1.0, 1.0);
 
         /* Testing Code **/
         System.out.println(where.getX());
