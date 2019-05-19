@@ -38,7 +38,7 @@ public class Pharah extends Player
         super(myId, xStart, yStart, list);
         try
         {
-            File image = new File("./graphics/characters/pharah/pharah.png");
+            File image = new File("./graphics/characters/pharah/right/standing/01.png");
             myImage = ImageIO.read(image);
         }
         catch(IOException ioe)
@@ -46,7 +46,7 @@ public class Pharah extends Player
             System.out.println(ioe);
         }
         try {
-            File image = new File("./graphics/characters/pharah/dead.png");
+            File image = new File("./graphics/characters/pharah/right/standing/01.png");
             dead = ImageIO.read(image);
         } catch (IOException ioe) {
             System.out.println(ioe);
