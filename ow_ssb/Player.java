@@ -50,6 +50,21 @@ public class Player {
     public int moveJump;
     public int moveDown;
 
+    /* Base Directory of Images **/
+    public final String BASE_DIREC = "./graphics/characters/";
+
+    /** Directory for direction facing */
+    public String facingDirec;
+
+    /** Directory for animation */
+    public String animationDirec;
+
+    /** Directory of previous animation */
+    public String prevDirec;
+
+    /** Animation Frame Number */
+    public double myAnimationFrame;
+
     /* Direction currently facing **/
     public boolean facingRight;
 
@@ -67,7 +82,7 @@ public class Player {
     public static final long respawnCD = 3000;
 
     /* Max walk speed **/
-    public static final int MAX_WALKV = 20;
+    public static final int MAX_WALKV = 60;
 
     /* Passthrough of Players class to be able to interact with others **/
     public Players otherPlayers;
@@ -84,13 +99,14 @@ public class Player {
     public Player(int playerNum, int xStart, int yStart, Players list) {
         myId = playerNum;
         enemyId = 2;
+
         if (myId == 2) {
             enemyId = 1;
         }
         otherPlayers = list;
 
         myPos = new Coord((double) xStart, (double) yStart);
-        myVector = new Coord(0.0,0.0);
+        myVector = new Coord(0.0, 0.0);
 
         healthAmt = STARTHEALTH;
         canWalk = true;
@@ -98,6 +114,8 @@ public class Player {
         onGround = true;
         dmgDone = 0;
         dmgTaken = 0;
+        myAnimationFrame = 1;
+        prevDirec = "";
         setKeybindings();
         System.out.print("Player of type ");
     }
@@ -186,9 +204,8 @@ public class Player {
      */
     public void walkLeft() {
         if (myPos.getX() > MY_WIDTH / 2) {
-            if (myPos.getX() < otherPlayers.myGame.APP_WIDTH - (MY_WIDTH / 2)) {
-                if (myVector.getX() > -MAX_WALKV)
-                {
+            if (myPos.getX() < SmashGame.APP_WIDTH - (MY_WIDTH / 2)) {
+                if (myVector.getX() > -MAX_WALKV) {
                     myVector.setX(myVector.getX() - 2);
                     canWalk = false;
                     facingRight = false;
@@ -203,8 +220,7 @@ public class Player {
      */
     public void walkRight() {
         if (myPos.getX() < otherPlayers.myGame.APP_WIDTH - (MY_WIDTH / 2)) {
-            if (myVector.getX() < MAX_WALKV)
-            {
+            if (myVector.getX() < MAX_WALKV) {
                 myVector.setX(myVector.getX() + 2);
                 canWalk = false;
                 facingRight = true;
@@ -214,14 +230,11 @@ public class Player {
     }
 
     public void jump() {
-        if (onGround)
-        {
-            myVector.setY(- 35);
+        if (onGround) {
+            myVector.setY(-35);
             onGround = false;
             new CooldownTracker(this, (long) 250, "doubleJump");
-        }
-        else if (doubleJump)
-        {
+        } else if (doubleJump) {
             myVector.setY(-20);
             doubleJump = false;
             new CooldownTracker(this, (long) 150, "doubleJump");
@@ -229,51 +242,36 @@ public class Player {
     }
 
     public void checkGround() {
-        if(myPos.getY() > 867)
-        {
+        if (myPos.getY() > 867) {
             myPos.setY(867);
-            if (myVector.getY() > 0)
-            {
+            if (myVector.getY() > 0) {
                 myVector.setY(0);
             }
             onGround = true;
             doubleJump = true;
+            System.out.println("Hit Ground!");
         }
     }
 
     public void resistance() {
-        if (onGround)
-        {
-            if (myVector.getX() >= 2)
-            {
-                myVector.setX(myVector.getX() * 0.8);
-            }
-            else if (myVector.getX() <= -2)
-            {
-                myVector.setX(myVector.getX() * 0.8);
-            }
-            else
-            {
+        if (onGround) {
+            if (myVector.getX() >= 2) {
+                myVector.setX(myVector.getX() * 0.9);
+            } else if (myVector.getX() <= -2) {
+                myVector.setX(myVector.getX() * 0.9);
+            } else {
                 myVector.setX(0);
             }
-        }
-        else
-        {
-            if (myVector.getY() < 10)
-            {
+        } else {
+            if (myVector.getY() < 10) {
                 myVector.setY(myVector.getY() + 1);
             }
 
-            if (myVector.getX() >= 0.5)
-            {
-                myVector.setX(myVector.getX() - 0.5);
-            }
-            else if (myVector.getX() <= 0.5)
-            {
-                myVector.setX(myVector.getX() + 0.5);
-            }
-            else
-            {
+            if (myVector.getX() >= 0.5) {
+                myVector.setX(myVector.getX() * 0.99);
+            } else if (myVector.getX() <= 0.5) {
+                myVector.setX(myVector.getX() * 0.99);
+            } else {
                 myVector.setX(0);
             }
         }
@@ -289,8 +287,7 @@ public class Player {
         resistance();
         if (healthAmt <= 0) {
             new CooldownTracker(this, respawnCD, "respawn");
-        } 
-        else {
+        } else {
 
             for (Key currentKey : myList) {
                 if (currentKey.keyState) {
@@ -300,8 +297,7 @@ public class Player {
                         walkRight();
                     }
 
-                    if (currentKey.keyNumber == moveJump)
-                    {
+                    if (currentKey.keyNumber == moveJump) {
                         jump();
                     }
 
@@ -322,20 +318,34 @@ public class Player {
      * @param g2 Graphics object passthrough
      */
     public void drawMe(Graphics2D g2) {
-        // Always Overidden
-    }
+        myAnimationFrame = myAnimationFrame + 0.1;
 
-    public static void main(String[] args) {
-        // Player player1 = new Player(1, 1, 1);
+        if (healthAmt > 0) {
+            if (facingRight) {
+                facingDirec = "/right";
+            } else {
+                facingDirec = "/left";
+            }
 
-        /* Test all methods **/
-        /*
-         * System.out.println(player1.getHealth() + ": Current Health");
-         * System.out.println(player1.getDmgDone() + ": Damage Done");
-         * System.out.println(player1.getDmgTaken() + ": Damage Taken");
-         * System.out.println(player1.getPos()); System.out.println(player1.attack() +
-         * ": Attack Successful"); System.out.println(player1.block() +
-         * ": Block Successful");
-         **/
+            if (myVector.getX() > 0 || myVector.getX() < 0) {
+                animationDirec = "/walking";
+            } else {
+                animationDirec = "/standing";
+            }
+
+            if (!onGround) {
+                animationDirec = "/flying";
+            }
+        } 
+        else 
+        {
+            facingDirec = "";
+            animationDirec = "/dead";
+        }
+
+        if (!(prevDirec.equals(facingDirec + animationDirec))) {
+            myAnimationFrame = 1;
+        }
+        prevDirec = facingDirec + animationDirec;
     }
 }

@@ -32,7 +32,7 @@ public class GameScreen extends JPanel {
 
         try
         {
-            File image = new File("./graphics/stages/default/StageBG.png");
+            File image = new File("./graphics/stages/gibraltar/stagebg.png");
             myImage = ImageIO.read(image);
         }
         catch(IOException ioe)

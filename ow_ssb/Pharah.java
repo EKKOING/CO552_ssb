@@ -15,10 +15,12 @@ public class Pharah extends Player
 {
     /** Image to draw */
     public BufferedImage myImage;
-    public BufferedImage dead;
+
+    /** Image Directory */
+    public final String BASE_DIREC = "./graphics/characters/pharah";
 
     /** Height of Pharah in pixels */
-    public static final int MY_HEIGHT = 191;
+    public static final int MY_HEIGHT = 162;
     /** Width of Pharah in pixels */
     public static final int MY_WIDTH = 166;
 
@@ -38,17 +40,11 @@ public class Pharah extends Player
         super(myId, xStart, yStart, list);
         try
         {
-            File image = new File("./graphics/characters/pharah/right/standing/01.png");
+            File image = new File(BASE_DIREC + facingDirec + "/standing/01.png");
             myImage = ImageIO.read(image);
         }
         catch(IOException ioe)
         {
-            System.out.println(ioe);
-        }
-        try {
-            File image = new File("./graphics/characters/pharah/right/standing/01.png");
-            dead = ImageIO.read(image);
-        } catch (IOException ioe) {
             System.out.println(ioe);
         }
         System.out.println("Pharah Created \n");
@@ -98,42 +94,37 @@ public class Pharah extends Player
         return true;
     }
 
-    /**
-    * Draws Pharah
-    * @param g2 Graphics object passthrough
-    */
-    public void drawMe(Graphics2D g2)
+    public void drawMe (Graphics2D g2)
     {
-        //Ellipse2D.Double spot = new Ellipse2D.Double((int) myPos.getX() - (MY_WIDTH / 2), (int) myPos.getY() - MY_HEIGHT, 50, 50);
-        //g2.setColor(myColor);
-        //g2.fill(spot);
+        super.drawMe(g2);
 
-        if(healthAmt > 0)
-        {
-            g2.drawImage(myImage, (int) myPos.getX() - (MY_WIDTH / 2), (int) myPos.getY() - MY_HEIGHT, null);
+        try {
+            //Create File Directory String
+            String fileDirectory = BASE_DIREC + facingDirec + animationDirec + "/";
+            if (myAnimationFrame < 10) {fileDirectory = fileDirectory + "0";}
+            fileDirectory = fileDirectory + (int) myAnimationFrame + ".png";
+
+            //Create Image
+            File image = new File(fileDirectory);
+            myImage = ImageIO.read(image);
+        } 
+        catch (IOException ioe) {
+            myAnimationFrame = 1;
+            try {
+                String fileDirectory = BASE_DIREC + facingDirec + animationDirec + "/";
+                if (myAnimationFrame < 10) {fileDirectory = fileDirectory + "0";}
+                fileDirectory = fileDirectory + (int) myAnimationFrame + ".png";
+                //Create Image
+                File image = new File(fileDirectory);
+                myImage = ImageIO.read(image);
+            } catch (IOException ioe2) {
+                System.err.println(ioe2);
+                String fileDirectory = BASE_DIREC + facingDirec + animationDirec + "/";
+                if (myAnimationFrame < 10) {fileDirectory = fileDirectory + "0";}
+                fileDirectory = fileDirectory + (int) myAnimationFrame + ".png";
+                System.err.println("FILE: " + fileDirectory);
+            }
         }
-        else
-        {
-            g2.drawImage(dead, (int) myPos.getX() - (MY_WIDTH / 2), (int) myPos.getY() - MY_HEIGHT, null);
-        }
-    }
-    
-    public static void main(String[] args) 
-    {
-        ///Pharah player1 = new Pharah(1,1,1);
-
-        /* Tests all inherited methods**/
-        /*
-        System.out.println(player1.getHealth() + ": Current Health");
-        System.out.println(player1.getDmgDone() + ": Damage Done");
-        System.out.println(player1.getDmgTaken() + ": Damage Taken");
-        System.out.println(player1.getPos());
-        **/
-
-        /* Tests all methods in class**/
-        /*
-        System.out.println(player1.attack() + ": Attack Successful");
-        System.out.println(player1.block() + ": Block Successful");
-        **/
+        g2.drawImage(myImage, (int) myPos.getX() - (MY_WIDTH / 2), (int) myPos.getY() - MY_HEIGHT, null);
     }
 }

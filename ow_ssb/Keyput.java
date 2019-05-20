@@ -83,7 +83,7 @@ public class Keyput implements KeyListener {
          temp.updatekey(true);
 
          // Debug Code
-         System.out.println("Key #" + temp.keyNumber + " has been pressed");
+         //System.out.println("Key #" + temp.keyNumber + " has been pressed");
       }
 
       dictionary.set(lastKeyIdx, temp);
@@ -102,7 +102,7 @@ public class Keyput implements KeyListener {
       dictionary.set(lastKeyIdx, temp);
 
       // Debug Code
-      System.out.println("Key #" + temp.keyNumber + " was held down for " + temp.pressLength + " seconds");
+      //System.out.println("Key #" + temp.keyNumber + " was held down for " + temp.pressLength + " seconds");
    }
 
    /**
@@ -130,7 +130,7 @@ public class Keyput implements KeyListener {
 
             // Debug Code
             if (myKey.keyState) {
-               System.out.println("Key #" + myKey.keyNumber + " is still being held down");
+               //System.out.println("Key #" + myKey.keyNumber + " is still being held down");
             }
          }
       }
