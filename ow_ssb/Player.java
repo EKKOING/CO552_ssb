@@ -53,6 +53,9 @@ public class Player {
     /* Base Directory of Images **/
     public final String BASE_DIREC = "./graphics/characters/";
 
+    /* Base Directory of Images **/
+    public final String BANNER_DIREC = "./graphics/ingame/banner/";
+
     /** Directory for direction facing */
     public String facingDirec;
 
@@ -90,7 +93,10 @@ public class Player {
     /* Int to hold the default health to start with **/
     public static final int STARTHEALTH = 100;
 
-    public boolean invincible = true;
+    //public boolean invincible = true;
+
+    /* Buffered Image of Banner **/
+    private BufferedImage myBanner;
 
     /**
      * @param playerNum Id number to assign the player (1 or 2)
@@ -134,6 +140,14 @@ public class Player {
             moveAttack = KeyEvent.VK_E;
             moveSpecial = KeyEvent.VK_Q;
             facingRight = true;
+            try {
+                File image = new File(BANNER_DIREC + "1.png");
+                myBanner = ImageIO.read(image);
+            } 
+            catch (IOException ioe2) 
+            {
+
+            }
         }
 
         if (myId == 2) {
@@ -144,6 +158,14 @@ public class Player {
             moveAttack = KeyEvent.VK_O;
             moveSpecial = KeyEvent.VK_U;
             facingRight = false;
+            try {
+                File image = new File(BANNER_DIREC + "2.png");
+                myBanner = ImageIO.read(image);
+            } 
+            catch (IOException ioe2) 
+            {
+
+            }
         }
     }
 
@@ -360,6 +382,8 @@ public class Player {
      * @param g2 Graphics object passthrough
      */
     public void drawMe(Graphics2D g2) {
+        g2.drawImage(myBanner, (int) (myPos.getX() - 48), (int) (myPos.getY() - MY_HEIGHT - 30), null);
+
         myAnimationFrame = myAnimationFrame + 0.1;
 
         if (healthAmt > 0) {

@@ -1,6 +1,7 @@
 import java.util.ArrayList;
 import java.awt.*;
 import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
 import java.awt.event.MouseEvent;
 import javax.swing.*;
 import java.awt.image.*;
@@ -23,15 +24,26 @@ public class TitleScreen extends JPanel {
 	/* Background Layer **/
 	private BufferedImage background;
 
+	/* Static Foreground Layer **/
+	private BufferedImage staticForeground;
+
 	/** Boolean State of Main Menu */
 	public boolean onMainMenu;
+
+	/** Boolean State of Character Menu */
+	public boolean onCharacterMenu;
 
 	/** Directory for Main Menu */
 	public static final String MAIN_MENU = "./graphics/menus/main/01.png";
 
+	/** Directory for Character Menu */
+	public static final String CHARACTER_MENU = "./graphics/menus/character/";
+
 	private String lastButtonClicked;
 
 	private boolean buttonClicked;
+
+	private boolean isPlayer1;
 
 	/**
 	 * name of file with character list (NOTE: Any character not there will not be
@@ -49,6 +61,7 @@ public class TitleScreen extends JPanel {
 		super();
 		myGame = game;
 		this.addMouseListener(new mouseHandler());
+		this.addMouseMotionListener(new mouseHover());
 		this.setVisible(true);
 		this.setFocusable(true);
 		this.requestFocusInWindow();
@@ -74,6 +87,30 @@ public class TitleScreen extends JPanel {
 		onMainMenu = true;
 	}
 
+	public void characterMenu() {
+		try {
+			File image = new File(CHARACTER_MENU + "StaticForeground.png");
+			staticForeground = ImageIO.read(image);
+		}
+		catch(IOException e)
+		{
+
+		}
+
+		onCharacterMenu = true;
+	}
+
+	public void characterMenuButtonHandler(MouseEvent e)
+	{
+		myGame.stage = 1;
+		myGame.player1 = 1;
+		myGame.player2 = 1;
+		this.setVisible(false);
+		myGame.screenSwitcher("Game");
+		myGame.myGameScreen.run();
+		onCharacterMenu = false;
+	}
+
 	public void mainMenuButtonHandler(MouseEvent e) 
 	{
 		int posY = e.getY();
@@ -81,12 +118,8 @@ public class TitleScreen extends JPanel {
 		if (posX > 153 && posX < 258) {
 			if (posY > 326 && posY < 381) {
 				lastButtonClicked = "Play";
-				myGame.stage = 1;
-				myGame.player1 = 1;
-				myGame.player2 = 1;
-				this.setVisible(false);
-				myGame.screenSwitcher("Game");
-				myGame.myGameScreen.run();
+				characterMenu();
+				onMainMenu = false;
 				return;
 			}
 		}
@@ -117,6 +150,13 @@ public class TitleScreen extends JPanel {
 			g2.drawImage(background, 0, 0, null);
 		}
 
+		if (onCharacterMenu)
+		{
+			g2.setBackground(Color.WHITE);
+			//g2.drawImage(characterPreview, 721, 17, null);
+			g2.drawImage(staticForeground, 0, 0, null);
+		}
+
 	}
 
 	private class mouseHandler implements MouseListener {
@@ -124,6 +164,10 @@ public class TitleScreen extends JPanel {
 			//System.out.println(e);
 			if (onMainMenu) {
 				mainMenuButtonHandler(e);
+			}
+			if (onCharacterMenu)
+			{
+				characterMenuButtonHandler(e);
 			}
 
 		}
@@ -144,6 +188,22 @@ public class TitleScreen extends JPanel {
 
 		}
 	}
+
+	private class mouseHover implements MouseMotionListener
+	{
+		public void mouseMoved(MouseEvent e)
+		{
+			//TODO: Create Character Select Previews
+		}
+
+		public void mouseDragged(MouseEvent e)
+		{
+
+		}
+	}
+	
+
+	
 
 	/**
 	 * Thread to handle repainting screen

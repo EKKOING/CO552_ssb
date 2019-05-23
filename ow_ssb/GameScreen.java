@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.ConcurrentModificationException;
 import java.awt.*;
 import javax.swing.*;
 import java.awt.image.*;
@@ -97,10 +98,14 @@ public class GameScreen extends JPanel {
 
         myStage.drawMe(g2);
 
-        ArrayList<Player> paintPlayers = myPlayers.getPlayers();
-        for (Player temp : paintPlayers) {temp.drawMe(g2);}
-
-        drawUI(g2);
+        try {
+            ArrayList<Player> paintPlayers = myPlayers.getPlayers();
+            for (Player temp : paintPlayers) {temp.drawMe(g2);}
+            drawUI(g2);
+        } catch (ConcurrentModificationException e) {
+            //Skip frame
+        }
+        
     }
 
     public void drawUI(Graphics2D g2)
