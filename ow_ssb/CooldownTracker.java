@@ -46,7 +46,7 @@ public class CooldownTracker {
                 break;
 
                 case "respawn":
-                myPlayer.healthAmt = myPlayer.STARTHEALTH;
+                myPlayer.respawn();
                 break;
 
                 default:

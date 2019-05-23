@@ -10,7 +10,7 @@ import javax.imageio.*;
  * ArrayList for exporting
  * 
  * @author Nicholas Lorentzen
- * @version 2019/05/05
+ * @version 2019/05/21
  */
 public class GameScreen extends JPanel {
     /** Keyput class for handling User Input */
@@ -19,6 +19,9 @@ public class GameScreen extends JPanel {
     public Players myPlayers;
     /** Passthrough of the SmashGame class to allow reference to the gamestate */
     public SmashGame myGame;
+
+    /** Stage */
+    public Stage myStage;
 
     /** Stage Image */
     private BufferedImage myImage;
@@ -29,20 +32,20 @@ public class GameScreen extends JPanel {
      */
     public GameScreen(SmashGame game) {
         super();
-
-        try
-        {
-            File image = new File("./graphics/stages/gibraltar/stagebg.png");
-            myImage = ImageIO.read(image);
-        }
-        catch(IOException ioe)
-        {
-            System.out.println(ioe);
-        }
+        Toolkit toolkit = Toolkit.getDefaultToolkit();
+		Image image = toolkit.getImage("./graphics/menu/cursor.png");
+		Cursor c = toolkit.createCustomCursor(image , new Point(this.getX(), this.getY()), "img");
+		this.setCursor (c);
 
         myGame = game;
+    }
+
+    public void run()
+    {
+        myStage = new Stage("gibraltar");
         myKeyput = new Keyput(myGame);
         myPlayers = new Players(myGame, myKeyput);
+        
         this.addKeyListener(myKeyput);
         this.setVisible(true);
         this.setFocusable(true);
@@ -63,7 +66,7 @@ public class GameScreen extends JPanel {
         //g2.fill(test);
         g2.clearRect(0, 0, myGame.APP_WIDTH, myGame.APP_HEIGHT);
 
-        g2.drawImage(myImage, 0, 0, null);
+        myStage.drawMe(g2);
 
         ArrayList<Player> paintPlayers = myPlayers.getPlayers();
         for (Player temp : paintPlayers) {temp.drawMe(g2);}

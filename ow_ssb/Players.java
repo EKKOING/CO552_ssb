@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.ConcurrentModificationException;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.awt.Graphics2D;
@@ -100,8 +101,12 @@ public class Players {
          */
         public void run() {
             if (!myGame.isPaused()) {
-                for (Player temp: myPlayers) {
-                    temp.move(myKeyput.getKeys());
+                try {
+                    for (Player temp: myPlayers) {
+                        temp.move(myKeyput.getKeys());
+                    }
+                } catch (ConcurrentModificationException e) {
+                    System.err.println("Concurrent Modification of Players - Skipped Frame");
                 }
             }
         }

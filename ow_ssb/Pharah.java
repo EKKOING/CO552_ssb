@@ -9,7 +9,7 @@ import java.io.File;
 /**
 Class for the Pharah character inherits from player
 @author Nicholas Lorentzen
-@version 2019/03/25
+@version 2019/05/21
 */
 public class Pharah extends Player
 {
@@ -38,15 +38,6 @@ public class Pharah extends Player
     public Pharah(int myId, int xStart, int yStart, Players list)
     {
         super(myId, xStart, yStart, list);
-        try
-        {
-            File image = new File(BASE_DIREC + facingDirec + "/standing/01.png");
-            myImage = ImageIO.read(image);
-        }
-        catch(IOException ioe)
-        {
-            System.out.println(ioe);
-        }
         System.out.println("Pharah Created \n");
     }
     

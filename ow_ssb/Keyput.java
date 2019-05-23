@@ -11,7 +11,7 @@ import java.util.TimerTask;
  * ArrayList for exporting
  * 
  * @author Nicholas Lorentzen
- * @version 2019/05/04
+ * @version 2019/05/21
  */
 public class Keyput implements KeyListener {
    /** List of keys pressed */
@@ -77,6 +77,13 @@ public class Keyput implements KeyListener {
    public void keyPressed(KeyEvent e) {
       // System.out.println(e);
       int code = e.getKeyCode();
+
+      if(code == KeyEvent.VK_ESCAPE)
+      {
+         myGame.screenSwitcher("Menu");
+         myGame.myTitleScreen.run();
+      }
+
       Key temp = getKey(code);
 
       if (!(temp.keyState)) {

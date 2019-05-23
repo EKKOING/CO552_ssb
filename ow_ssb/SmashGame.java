@@ -14,16 +14,28 @@ public class SmashGame {
    public static final int APP_HEIGHT = 900;
 
    /** JFrame that holds the entirety of the game */
-   private JFrame myApp;
+   public JFrame myApp;
 
    /** Screen for when the game is running */
-   private GameScreen myGameScreen;
+   public GameScreen myGameScreen;
+
+   /** TitleScreen */
+   public TitleScreen myTitleScreen;
 
    /** App panel */
    private JPanel myAppPanel;
 
+   /** Stage to Play */
+   public int stage;
+
+   /** Player 1 Character */
+   public int player1;
+
+   /** Player 2 Character */
+   public int player2;
+
    /** Master pause state */
-   private boolean isPaused;
+   public boolean isPaused;
 
    public static void main(String[] args) {
       SmashGame app = new SmashGame();
@@ -54,6 +66,7 @@ public class SmashGame {
    public void run() {
       isPaused = false;
       setupFrame();
+      myTitleScreen.run();
    }
 
    /**
@@ -62,16 +75,27 @@ public class SmashGame {
    private void setupFrame() {
       myApp = new JFrame();
       myApp.setSize(APP_WIDTH, APP_HEIGHT);
+      myAppPanel = new JPanel(new CardLayout());
+
+      myTitleScreen = new TitleScreen(this);
+      myTitleScreen.setFocusable(true);
+      myAppPanel.add("Menu", myTitleScreen);
 
       myGameScreen = new GameScreen(this);
       myGameScreen.setFocusable(true);
-
-      myAppPanel = new JPanel(new CardLayout());
-      // myAppPanel.add(myTitlePanel, TITLE);
       myAppPanel.add("Game", myGameScreen);
-      
+
       myApp.add(myAppPanel);
       myApp.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+      myApp.setExtendedState(JFrame.MAXIMIZED_BOTH); 
+      //myApp.setUndecorated(true);
       myApp.setVisible(true);
+   }
+
+   public void screenSwitcher(String screenName)
+   {
+      CardLayout layout = (CardLayout) myAppPanel.getLayout();
+      layout.show(myAppPanel, screenName);
    }
 }

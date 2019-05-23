@@ -12,7 +12,7 @@ import java.util.ArrayList;
  * Class from which all characters inherit properties from
  * 
  * @author Nicholas Lorentzen
- * @version 2019/03/25
+ * @version 2019/05/21
  */
 public class Player {
 
@@ -82,13 +82,15 @@ public class Player {
     public static final long respawnCD = 3000;
 
     /* Max walk speed **/
-    public static final int MAX_WALKV = 60;
+    public static final int MAX_WALKV = 80;
 
     /* Passthrough of Players class to be able to interact with others **/
     public Players otherPlayers;
 
     /* Int to hold the default health to start with **/
     public static final int STARTHEALTH = 100;
+
+    public boolean invincible = true;
 
     /**
      * @param playerNum Id number to assign the player (1 or 2)
@@ -131,6 +133,7 @@ public class Player {
             moveDown = KeyEvent.VK_S;
             moveAttack = KeyEvent.VK_E;
             moveSpecial = KeyEvent.VK_Q;
+            facingRight = true;
         }
 
         if (myId == 2) {
@@ -140,6 +143,7 @@ public class Player {
             moveDown = KeyEvent.VK_K;
             moveAttack = KeyEvent.VK_O;
             moveSpecial = KeyEvent.VK_U;
+            facingRight = false;
         }
     }
 
@@ -204,7 +208,7 @@ public class Player {
      */
     public void walkLeft() {
         if (myPos.getX() > MY_WIDTH / 2) {
-            if (myPos.getX() < SmashGame.APP_WIDTH - (MY_WIDTH / 2)) {
+            if (myPos.getX() < SmashGame.APP_WIDTH) {
                 if (myVector.getX() > -MAX_WALKV) {
                     myVector.setX(myVector.getX() - 2);
                     canWalk = false;
@@ -219,7 +223,7 @@ public class Player {
      * Default walk right method
      */
     public void walkRight() {
-        if (myPos.getX() < otherPlayers.myGame.APP_WIDTH - (MY_WIDTH / 2)) {
+        if (myPos.getX() < otherPlayers.myGame.APP_WIDTH - MY_WIDTH) {
             if (myVector.getX() < MAX_WALKV) {
                 myVector.setX(myVector.getX() + 2);
                 canWalk = false;
@@ -249,7 +253,6 @@ public class Player {
             }
             onGround = true;
             doubleJump = true;
-            System.out.println("Hit Ground!");
         }
     }
 
@@ -277,15 +280,29 @@ public class Player {
         }
     }
 
+    public void respawn()
+    {
+        myPos = new Coord( SmashGame.APP_WIDTH / 2, -MY_HEIGHT - 10);
+        healthAmt = STARTHEALTH;
+        onGround = false;
+        myVector.setY(60);
+    }
+
+    public void kill()
+    {
+        healthAmt = 0;
+    }
+
     /**
      * Executes moves on the player based off of key input
      * 
      * @param myList Key list generated from Keyput class
      */
     public void move(ArrayList<Key> myList) {
-        checkGround();
         resistance();
+        checkGround();
         if (healthAmt <= 0) {
+            kill();
             new CooldownTracker(this, respawnCD, "respawn");
         } else {
 
@@ -306,10 +323,9 @@ public class Player {
                     }
                 }
             }
-
-            myPos.setX(myPos.getX() + myVector.getX() / 10);
-            myPos.setY(myPos.getY() + myVector.getY() / 10);
         }
+        myPos.setX(myPos.getX() + myVector.getX() / 10);
+        myPos.setY(myPos.getY() + myVector.getY() / 10);
     }
 
     /**
