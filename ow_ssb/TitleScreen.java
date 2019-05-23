@@ -6,7 +6,7 @@ import javax.swing.*;
 import java.awt.image.*;
 import java.awt.geom.*;
 import java.io.*;
-import java.time.chrono.ThaiBuddhistDate;
+//import java.time.chrono.ThaiBuddhistDate; This keeps adding itself idk y
 
 import javax.imageio.*;
 import javax.lang.model.util.ElementScanner6;

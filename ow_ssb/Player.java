@@ -190,7 +190,33 @@ public class Player {
      */
     public boolean attack() {
         /* This method will always be overidden **/
-        return true;
+        Player enemy = otherPlayers.findPlayer(enemyId);
+        Coord enemyPos = enemy.getPos();
+        Coord distToEnemy = myPos.checkDistance(enemy.getPos());
+        //int damage = 0;
+        if(facingRight && distToEnemy.getX() > 0 && distToEnemy.getX() < MY_WIDTH)
+        {
+            if(myPos.getY() + MY_HEIGHT >= enemyPos.getY() && myPos.getY() <= enemyPos.getY() + enemy.MY_HEIGHT)
+            {
+                dmgDone += 25;
+                enemy.healthAmt -= 25;
+                canAttack = false;
+                new CooldownTracker(this, attackCD, "canAttack");
+                return true;
+            }
+        }
+        else
+        {
+            if(myPos.getY() + MY_HEIGHT >= enemyPos.getY() && myPos.getY() <= enemyPos.getY() + enemy.MY_HEIGHT)
+            {
+                dmgDone += 25;
+                enemy.healthAmt -= 25;
+                canAttack = false;
+                new CooldownTracker(this, attackCD, "canAttack");
+                return true;
+            }
+        }
+        return false;
     }
 
     /**

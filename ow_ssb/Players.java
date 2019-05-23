@@ -20,7 +20,7 @@ public class Players {
     public static final int UPDATE_DELAY = 10;
 
     /** List of players */
-    private ArrayList<Player> myPlayers;
+    public ArrayList<Player> myPlayers;
     /** Num of players int */
     private int myNumPlayers;
 

@@ -3,6 +3,7 @@ import java.awt.*;
 import javax.swing.*;
 import java.awt.image.*;
 import java.awt.geom.*;
+import java.awt.geom.Rectangle2D;
 import java.io.*;
 import javax.imageio.*;
 /**
@@ -23,8 +24,13 @@ public class GameScreen extends JPanel {
     /** Stage */
     public Stage myStage;
 
-    /** Stage Image */
-    private BufferedImage myImage;
+    public static final String BASE_DIRECTORY = "./graphics/ingame/topIcon/";
+
+    /** Health Bar Overlay */
+    private BufferedImage healthBar;
+
+    /** Background UI */
+    private BufferedImage background;
 
     /**
      * Constructs a GameScreen
@@ -34,7 +40,7 @@ public class GameScreen extends JPanel {
         super();
         Toolkit toolkit = Toolkit.getDefaultToolkit();
 		Image image = toolkit.getImage("./graphics/menu/cursor.png");
-		Cursor c = toolkit.createCustomCursor(image , new Point(this.getX(), this.getY()), "img");
+		Cursor c = toolkit.createCustomCursor(image, new Point(this.getX(), this.getY()), "img");
 		this.setCursor (c);
 
         myGame = game;
@@ -45,6 +51,29 @@ public class GameScreen extends JPanel {
         myStage = new Stage("gibraltar");
         myKeyput = new Keyput(myGame);
         myPlayers = new Players(myGame, myKeyput);
+
+        String directoryArray[] = {"bg.png", "healthbar.png"};
+        for(String fileDirectory : directoryArray)
+        {
+            try {
+            //Create Image
+            File image = new File(BASE_DIRECTORY + fileDirectory);
+            BufferedImage tempImage = ImageIO.read(image);
+            switch(fileDirectory)
+            {
+                case "bg.png":
+                background = tempImage;
+                break;
+                case "healthbar.png":
+                healthBar = tempImage;
+                break;
+                default:
+                break;
+            }
+            } catch (IOException e) {
+                System.err.println("Directory: " + fileDirectory + " - Does Not Exist");
+            }
+        }
         
         this.addKeyListener(myKeyput);
         this.setVisible(true);
@@ -71,6 +100,38 @@ public class GameScreen extends JPanel {
         ArrayList<Player> paintPlayers = myPlayers.getPlayers();
         for (Player temp : paintPlayers) {temp.drawMe(g2);}
 
+        drawUI(g2);
+    }
+
+    public void drawUI(Graphics2D g2)
+    {
+        //Player 1
+        g2.drawImage(background, 0, 0, null);
+
+        //Create Health Bar Inners
+        for(int idx = 1; idx <= 2; idx++)
+        {
+            Player temp = myPlayers.findPlayer(idx);
+            int rectangleLength = (int) ((200 / temp.STARTHEALTH) * temp.healthAmt);
+            if(idx == 1)
+            {
+                Rectangle2D healthInner = new Rectangle2D.Double(11, 73, rectangleLength, 19);
+                g2.setColor(Color.WHITE);
+                g2.fill(healthInner);
+            }
+            else
+            {
+                Rectangle2D healthInner = new Rectangle2D.Double(1232, 73, rectangleLength, 19);
+                g2.setColor(Color.WHITE);
+                g2.fill(healthInner);
+            }
+        }
+
+        //Player 1
+        g2.drawImage(healthBar, 7, 73, null);
+
+        //Player 2
+        g2.drawImage(healthBar, 1228, 73, null);
     }
 
     /**

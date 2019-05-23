@@ -58,7 +58,7 @@ public class Coord {
     }
 
     public Coord checkDistance(Coord otherCoord) {
-        return new Coord(posX - otherCoord.getX(), posY - otherCoord.getY());
+        return new Coord(Math.abs(posX - otherCoord.getX()), Math.abs(posY - otherCoord.getY()));
     }
 
     /**
