@@ -55,11 +55,11 @@ public class SmashGame {
    {
       if(myApp.getSize().getWidth() / (double) APP_WIDTH > myApp.getSize().getHeight() / (double) APP_HEIGHT)
       {
-         return myApp.getSize().getHeight() / (double) APP_HEIGHT;
+         return myApp.getSize().getHeight() / ((double) APP_HEIGHT);
       }
       else
       {
-         return myApp.getSize().getWidth() / (double) APP_WIDTH;
+         return myApp.getSize().getWidth() / ((double) APP_WIDTH);
       }
    }
 
@@ -89,7 +89,7 @@ public class SmashGame {
       setupFrame();
       iR = new ImageResizer(this);
       scale = getScale();
-      //scale = 1;
+      scale = 0.95; //Manually set Scale
       myTitleScreen.run();
    }
 

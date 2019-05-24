@@ -71,8 +71,8 @@ public class Players {
      */
     public void setupPlayers() {
         myPlayers.clear();
-        myPlayers.add(new Pharah(1, (int) (myGame.scale * 93), (int) (myGame.scale * 867), this));
-        myPlayers.add(new Pharah(2, (int) (myGame.scale * 1350), (int) (myGame.scale * 867), this));
+        myPlayers.add(new Pharah(1, (int) 93, (int) 867, this));
+        myPlayers.add(new Pharah(2, (int) 1350, (int) 867, this));
     }
 
     /**

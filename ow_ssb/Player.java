@@ -261,14 +261,12 @@ public class Player {
      * Default walk left method
      */
     public void walkLeft() {
-        if (myPos.getX() > MY_WIDTH / 2) {
-            if (myPos.getX() < SmashGame.APP_WIDTH) {
-                if (myVector.getX() > -MAX_WALKV) {
-                    myVector.setX(myVector.getX() - 2);
-                    canWalk = false;
-                    facingRight = false;
-                    new CooldownTracker(this, walkCD, "canWalk");
-                }
+        if (myPos.getX() < SmashGame.APP_WIDTH) {
+            if (myVector.getX() > -MAX_WALKV) {
+                myVector.setX(myVector.getX() - 2);
+                canWalk = false;
+                facingRight = false;
+                new CooldownTracker(this, walkCD, "canWalk");
             }
         }
     }
@@ -277,13 +275,11 @@ public class Player {
      * Default walk right method
      */
     public void walkRight() {
-        if (myPos.getX() < otherPlayers.myGame.APP_WIDTH - MY_WIDTH) {
-            if (myVector.getX() < MAX_WALKV) {
-                myVector.setX(myVector.getX() + 2);
-                canWalk = false;
-                facingRight = true;
-                new CooldownTracker(this, walkCD, "canWalk");
-            }
+        if (myVector.getX() < MAX_WALKV) {
+            myVector.setX(myVector.getX() + 2);
+            canWalk = false;
+            facingRight = true;
+            new CooldownTracker(this, walkCD, "canWalk");
         }
     }
 
@@ -320,7 +316,7 @@ public class Player {
                 myVector.setX(0);
             }
         } else {
-            if (myVector.getY() < 10) {
+            if (myVector.getY() < 20) {
                 myVector.setY(myVector.getY() + 1);
             }
 
@@ -389,7 +385,7 @@ public class Player {
      */
     public void drawMe(Graphics2D g2) {
         prevDirec = facingDirec + animationDirec;
-        g2.drawImage(myBanner, (int) (scale * (myPos.getX() - 48)), (int) (myPos.getY() - MY_HEIGHT - scale * 30), null);
+        g2.drawImage(myBanner, (int) (scale * (myPos.getX() - 48)), (int) (scale * (myPos.getY() - MY_HEIGHT - 30)), null);
 
         if (healthAmt > 0) {
             if (facingRight) {

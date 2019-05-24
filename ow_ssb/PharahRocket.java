@@ -31,6 +31,7 @@ public class PharahRocket extends Player {
 			myVector.setX(-SPEED);
 		}
 		hitSomething = false;
+		System.out.print("Pharah Rocket Created");
 	}
 
     /**

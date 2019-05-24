@@ -104,11 +104,10 @@ public class GameScreen extends JPanel {
         try {
             ArrayList<Player> paintPlayers = myPlayers.getPlayers();
             for (Player temp : paintPlayers) {temp.drawMe(g2);}
-            drawUI(g2);
         } catch (ConcurrentModificationException e) {
             //Skip frame
         }
-        
+        drawUI(g2);
     }
 
     public void drawUI(Graphics2D g2)
