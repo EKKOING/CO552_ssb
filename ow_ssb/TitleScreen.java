@@ -44,6 +44,8 @@ public class TitleScreen extends JPanel {
 	private boolean buttonClicked;
 
 	private boolean isPlayer1;
+	
+	public double scale;
 
 	/**
 	 * name of file with character list (NOTE: Any character not there will not be
@@ -115,22 +117,23 @@ public class TitleScreen extends JPanel {
 	{
 		int posY = e.getY();
 		int posX = e.getX();
-		if (posX > 153 && posX < 258) {
-			if (posY > 326 && posY < 381) {
+		double scale = myGame.getScale();
+		if (posX > scale * 153 && posX < scale * 258) {
+			if (posY > scale * 326 && posY < scale * 381) {
 				lastButtonClicked = "Play";
 				characterMenu();
 				onMainMenu = false;
 				return;
 			}
 		}
-		if (posX > 153 && posX < 252) {
-			if (posY > 470 && posY < 537) {
+		if (posX > scale * 153 && posX < scale * 252) {
+			if (posY > scale * 470 && posY < scale * 537) {
 				lastButtonClicked = "Exit";
 				myGame.myApp.setVisible(false);
 			}
 		}
-		if (posX > 153 && posX < 445) {
-			if (posY > 406 && posY < 456) {
+		if (posX > scale * 153 && posX < scale * 445) {
+			if (posY > scale * 406 && posY < scale * 456) {
 				lastButtonClicked = "Instructions";
 			}
 		}
@@ -147,16 +150,15 @@ public class TitleScreen extends JPanel {
 		g2 = (Graphics2D) g;
 
 		if (onMainMenu) {
-			g2.drawImage(background, 0, 0, null);
+			g2.drawImage(myGame.iR.resizeImage(background), 0, 0, null);
 		}
 
 		if (onCharacterMenu)
 		{
 			g2.setBackground(Color.WHITE);
-			//g2.drawImage(characterPreview, 721, 17, null);
-			g2.drawImage(staticForeground, 0, 0, null);
+			//g2.drawImage(myGame.iR.resizeImage(characterPreview), scale * 721, scale * 17, null);
+			g2.drawImage(myGame.iR.resizeImage(staticForeground), 0, 0, null);
 		}
-
 	}
 
 	private class mouseHandler implements MouseListener {
@@ -214,7 +216,7 @@ public class TitleScreen extends JPanel {
 		 */
 		public void run() {
 			while (true) {
-
+				scale = myGame.getScale();
 				repaint();
 
 				try {

@@ -15,7 +15,11 @@ import javax.imageio.*;
  * @version 2019/05/21
  */
 public class GameScreen extends JPanel {
-    /** Keyput class for handling User Input */
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 3412334407377724982L;
+	/** Keyput class for handling User Input */
     public Keyput myKeyput;
     /** Players class for managing the players */
     public Players myPlayers;
@@ -33,6 +37,9 @@ public class GameScreen extends JPanel {
     /** Background UI */
     private BufferedImage background;
 
+    /** Scale */
+    public double scale;
+
     /**
      * Constructs a GameScreen
      * @param game Game passthrough
@@ -49,7 +56,7 @@ public class GameScreen extends JPanel {
 
     public void run()
     {
-        myStage = new Stage("gibraltar");
+        myStage = new Stage("gibraltar", this);
         myKeyput = new Keyput(myGame);
         myPlayers = new Players(myGame, myKeyput);
 
@@ -111,7 +118,7 @@ public class GameScreen extends JPanel {
     public void drawUI(Graphics2D g2)
     {
         //Player 1
-        g2.drawImage(background, 0, 0, null);
+        g2.drawImage(myGame.iR.resizeImage(background), (int) (scale * 0), (int) (scale * 0), null);
 
         //Create Health Bar Inners
         for(int idx = 1; idx <= 2; idx++)
@@ -120,23 +127,23 @@ public class GameScreen extends JPanel {
             int rectangleLength = (int) ((200 / temp.STARTHEALTH) * temp.healthAmt);
             if(idx == 1)
             {
-                Rectangle2D healthInner = new Rectangle2D.Double(11, 73, rectangleLength, 19);
+                Rectangle2D healthInner = new Rectangle2D.Double(scale * 11, scale * 73, scale * rectangleLength, scale * 19);
                 g2.setColor(Color.WHITE);
                 g2.fill(healthInner);
             }
             else
             {
-                Rectangle2D healthInner = new Rectangle2D.Double(1232, 73, rectangleLength, 19);
+                Rectangle2D healthInner = new Rectangle2D.Double(scale * 1232, scale * 73, scale * rectangleLength, scale * 19);
                 g2.setColor(Color.WHITE);
                 g2.fill(healthInner);
             }
         }
 
         //Player 1
-        g2.drawImage(healthBar, 7, 73, null);
+        g2.drawImage(myGame.iR.resizeImage(healthBar), (int) (scale * 7), (int) (scale * 73), null);
 
         //Player 2
-        g2.drawImage(healthBar, 1228, 73, null);
+        g2.drawImage(myGame.iR.resizeImage(healthBar), (int) (scale * 1228), (int) (scale * 73), null);
     }
 
     /**
@@ -149,6 +156,7 @@ public class GameScreen extends JPanel {
         public void run() {
             while (true) {
                 if (!(myGame.isPaused())) {
+                    scale = myGame.getScale();
                     repaint();
                 }
 

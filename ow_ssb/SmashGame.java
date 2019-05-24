@@ -37,9 +37,24 @@ public class SmashGame {
    /** Master pause state */
    public boolean isPaused;
 
+   /** Image Resizer */
+   public ImageResizer iR;
+
    public static void main(String[] args) {
       SmashGame app = new SmashGame();
       app.run();
+   }
+
+   public double getScale()
+   {
+      if(myApp.getSize().getWidth() / (double) APP_WIDTH > myApp.getSize().getHeight() / (double) APP_HEIGHT)
+      {
+         return myApp.getSize().getHeight() / (double) APP_HEIGHT;
+      }
+      else
+      {
+         return myApp.getSize().getWidth() / (double) APP_WIDTH;
+      }
    }
 
    /**
@@ -66,6 +81,7 @@ public class SmashGame {
    public void run() {
       isPaused = false;
       setupFrame();
+      iR = new ImageResizer(this);
       myTitleScreen.run();
    }
 

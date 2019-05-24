@@ -47,7 +47,7 @@ public class Pharah extends Player
     */
     public boolean attack()
     {
-        otherPlayers.myPlayers.add(new PharahRocket(myId, (int) myPos.getX(), (int) myPos.getY() - 100, otherPlayers, facingRight, enemyId));
+        otherPlayers.myPlayers.add(new PharahRocket(myId, (int) myPos.getX(), (int) (myPos.getY() - (scale * 100)), otherPlayers, facingRight, enemyId));
         canAttack = false;
         new CooldownTracker(this, (long) attackCD, "canAttack");
         return true;
@@ -93,6 +93,6 @@ public class Pharah extends Player
                 System.err.println("FILE: " + fileDirectory);
             }
         }
-        g2.drawImage(myImage, (int) myPos.getX() - (MY_WIDTH / 2), (int) myPos.getY() - MY_HEIGHT, null);
+        g2.drawImage(otherPlayers.myGame.iR.resizeImage(myImage), (int) (scale * (myPos.getX() - (MY_WIDTH / 2))), (int) (scale * (myPos.getY() - MY_HEIGHT)), null);
     }
 }

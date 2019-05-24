@@ -98,6 +98,9 @@ public class Player {
     /* Buffered Image of Banner **/
     private BufferedImage myBanner;
 
+    /* Image Resizer **/
+    public double scale;
+
     /**
      * @param playerNum Id number to assign the player (1 or 2)
      * @param xStart    X location to start player at
@@ -382,7 +385,8 @@ public class Player {
      * @param g2 Graphics object passthrough
      */
     public void drawMe(Graphics2D g2) {
-        g2.drawImage(myBanner, (int) (myPos.getX() - 48), (int) (myPos.getY() - MY_HEIGHT - 30), null);
+        scale = otherPlayers.myGame.getScale();
+        g2.drawImage(otherPlayers.myGame.iR.resizeImage(myBanner), (int) (scale * (myPos.getX() - 48)), (int) (myPos.getY() - MY_HEIGHT - scale * 30), null);
 
         myAnimationFrame = myAnimationFrame + 0.1;
 

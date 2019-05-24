@@ -27,12 +27,19 @@ public class Stage {
 	/* ArrayList of Images **/
 	public ArrayList<BufferedImage> images;
 
+	/** Screen Created From */
+	public GameScreen myScreen;
+
+	/** Scale */
+	public double scale;
+
 	/**
 	 * 
 	 */
-	public Stage(String name) {
+	public Stage(String name, GameScreen screen) {
 		myAnimationFrame = 1;
 		animationDirec = name;
+		myScreen = screen;
 
 		images = new ArrayList<BufferedImage>();
 
@@ -59,6 +66,7 @@ public class Stage {
 	}
 
 	public void drawMe(Graphics2D g2) {
+		scale = myScreen.myGame.getScale();
 		if(myAnimationFrame < images.size() - 2)
 		{
 			myAnimationFrame++;
@@ -67,7 +75,7 @@ public class Stage {
 		{
 			myAnimationFrame = 0;
 		}
-		g2.drawImage(images.get(myAnimationFrame), 0, 0, null);
+		g2.drawImage(myScreen.myGame.iR.resizeImage(images.get(myAnimationFrame)), 0, 0, null);
 	}
 
 }
