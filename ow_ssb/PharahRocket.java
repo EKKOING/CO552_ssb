@@ -70,7 +70,7 @@ public class PharahRocket extends Player {
 
     public void kill()
     {
-		otherPlayers.myPlayers.remove(this);
+		otherPlayers.removeObject(this);
 	}
 
 	public void explode()

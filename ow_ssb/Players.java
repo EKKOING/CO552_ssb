@@ -92,6 +92,11 @@ public class Players {
         return null;
     }
 
+    public void removeObject(Player remove)
+    {
+        myPlayers.remove(remove);
+    }
+
     /**
      * Runs tasks on the players
      */
