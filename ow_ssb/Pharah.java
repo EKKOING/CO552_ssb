@@ -5,6 +5,9 @@ import java.awt.geom.*;
 import java.io.*;
 import javax.imageio.*;
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
 Class for the Pharah character inherits from player
@@ -16,6 +19,9 @@ public class Pharah extends Player
     /** Image to draw */
     public BufferedImage myImage;
 
+    /* ArrayList of Images **/
+	public ArrayList<BufferedImage> images;
+
     /** Image Directory */
     public final String BASE_DIREC = "./graphics/characters/pharah";
 
@@ -26,6 +32,9 @@ public class Pharah extends Player
 
     /** Cooldowns for Pharah */
     public static final long attackCD = 500;
+
+    /** Timer thread */
+    public Timer timer;
     
 
     /**
@@ -38,6 +47,7 @@ public class Pharah extends Player
     public Pharah(int myId, int xStart, int yStart, Players list)
     {
         super(myId, xStart, yStart, list);
+        images = new ArrayList<BufferedImage>();
         System.out.println("Pharah Created \n");
     }
     
@@ -62,37 +72,85 @@ public class Pharah extends Player
         return true;
     }
 
+    public void renderNewFrames()
+    {
+        images = new ArrayList<BufferedImage>();
+        int renderFrame = 1;
+		boolean fileExists = true;
+		while(fileExists)
+		{
+			try {
+				//Create File Directory String
+				String fileDirectory = BASE_DIREC + facingDirec + animationDirec + "/";
+				if (renderFrame < 10) {fileDirectory = fileDirectory + "0";}
+				fileDirectory = fileDirectory + (int) renderFrame + ".png";
+	
+				//Create Image
+				File image = new File(fileDirectory);
+				myImage = otherPlayers.myGame.iR.resizeImage(ImageIO.read(image));
+				images.add(myImage);
+			} 
+			catch (IOException ioe) {
+				fileExists = false;
+			}
+			renderFrame++;
+		}
+    }
+
     public void drawMe (Graphics2D g2)
     {
         super.drawMe(g2);
-
-        try {
-            //Create File Directory String
-            String fileDirectory = BASE_DIREC + facingDirec + animationDirec + "/";
-            if (myAnimationFrame < 10) {fileDirectory = fileDirectory + "0";}
-            fileDirectory = fileDirectory + (int) myAnimationFrame + ".png";
-
-            //Create Image
-            File image = new File(fileDirectory);
-            myImage = ImageIO.read(image);
-        } 
-        catch (IOException ioe) {
-            myAnimationFrame = 1;
-            try {
-                String fileDirectory = BASE_DIREC + facingDirec + animationDirec + "/";
-                if (myAnimationFrame < 10) {fileDirectory = fileDirectory + "0";}
-                fileDirectory = fileDirectory + (int) myAnimationFrame + ".png";
-                //Create Image
-                File image = new File(fileDirectory);
-                myImage = ImageIO.read(image);
-            } catch (IOException ioe2) {
-                System.err.println(ioe2);
-                String fileDirectory = BASE_DIREC + facingDirec + animationDirec + "/";
-                if (myAnimationFrame < 10) {fileDirectory = fileDirectory + "0";}
-                fileDirectory = fileDirectory + (int) myAnimationFrame + ".png";
-                System.err.println("FILE: " + fileDirectory);
-            }
+        if(!((facingDirec + animationDirec).equals(prevDirec)))
+        {
+            //renderNewFrames();
+            timer = new Timer();
+            timer.schedule(new Renderer(), 0);
         }
-        g2.drawImage(otherPlayers.myGame.iR.resizeImage(myImage), (int) (scale * (myPos.getX() - (MY_WIDTH / 2))), (int) (scale * (myPos.getY() - MY_HEIGHT)), null);
+
+        if(myAnimationFrame < images.size() - 2)
+		{
+            myAnimationFrame = myAnimationFrame + 0.1;
+		}
+		else
+		{
+			myAnimationFrame = 0;
+		}
+        
+        try {
+            g2.drawImage(images.get((int) myAnimationFrame), (int) (scale * (myPos.getX() - (MY_WIDTH / 2))), (int) (scale * (myPos.getY() - MY_HEIGHT)), null);
+        } 
+        catch (IndexOutOfBoundsException e) 
+        {
+
+        }
+        
+    }
+
+    class Renderer extends TimerTask {
+        public void run() {
+            ArrayList<BufferedImage> temp = new ArrayList<BufferedImage>();
+            int renderFrame = 1;
+            boolean fileExists = true;
+            while(fileExists)
+            {
+                try {
+                    //Create File Directory String
+                    String fileDirectory = BASE_DIREC + facingDirec + animationDirec + "/";
+                    if (renderFrame < 10) {fileDirectory = fileDirectory + "0";}
+                    fileDirectory = fileDirectory + (int) renderFrame + ".png";
+        
+                    //Create Image
+                    File image = new File(fileDirectory);
+                    myImage = otherPlayers.myGame.iR.resizeImage(ImageIO.read(image));
+                    temp.add(myImage);
+                } 
+                catch (IOException ioe) {
+                    fileExists = false;
+                }
+                renderFrame++;
+            }
+            images = temp;
+            timer.cancel();
+        }
     }
 }

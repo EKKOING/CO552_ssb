@@ -40,6 +40,12 @@ public class SmashGame {
    /** Image Resizer */
    public ImageResizer iR;
 
+   /** Scale */
+   public double scale;
+
+   /** Monitor Running On */
+   public GraphicsDevice gd;
+
    public static void main(String[] args) {
       SmashGame app = new SmashGame();
       app.run();
@@ -82,6 +88,8 @@ public class SmashGame {
       isPaused = false;
       setupFrame();
       iR = new ImageResizer(this);
+      scale = getScale();
+      //scale = 1;
       myTitleScreen.run();
    }
 
@@ -90,7 +98,23 @@ public class SmashGame {
     */
    private void setupFrame() {
       myApp = new JFrame();
-      myApp.setSize(APP_WIDTH, APP_HEIGHT);
+
+      //Set to Full Screen
+      Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+      myApp.setSize((int) screenSize.getWidth(), (int) screenSize.getHeight());
+      myApp.setExtendedState(JFrame.MAXIMIZED_BOTH); 
+      myApp.setResizable(false);
+      gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
+    if (gd.isFullScreenSupported()) {
+        myApp.setUndecorated(true);
+        gd.setFullScreenWindow(myApp);
+    } 
+    else 
+    {
+        System.err.println("Full screen not supported");
+    }
+      
+    
       myAppPanel = new JPanel(new CardLayout());
 
       myTitleScreen = new TitleScreen(this);
@@ -103,9 +127,6 @@ public class SmashGame {
 
       myApp.add(myAppPanel);
       myApp.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-      myApp.setExtendedState(JFrame.MAXIMIZED_BOTH); 
-      //myApp.setUndecorated(true);
       myApp.setVisible(true);
    }
 

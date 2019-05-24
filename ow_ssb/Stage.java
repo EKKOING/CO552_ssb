@@ -40,6 +40,7 @@ public class Stage {
 		myAnimationFrame = 1;
 		animationDirec = name;
 		myScreen = screen;
+		scale = myScreen.myGame.scale;
 
 		images = new ArrayList<BufferedImage>();
 
@@ -54,7 +55,7 @@ public class Stage {
 	
 				//Create Image
 				File image = new File(fileDirectory);
-				myImage = ImageIO.read(image);
+				myImage = myScreen.myGame.iR.resizeImage(ImageIO.read(image));
 				images.add(myImage);
 			} 
 			catch (IOException ioe) {
@@ -66,7 +67,6 @@ public class Stage {
 	}
 
 	public void drawMe(Graphics2D g2) {
-		scale = myScreen.myGame.getScale();
 		if(myAnimationFrame < images.size() - 2)
 		{
 			myAnimationFrame++;
@@ -75,7 +75,7 @@ public class Stage {
 		{
 			myAnimationFrame = 0;
 		}
-		g2.drawImage(myScreen.myGame.iR.resizeImage(images.get(myAnimationFrame)), 0, 0, null);
+		g2.drawImage(images.get(myAnimationFrame), 0, 0, null);
 	}
 
 }

@@ -104,7 +104,7 @@ public class PharahRocket extends Player {
 		if(!(hitSomething))
 		{
 			//TODO: Place Images
-			Rectangle2D me = new Rectangle2D.Double(myPos.getX() - 10, myPos.getY() - 2.5, 10, 5);
+			Rectangle2D me = new Rectangle2D.Double(otherPlayers.myGame.scale * (myPos.getX() - 10), otherPlayers.myGame.scale * (myPos.getY() - 2.5), otherPlayers.myGame.scale * 20, otherPlayers.myGame.scale * 10);
 			g2.setColor(Color.YELLOW);
 			g2.fill(me);
 		}

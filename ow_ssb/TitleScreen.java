@@ -73,6 +73,7 @@ public class TitleScreen extends JPanel {
 	}
 
 	public void run() {
+		scale = myGame.scale;
 		this.requestFocusInWindow(true);
 		mainMenu();
 	}
@@ -82,7 +83,7 @@ public class TitleScreen extends JPanel {
 		buttonClicked = false;
 		try {
 			File image = new File(MAIN_MENU);
-			background = ImageIO.read(image);
+			background = myGame.iR.resizeImage(ImageIO.read(image));
 		} catch (IOException ioe) {
 			System.err.println(ioe);
 		}
@@ -92,7 +93,7 @@ public class TitleScreen extends JPanel {
 	public void characterMenu() {
 		try {
 			File image = new File(CHARACTER_MENU + "StaticForeground.png");
-			staticForeground = ImageIO.read(image);
+			staticForeground = myGame.iR.resizeImage(ImageIO.read(image));
 		}
 		catch(IOException e)
 		{
@@ -117,7 +118,7 @@ public class TitleScreen extends JPanel {
 	{
 		int posY = e.getY();
 		int posX = e.getX();
-		double scale = myGame.getScale();
+		double scale = myGame.scale;
 		if (posX > scale * 153 && posX < scale * 258) {
 			if (posY > scale * 326 && posY < scale * 381) {
 				lastButtonClicked = "Play";
@@ -130,6 +131,8 @@ public class TitleScreen extends JPanel {
 			if (posY > scale * 470 && posY < scale * 537) {
 				lastButtonClicked = "Exit";
 				myGame.myApp.setVisible(false);
+				myGame.gd.setFullScreenWindow(null);
+				System.exit(0);
 			}
 		}
 		if (posX > scale * 153 && posX < scale * 445) {
@@ -150,14 +153,14 @@ public class TitleScreen extends JPanel {
 		g2 = (Graphics2D) g;
 
 		if (onMainMenu) {
-			g2.drawImage(myGame.iR.resizeImage(background), 0, 0, null);
+			g2.drawImage(background, 0, 0, null);
 		}
 
 		if (onCharacterMenu)
 		{
 			g2.setBackground(Color.WHITE);
 			//g2.drawImage(myGame.iR.resizeImage(characterPreview), scale * 721, scale * 17, null);
-			g2.drawImage(myGame.iR.resizeImage(staticForeground), 0, 0, null);
+			g2.drawImage(staticForeground, 0, 0, null);
 		}
 	}
 
@@ -216,7 +219,6 @@ public class TitleScreen extends JPanel {
 		 */
 		public void run() {
 			while (true) {
-				scale = myGame.getScale();
 				repaint();
 
 				try {

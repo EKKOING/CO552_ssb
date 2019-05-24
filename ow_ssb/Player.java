@@ -125,10 +125,13 @@ public class Player {
         onGround = true;
         dmgDone = 0;
         dmgTaken = 0;
-        myAnimationFrame = 1;
+        myAnimationFrame = 0;
+        facingDirec = "";
+        animationDirec = "";
         prevDirec = "";
         setKeybindings();
         System.out.print("Player of type ");
+        scale = otherPlayers.myGame.scale;
     }
 
     /**
@@ -145,7 +148,7 @@ public class Player {
             facingRight = true;
             try {
                 File image = new File(BANNER_DIREC + "1.png");
-                myBanner = ImageIO.read(image);
+                myBanner = otherPlayers.myGame.iR.resizeImage(ImageIO.read(image));
             } 
             catch (IOException ioe2) 
             {
@@ -163,7 +166,7 @@ public class Player {
             facingRight = false;
             try {
                 File image = new File(BANNER_DIREC + "2.png");
-                myBanner = ImageIO.read(image);
+                myBanner = otherPlayers.myGame.iR.resizeImage(ImageIO.read(image));
             } 
             catch (IOException ioe2) 
             {
@@ -385,10 +388,8 @@ public class Player {
      * @param g2 Graphics object passthrough
      */
     public void drawMe(Graphics2D g2) {
-        scale = otherPlayers.myGame.getScale();
-        g2.drawImage(otherPlayers.myGame.iR.resizeImage(myBanner), (int) (scale * (myPos.getX() - 48)), (int) (myPos.getY() - MY_HEIGHT - scale * 30), null);
-
-        myAnimationFrame = myAnimationFrame + 0.1;
+        prevDirec = facingDirec + animationDirec;
+        g2.drawImage(myBanner, (int) (scale * (myPos.getX() - 48)), (int) (myPos.getY() - MY_HEIGHT - scale * 30), null);
 
         if (healthAmt > 0) {
             if (facingRight) {
@@ -414,8 +415,7 @@ public class Player {
         }
 
         if (!(prevDirec.equals(facingDirec + animationDirec))) {
-            myAnimationFrame = 1;
+            myAnimationFrame = 0;
         }
-        prevDirec = facingDirec + animationDirec;
     }
 }
