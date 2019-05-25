@@ -13,6 +13,11 @@ public class SmashGame {
    /** App Height */
    public static final int APP_HEIGHT = 900;
 
+   /** Boolean for what happens at boundaries 
+    * If True, Characters Wrap, otherwise Characters bounce
+   */
+   public static final boolean MOTION_WRAP = false;
+
    /** JFrame that holds the entirety of the game */
    public JFrame myApp;
 
@@ -89,7 +94,7 @@ public class SmashGame {
       setupFrame();
       iR = new ImageResizer(this);
       scale = getScale();
-      scale = 0.95; //Manually set Scale
+      //scale = 0.95; //Manually set Scale
       myTitleScreen.run();
    }
 

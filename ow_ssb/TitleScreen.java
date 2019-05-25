@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.TimerTask;
 import java.awt.*;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
@@ -7,7 +8,8 @@ import javax.swing.*;
 import java.awt.image.*;
 import java.awt.geom.*;
 import java.io.*;
-//import java.time.chrono.ThaiBuddhistDate; This keeps adding itself idk y
+import java.util.Timer;
+
 
 import javax.imageio.*;
 import javax.lang.model.util.ElementScanner6;
@@ -27,6 +29,15 @@ public class TitleScreen extends JPanel {
 	/* Static Foreground Layer **/
 	private BufferedImage staticForeground;
 
+	/* Dynamic Character Preview **/
+	private BufferedImage characterPreview;
+
+	/** Character Preview Placeholder */
+	private BufferedImage noCharacterPreviewed;
+
+	/** Character Preview Placeholder */
+	private BufferedImage currentPicker;
+
 	/** Boolean State of Main Menu */
 	public boolean onMainMenu;
 
@@ -44,14 +55,28 @@ public class TitleScreen extends JPanel {
 	private boolean buttonClicked;
 
 	private boolean isPlayer1;
+
+	private boolean isPlayer2;
 	
 	public double scale;
+
+	public Timer myTimer;
+
+	public boolean canClick;
+
+	public ArrayList<CharacterMenuIcon> myIcons;
+
+	public static final double ICON_X = 56.00;
+
+	public static final double ICON_Y = 220.0;
 
 	/**
 	 * name of file with character list (NOTE: Any character not there will not be
 	 * selectable)
 	 */
-	public static final String CHARACTER_LIST = "./data/characters.txt";
+	public static final String charactersArray[] = {"random","pharah", "empty", "empty", "empty", "empty", "empty", "empty","empty","empty","empty","empty","empty","empty","empty"};
+
+	public int numCharacters;
 
 	/** Graphics Object */
 	private Graphics2D g2;
@@ -76,6 +101,19 @@ public class TitleScreen extends JPanel {
 		scale = myGame.scale;
 		this.requestFocusInWindow(true);
 		mainMenu();
+		canClick = true;
+	}
+
+	public void getNumCharacters()
+	{
+		numCharacters = 0;
+		for(String currentCharacter : charactersArray)
+		{
+			if(!(currentCharacter.equals("random") || currentCharacter.equals("empty")))
+			{
+				numCharacters++;
+			}
+		}
 	}
 
 	public void mainMenu() {
@@ -100,18 +138,97 @@ public class TitleScreen extends JPanel {
 
 		}
 
+		try {
+			File image = new File(CHARACTER_MENU + "noCharacterPreviewed.png");
+			noCharacterPreviewed = myGame.iR.resizeImage(ImageIO.read(image));
+		}
+		catch(IOException e)
+		{
+
+		}
+
+		if(isPlayer1)
+		{
+			try {
+				File image = new File(CHARACTER_MENU + "1.png");
+				currentPicker = myGame.iR.resizeImage(ImageIO.read(image));
+			}
+			catch(IOException e)
+			{
+	
+			}
+		}
+		else
+		{
+			try {
+				File image = new File(CHARACTER_MENU + "2.png");
+				currentPicker = myGame.iR.resizeImage(ImageIO.read(image));
+			}
+			catch(IOException e)
+			{
+	
+			}
+		}
+
+		//Auto Layout Icons From Set Array
+		double positionX = ICON_X;
+		double positionY = ICON_Y;
+		myIcons = new ArrayList<CharacterMenuIcon>();
+		
+		for(String character : charactersArray)
+		{
+			myIcons.add(new CharacterMenuIcon(character, scale, positionX, positionY));
+			positionX = positionX + CharacterMenuIcon.WIDTH + 20;
+			if(myIcons.size() == 4 || myIcons.size() == 9)
+			{
+				positionX = ICON_X;
+				positionY = positionY + CharacterMenuIcon.HEIGHT + 40;
+			}
+		}
 		onCharacterMenu = true;
 	}
 
 	public void characterMenuButtonHandler(MouseEvent e)
 	{
-		myGame.stage = 1;
-		myGame.player1 = 1;
-		myGame.player2 = 1;
-		this.setVisible(false);
-		myGame.screenSwitcher("Game");
-		myGame.myGameScreen.run();
-		onCharacterMenu = false;
+		if(canClick)
+		{
+			for(CharacterMenuIcon currentIcon : myIcons)
+			{
+				if(currentIcon.contains(e))
+				{
+					int currentCharacter = 0;
+					switch(currentIcon.myName)
+					{
+						case "pharah":
+						currentCharacter = 1;
+						break;
+						case "random":
+						currentCharacter = (int) (Math.random() * numCharacters) + 1;
+						break;
+					}
+					if(isPlayer2 && currentCharacter != 0)
+					{
+						myGame.player2 = currentCharacter;
+						isPlayer2 = false;
+						this.setVisible(false);
+						myGame.screenSwitcher("Game");
+						myGame.myGameScreen.run();
+						onCharacterMenu = false;
+					}
+
+					if(isPlayer1 && currentCharacter != 0)
+					{
+						myGame.player1 = currentCharacter;
+						isPlayer1 = false;
+						isPlayer2 = true;
+						canClick = false;
+						myTimer = new Timer();
+						myTimer.schedule(new RemindTask(), 2000);
+						characterMenu();
+					}
+				}
+			}
+		}
 	}
 
 	public void mainMenuButtonHandler(MouseEvent e) 
@@ -122,6 +239,10 @@ public class TitleScreen extends JPanel {
 		if (posX > scale * 153 && posX < scale * 258) {
 			if (posY > scale * 326 && posY < scale * 381) {
 				lastButtonClicked = "Play";
+				canClick = false;
+				myTimer = new Timer();
+				myTimer.schedule(new RemindTask(), 1000);
+				isPlayer1 = true;
 				characterMenu();
 				onMainMenu = false;
 				return;
@@ -158,15 +279,22 @@ public class TitleScreen extends JPanel {
 
 		if (onCharacterMenu)
 		{
+			g2.clearRect(0, 0, 1920, 1080);
 			g2.setBackground(Color.WHITE);
-			//g2.drawImage(myGame.iR.resizeImage(characterPreview), scale * 721, scale * 17, null);
+			g2.drawImage(characterPreview, (int) (scale * 721), (int) (scale * 17), null);
 			g2.drawImage(staticForeground, 0, 0, null);
+			g2.drawImage(currentPicker, (int)(scale * 60), (int)(scale * 109.94), null);
+			for(CharacterMenuIcon currentIcon : myIcons)
+			{
+				currentIcon.drawMe(g2);
+			}
 		}
 	}
 
 	private class mouseHandler implements MouseListener {
 		public void mouseClicked(MouseEvent e) {
 			//System.out.println(e);
+
 			if (onMainMenu) {
 				mainMenuButtonHandler(e);
 			}
@@ -174,7 +302,6 @@ public class TitleScreen extends JPanel {
 			{
 				characterMenuButtonHandler(e);
 			}
-
 		}
 
 		public void mouseEntered(MouseEvent e) {
@@ -198,7 +325,17 @@ public class TitleScreen extends JPanel {
 	{
 		public void mouseMoved(MouseEvent e)
 		{
-			//TODO: Create Character Select Previews
+			if(onCharacterMenu)
+			{
+				characterPreview = noCharacterPreviewed;
+				for(CharacterMenuIcon currentIcon : myIcons)
+				{
+					if(currentIcon.contains(e))
+					{
+						characterPreview = currentIcon.getPreview();
+					}
+				}
+			}
 		}
 
 		public void mouseDragged(MouseEvent e)
@@ -222,12 +359,19 @@ public class TitleScreen extends JPanel {
 				repaint();
 
 				try {
-					sleep(10);
+					sleep(20);
 				} catch (InterruptedException ie) {
 
 				}
 			}
 		}
 	}
+
+	class RemindTask extends TimerTask {
+        public void run() {
+			canClick = true;
+            myTimer.cancel();
+        }
+    }
 
 }

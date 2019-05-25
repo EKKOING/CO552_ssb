@@ -330,6 +330,41 @@ public class Player {
         }
     }
 
+    public void checkBoundaries() {
+
+        if (SmashGame.MOTION_WRAP)
+        {
+            if(myPos.getX() > SmashGame.APP_WIDTH + 10)
+            {
+                myPos.setX(0);
+            }
+
+            if(myPos.getX() < -10)
+            {
+                myPos.setX(SmashGame.APP_WIDTH);
+            }
+        }
+        else
+        {
+            if(myPos.getX() > SmashGame.APP_WIDTH - 10)
+            {
+                myVector.setX(myVector.getX() - 8);
+            }
+
+            if(myPos.getX() < 10)
+            {
+                myVector.setX(myVector.getX() + 8);
+            }
+        }
+
+        if(myPos.getY() < 5)
+        {
+            myPos.setY(5);
+        }
+
+        
+    }
+
     public void respawn()
     {
         myPos = new Coord( SmashGame.APP_WIDTH / 2, -MY_HEIGHT - 10);
@@ -351,6 +386,7 @@ public class Player {
     public void move(ArrayList<Key> myList) {
         resistance();
         checkGround();
+        checkBoundaries();
         if (healthAmt <= 0) {
             kill();
             new CooldownTracker(this, respawnCD, "respawn");

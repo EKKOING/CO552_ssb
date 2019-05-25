@@ -17,9 +17,22 @@ public class ImageResizer {
 		myGame = frame;
 	}
 
+	/**
+	 * 
+	 */
+	public ImageResizer() {
+	}
+
 	public BufferedImage resizeImage(BufferedImage bi) 
 	{
 		double scale = myGame.scale;
+		AffineTransform resize = AffineTransform.getScaleInstance(scale, scale);
+		AffineTransformOp op = new AffineTransformOp(resize, AffineTransformOp.TYPE_BICUBIC);
+		return op.filter(bi, null);
+	}
+
+	public BufferedImage resizeImage(BufferedImage bi, double scale) 
+	{
 		AffineTransform resize = AffineTransform.getScaleInstance(scale, scale);
 		AffineTransformOp op = new AffineTransformOp(resize, AffineTransformOp.TYPE_BICUBIC);
 		return op.filter(bi, null);

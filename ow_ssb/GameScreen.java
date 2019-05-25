@@ -97,7 +97,7 @@ public class GameScreen extends JPanel {
 
         //Rectangle2D.Double test = new Rectangle2D.Double(0, 0, 200, 200);
         //g2.fill(test);
-        g2.clearRect(0, 0, myGame.APP_WIDTH, myGame.APP_HEIGHT);
+        g2.clearRect(0, 0, 1920, 1080);
 
         myStage.drawMe(g2);
 
