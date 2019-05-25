@@ -93,7 +93,8 @@ public class Player {
     /* Int to hold the default health to start with **/
     public static final int STARTHEALTH = 100;
 
-    //public boolean invincible = true;
+    /** Lives Left */
+    public int livesLeft;
 
     /* Buffered Image of Banner **/
     private BufferedImage myBanner;
@@ -109,11 +110,6 @@ public class Player {
      */
     public Player(int playerNum, int xStart, int yStart, Players list) {
         myId = playerNum;
-        enemyId = 2;
-
-        if (myId == 2) {
-            enemyId = 1;
-        }
         otherPlayers = list;
 
         myPos = new Coord((double) xStart, (double) yStart);
@@ -132,12 +128,13 @@ public class Player {
         setKeybindings();
         System.out.print("Player of type ");
         scale = otherPlayers.myGame.scale;
+        livesLeft = SmashGame.NUM_LIVES;
     }
 
     /**
      * Sets keybindings based off of ID num
      */
-    private void setKeybindings() {
+    public void setKeybindings() {
         if (myId == 1) {
             moveLeft = KeyEvent.VK_A;
             moveRight = KeyEvent.VK_D;
@@ -146,6 +143,7 @@ public class Player {
             moveAttack = KeyEvent.VK_E;
             moveSpecial = KeyEvent.VK_Q;
             facingRight = true;
+            enemyId = 2;
             try {
                 File image = new File(BANNER_DIREC + "1.png");
                 myBanner = otherPlayers.myGame.iR.resizeImage(ImageIO.read(image));
@@ -164,6 +162,7 @@ public class Player {
             moveAttack = KeyEvent.VK_O;
             moveSpecial = KeyEvent.VK_U;
             facingRight = false;
+            enemyId = 1;
             try {
                 File image = new File(BANNER_DIREC + "2.png");
                 myBanner = otherPlayers.myGame.iR.resizeImage(ImageIO.read(image));
@@ -348,12 +347,12 @@ public class Player {
         {
             if(myPos.getX() > SmashGame.APP_WIDTH - 10)
             {
-                myVector.setX(myVector.getX() - 8);
+                myVector.setX(myVector.getX() - 1);
             }
 
             if(myPos.getX() < 10)
             {
-                myVector.setX(myVector.getX() + 8);
+                myVector.setX(myVector.getX() + 1);
             }
         }
 

@@ -71,8 +71,36 @@ public class Players {
      */
     public void setupPlayers() {
         myPlayers.clear();
-        myPlayers.add(new Pharah(1, (int) 93, (int) 867, this));
-        myPlayers.add(new Pharah(2, (int) 1350, (int) 867, this));
+        int currentPlayer = 0;
+        for(int idx = 1; idx <= 2; idx++)
+        {
+            Player temp = new Player(0, 0, 0, this);
+            if(idx == 1)
+            {   
+                currentPlayer = myGame.player1;
+            }
+            else{
+                currentPlayer = myGame.player2;
+            }
+            
+            switch(currentPlayer)
+            {
+                case 1:
+                temp = new Pharah(0, 0, 0, this);
+                break;
+            }
+            temp.myId = idx;
+            temp.setKeybindings();
+            if(idx == 1)
+            {
+                temp.myPos = new Coord(93, 867);
+            }
+            else
+            {
+                temp.myPos = new Coord(1350, 867);
+            }
+            myPlayers.add(temp);
+        }
     }
 
     /**

@@ -48,6 +48,7 @@ public class PharahRocket extends Player {
 			if (distToEnemy.getY() < enemy.MY_HEIGHT && distToEnemy.getY() > 0 && myPos.getY() < enemyPos.getY())
 			{
 				enemy.healthAmt -=  10;
+				enemy.myVector.setX(enemy.myVector.getX() + (myVector.getX() * 0.5));
 				canAttack = false;
 				hitSomething = true;
 				explode();

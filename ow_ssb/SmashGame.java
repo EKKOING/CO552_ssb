@@ -18,6 +18,9 @@ public class SmashGame {
    */
    public static final boolean MOTION_WRAP = false;
 
+   /** Int for number of lives given to players */
+  public static final int NUM_LIVES = 3;
+
    /** JFrame that holds the entirety of the game */
    public JFrame myApp;
 
