@@ -31,7 +31,7 @@ public class Pharah extends Player
     public static final int MY_WIDTH = 166;
 
     /** Cooldowns for Pharah */
-    public static final long attackCD = 500;
+    public static final long attackCD = 600;
 
     /** Timer thread */
     public Timer timer;
@@ -57,9 +57,13 @@ public class Pharah extends Player
     */
     public boolean attack()
     {
-        otherPlayers.myPlayers.add(new PharahRocket(myId * 100 + 1, (int) myPos.getX(), (int) (myPos.getY() - (scale * 100)), otherPlayers, facingRight, enemyId));
+        attacking = true;
+        int newX = -55;
+        if(facingRight){newX = 55;}
+        otherPlayers.myPlayers.add(new PharahRocket(myId * 100 + 1, (int) myPos.getX() + newX, (int) (myPos.getY() - 124), otherPlayers, facingRight, enemyId));
         canAttack = false;
         new CooldownTracker(this, (long) attackCD, "canAttack");
+        new CooldownTracker(this, (long) 150, "attacking");
         return true;
     }
 

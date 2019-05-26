@@ -17,6 +17,12 @@ public class Stage {
 
 	public static final double FLOOR_BOTTOM = 758;
 
+	public static final double BALCONY_TOP = 432;
+
+	public static final double BALCONY_GAP = 531;
+
+	public static final double BALCONY_BOTTOM = 468;
+
 	/** Stage Path */
 	public final String BASE_DIREC = "./graphics/stages/";
 

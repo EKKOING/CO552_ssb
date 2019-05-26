@@ -81,6 +81,7 @@ public class Player {
     public boolean canWalk;
     public static final long walkCD = 10;
     public boolean canAttack;
+    public boolean attacking;
     public static final long attackCD = 500;
     public static final long respawnCD = 5000;
 
@@ -298,20 +299,34 @@ public class Player {
 
     public void jump() {
         if (onGround) {
-            myVector.setY(-35);
+            myVector.setY(-30);
             onGround = false;
-            new CooldownTracker(this, (long) 250, "doubleJump");
+            doubleJump = false;
+            new CooldownTracker(this, (long) 300, "doubleJump");
         } else if (doubleJump) {
-            myVector.setY(-20);
+            myVector.setY(myVector.getY() - 20);
             doubleJump = false;
             new CooldownTracker(this, (long) 150, "doubleJump");
         }
     }
 
     public void checkGround() {
-        if (myPos.getY() >= Stage.FLOOR_TOP && myPos.getY() <= Stage.FLOOR_TOP + 10 && myPos.getX() > 100 && myPos.getX() < SmashGame.APP_WIDTH - 100) {
+        if (myPos.getY() >= Stage.FLOOR_TOP && myPos.getY() <= Stage.FLOOR_TOP + 10 && myPos.getX() > Stage.FLOOR_GAP && myPos.getX() < SmashGame.APP_WIDTH - Stage.FLOOR_GAP) {
 
             myPos.setY(Stage.FLOOR_TOP);
+            if (myVector.getY() >= 0) 
+            {
+                myVector.setY(0);
+            }
+            if (myVector.getY() > -5)
+            {
+                onGround = true;
+                doubleJump = true;
+            }
+        }
+        else if (myPos.getY() >= Stage.BALCONY_TOP && myPos.getY() <= Stage.BALCONY_TOP + 10 && myPos.getX() > Stage.BALCONY_GAP && myPos.getX() < SmashGame.APP_WIDTH - Stage.BALCONY_GAP) {
+
+            myPos.setY(Stage.BALCONY_TOP);
             if (myVector.getY() >= 0) 
             {
                 myVector.setY(0);
@@ -505,6 +520,11 @@ public class Player {
         {
             facingDirec = "";
             animationDirec = "/dead";
+        }
+
+        if(attacking)
+        {
+            animationDirec = animationDirec + "shooting";
         }
 
         if (!(prevDirec.equals(facingDirec + animationDirec))) {

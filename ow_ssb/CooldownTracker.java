@@ -49,6 +49,10 @@ public class CooldownTracker {
                 myPlayer.respawn();
                 break;
 
+                case "attacking":
+                myPlayer.attacking = false;
+                break;
+
                 default:
                 System.err.println("No Such Cooldown Found for Input: \"" + whichCD + "\"");
                 break;
