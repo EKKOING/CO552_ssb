@@ -100,7 +100,7 @@ public class SmashGame {
       setupFrame();
       iR = new ImageResizer(this);
       scale = getScale();
-      scale = 1; //Manually set Scale
+      //scale = 1; //Manually set Scale
       myTitleScreen.run();
    }
 

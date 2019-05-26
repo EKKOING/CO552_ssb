@@ -73,17 +73,18 @@ public class RingOutExplosion implements Animator {
         myLocation = new Coord(myPos.getX(), myPos.getY());
         if(direcFacing.equals("left"))
         {
-            myLocation.setX(0 - 140);
-            myLocation.setY(myLocation.getY() - 280);
+            myLocation.setX(0 - 280 * .35);
+            myLocation.setY(myLocation.getY() - 560 * .35);
         }
         else if (direcFacing.equals("right"))
         {
-            myLocation.setX(SmashGame.APP_WIDTH - 140);
-            myLocation.setY(myLocation.getY() - 280);
+            myLocation.setX(SmashGame.APP_WIDTH - 1576 * .35);
+            myLocation.setY(myLocation.getY() - 560 * .35);
         }
         else
         {
-
+            myLocation.setY(SmashGame.APP_HEIGHT - 1576 * .35);
+            myLocation.setX(myLocation.getX() - 560 * .35);
         }
         myScreen.myAnimations.add(this);
     }
@@ -130,7 +131,7 @@ public class RingOutExplosion implements Animator {
         
                     //Create Image
                     File image = new File(fileDirectory);
-                    myImage = ImageResizer.resizeImage(ImageIO.read(image), scale * 0.5);
+                    myImage = ImageResizer.resizeImage(ImageIO.read(image), scale * 0.35);
                     temp.add(myImage);
                 } 
                 catch (IOException ioe) {

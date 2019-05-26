@@ -103,6 +103,8 @@ public class Player {
     private BufferedImage myBanner;
 
     private RingOutExplosion ringOutLeft;
+    private RingOutExplosion ringOutRight;
+    private RingOutExplosion ringOutDown;
 
     /* Image Resizer **/
     public double scale;
@@ -134,7 +136,6 @@ public class Player {
         System.out.print("Player of type ");
         scale = otherPlayers.myGame.scale;
         livesLeft = SmashGame.NUM_LIVES;
-        ringOutLeft = new RingOutExplosion(otherPlayers.myGame.myGameScreen, scale, "left");
     }
 
     /**
@@ -177,6 +178,13 @@ public class Player {
             {
 
             }
+        }
+        
+        if(myId == 1 || myId == 2)
+        {
+            ringOutLeft = new RingOutExplosion(otherPlayers.myGame.myGameScreen, scale, "left");
+            ringOutRight = new RingOutExplosion(otherPlayers.myGame.myGameScreen, scale, "right");
+            ringOutDown = new RingOutExplosion(otherPlayers.myGame.myGameScreen, scale, "down");
         }
     }
 
@@ -394,7 +402,6 @@ public class Player {
 
     public void respawn()
     {
-        dead = false;
         myPos = new Coord( SmashGame.APP_WIDTH / 2, -50);
         if(SmashGame.NO_SPAWNCAMPING)
         {
@@ -403,6 +410,7 @@ public class Player {
         healthAmt = STARTHEALTH;
         onGround = false;
         myVector.setY(60);
+        dead = false;
     }
 
     public void kill(String type)
@@ -414,7 +422,17 @@ public class Player {
                 ringOutLeft.play(myPos);
                 myPos.setY(SmashGame.APP_HEIGHT + 200);
             }
-            
+            if(type.equals("right"))
+            {
+                ringOutRight.play(myPos);
+                myPos.setY(SmashGame.APP_HEIGHT + 200);
+            }
+            if(type.equals("down"))
+            {
+                ringOutDown.play(myPos);
+                myPos.setY(SmashGame.APP_HEIGHT + 200);
+            }
+
             healthAmt = 0;
             dead = true;
 
