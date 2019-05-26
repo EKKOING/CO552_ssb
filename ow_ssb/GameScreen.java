@@ -37,6 +37,9 @@ public class GameScreen extends JPanel {
     /** Background UI */
     private BufferedImage background;
 
+    /** Animations List */
+    public ArrayList<Animator> myAnimations;
+
     /** Scale */
     public double scale;
 
@@ -51,6 +54,7 @@ public class GameScreen extends JPanel {
 
     public void run()
     {
+        myAnimations = new ArrayList<Animator>();
         scale = myGame.scale;
         myStage = new Stage("gibraltar", this);
         myKeyput = new Keyput(myGame);
@@ -107,7 +111,20 @@ public class GameScreen extends JPanel {
         } catch (ConcurrentModificationException e) {
             //Skip frame
         }
+        
+        if (myAnimations.size() > 0)
+        {
+            try {
+                for (Animator temp : myAnimations) {temp.drawMe(g2);}
+            } catch (ConcurrentModificationException e) {
+                //Skip frame
+            }
+        }
+
         drawUI(g2);
+
+        g2.clearRect((int) (SmashGame.APP_WIDTH * scale), 0, (int) (scale * 500), (int) (scale * SmashGame.APP_HEIGHT));
+        g2.clearRect(0, (int) (SmashGame.APP_HEIGHT* scale), (int) (scale * (SmashGame.APP_WIDTH + 500)), (int) (scale * 500));
     }
 
     public void drawUI(Graphics2D g2)

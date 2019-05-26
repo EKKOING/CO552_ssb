@@ -93,11 +93,11 @@ public class Players {
             temp.setKeybindings();
             if(idx == 1)
             {
-                temp.myPos = new Coord(93, 867);
+                temp.myPos = new Coord(Stage.FLOOR_GAP + 20, Stage.FLOOR_TOP);
             }
             else
             {
-                temp.myPos = new Coord(1350, 867);
+                temp.myPos = new Coord(SmashGame.APP_WIDTH - Stage.FLOOR_GAP - 20, Stage.FLOOR_TOP);
             }
             myPlayers.add(temp);
         }

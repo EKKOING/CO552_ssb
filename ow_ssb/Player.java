@@ -82,10 +82,13 @@ public class Player {
     public static final long walkCD = 10;
     public boolean canAttack;
     public static final long attackCD = 500;
-    public static final long respawnCD = 3000;
+    public static final long respawnCD = 5000;
 
     /* Max walk speed **/
     public static final int MAX_WALKV = 80;
+
+    /** Boolean Dead State */
+    public boolean dead;
 
     /* Passthrough of Players class to be able to interact with others **/
     public Players otherPlayers;
@@ -98,6 +101,8 @@ public class Player {
 
     /* Buffered Image of Banner **/
     private BufferedImage myBanner;
+
+    private RingOutExplosion ringOutLeft;
 
     /* Image Resizer **/
     public double scale;
@@ -129,6 +134,7 @@ public class Player {
         System.out.print("Player of type ");
         scale = otherPlayers.myGame.scale;
         livesLeft = SmashGame.NUM_LIVES;
+        ringOutLeft = new RingOutExplosion(otherPlayers.myGame.myGameScreen, scale, "left");
     }
 
     /**
@@ -295,13 +301,22 @@ public class Player {
     }
 
     public void checkGround() {
-        if (myPos.getY() > 867) {
-            myPos.setY(867);
-            if (myVector.getY() > 0) {
+        if (myPos.getY() >= Stage.FLOOR_TOP && myPos.getY() <= Stage.FLOOR_TOP + 10 && myPos.getX() > 100 && myPos.getX() < SmashGame.APP_WIDTH - 100) {
+
+            myPos.setY(Stage.FLOOR_TOP);
+            if (myVector.getY() >= 0) 
+            {
                 myVector.setY(0);
             }
-            onGround = true;
-            doubleJump = true;
+            if (myVector.getY() > -5)
+            {
+                onGround = true;
+                doubleJump = true;
+            }
+        }
+        else
+        {
+            onGround = false;
         }
     }
 
@@ -354,27 +369,57 @@ public class Player {
             {
                 myVector.setX(myVector.getX() + 1);
             }
+
+            if(myPos.getX() > SmashGame.APP_WIDTH + 120 && healthAmt > 0)
+            {
+                kill("right");
+            }
+
+            if(myPos.getX() < -120 && healthAmt > 0)
+            {
+                kill("left");
+            }
         }
 
-        if(myPos.getY() < 5)
+        if(myPos.getY() < 10)
         {
-            myPos.setY(5);
+            myPos.setY(10);
         }
 
-        
+        if(myPos.getY() > SmashGame.APP_HEIGHT + 200 && healthAmt > 0)
+        {
+            kill("down");
+        }
     }
 
     public void respawn()
     {
-        myPos = new Coord( SmashGame.APP_WIDTH / 2, -MY_HEIGHT - 10);
+        dead = false;
+        myPos = new Coord( SmashGame.APP_WIDTH / 2, -50);
+        if(SmashGame.NO_SPAWNCAMPING)
+        {
+            myPos.setX( Stage.FLOOR_GAP + (Math.random() * (SmashGame.APP_WIDTH - (2 * Stage.FLOOR_GAP))));
+        }
         healthAmt = STARTHEALTH;
         onGround = false;
         myVector.setY(60);
     }
 
-    public void kill()
+    public void kill(String type)
     {
-        healthAmt = 0;
+        if(!dead)
+        {
+            if(type.equals("left"))
+            {
+                ringOutLeft.play(myPos);
+                myPos.setY(SmashGame.APP_HEIGHT + 200);
+            }
+            
+            healthAmt = 0;
+            dead = true;
+
+            new CooldownTracker(this, respawnCD, "respawn");
+        }
     }
 
     /**
@@ -387,8 +432,7 @@ public class Player {
         checkGround();
         checkBoundaries();
         if (healthAmt <= 0) {
-            kill();
-            new CooldownTracker(this, respawnCD, "respawn");
+            kill("health");
         } else {
 
             for (Key currentKey : myList) {

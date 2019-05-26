@@ -1,6 +1,5 @@
 import java.awt.*;
 import java.awt.image.*;
-import java.awt.geom.*;
 import java.io.*;
 import javax.imageio.*;
 import java.io.File;
@@ -11,6 +10,12 @@ import java.util.ArrayList;
  *
  */
 public class Stage {
+
+	public static final double FLOOR_TOP = 722;
+
+	public static final double FLOOR_GAP = 104;
+
+	public static final double FLOOR_BOTTOM = 758;
 
 	/** Stage Path */
 	public final String BASE_DIREC = "./graphics/stages/";

@@ -18,6 +18,9 @@ public class SmashGame {
    */
    public static final boolean MOTION_WRAP = false;
 
+   /** Respawns in Random Location to prevent Spawncamping*/
+   public static final boolean NO_SPAWNCAMPING = true;
+
    /** Int for number of lives given to players */
   public static final int NUM_LIVES = 3;
 
@@ -97,7 +100,7 @@ public class SmashGame {
       setupFrame();
       iR = new ImageResizer(this);
       scale = getScale();
-      //scale = 0.95; //Manually set Scale
+      scale = 1; //Manually set Scale
       myTitleScreen.run();
    }
 

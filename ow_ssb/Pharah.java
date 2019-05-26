@@ -57,7 +57,7 @@ public class Pharah extends Player
     */
     public boolean attack()
     {
-        otherPlayers.myPlayers.add(new PharahRocket(myId, (int) myPos.getX(), (int) (myPos.getY() - (scale * 100)), otherPlayers, facingRight, enemyId));
+        otherPlayers.myPlayers.add(new PharahRocket(myId * 100 + 1, (int) myPos.getX(), (int) (myPos.getY() - (scale * 100)), otherPlayers, facingRight, enemyId));
         canAttack = false;
         new CooldownTracker(this, (long) attackCD, "canAttack");
         return true;

@@ -1,12 +1,9 @@
-import java.awt.*;
 import java.awt.image.*;
-import java.awt.geom.*;
 import java.io.*;
 import javax.imageio.*;
 import java.io.File;
 import java.awt.Graphics2D;
 import java.awt.event.MouseEvent;
-import java.util.ArrayList;
 
 /**
  * @author student
@@ -50,7 +47,7 @@ public class CharacterMenuIcon {
 
 			//Create Image
 			File image = new File(fileDirectory);
-			myIcon = iR.resizeImage(ImageIO.read(image), scale);
+			myIcon = ImageResizer.resizeImage(ImageIO.read(image), scale);
 		} 
 		catch(IOException e)
 		{
@@ -63,7 +60,7 @@ public class CharacterMenuIcon {
 
 			//Create Image
 			File image = new File(fileDirectory);
-			myPreview = iR.resizeImage(ImageIO.read(image), scale);
+			myPreview = ImageResizer.resizeImage(ImageIO.read(image), scale);
 		} 
 		catch(IOException e)
 		{
