@@ -21,33 +21,28 @@ public class PharahRocket extends Player {
 	public PharahRocket(int myId, int xStart, int yStart, Players list, boolean facingR, int enemy) {
 		super(myId, xStart, yStart, list);
 		enemyId = enemy;
-		facingRight = facingR; //This will be used later don't worry
-		if(facingRight)
-		{
+		facingRight = facingR; // This will be used later don't worry
+		if (facingRight) {
 			myVector.setX(SPEED);
-		}
-		else
-		{
+		} else {
 			myVector.setX(-SPEED);
 		}
 		hitSomething = false;
 		System.out.print("Pharah Rocket Created");
 	}
 
-    /**
-     * Attack method (Just a shell)
-     * 
-     * @return true if successful attack
-     */
-    public boolean attack() {
-        Player enemy = otherPlayers.findPlayer(enemyId);
-        Coord enemyPos = enemy.getPos();
+	/**
+	 * Attack method (Just a shell)
+	 * 
+	 * @return true if successful attack
+	 */
+	public boolean attack() {
+		Player enemy = otherPlayers.findPlayer(enemyId);
+		Coord enemyPos = enemy.getPos();
 		Coord distToEnemy = myPos.checkDistance(enemyPos);
-		if (distToEnemy.getX() < (enemy.MY_WIDTH / 2) && distToEnemy.getX() > (-enemy.MY_WIDTH / 2))
-		{
-			if (distToEnemy.getY() < enemy.MY_HEIGHT && distToEnemy.getY() > 0 && myPos.getY() < enemyPos.getY())
-			{
-				enemy.healthAmt -=  10;
+		if (distToEnemy.getX() < (enemy.MY_WIDTH / 2) && distToEnemy.getX() > (-enemy.MY_WIDTH / 2)) {
+			if (distToEnemy.getY() < enemy.MY_HEIGHT && distToEnemy.getY() > 0 && myPos.getY() < enemyPos.getY()) {
+				enemy.healthAmt -= 10;
 				enemy.myVector.setX(enemy.myVector.getX() + (myVector.getX() * 0.5));
 				canAttack = false;
 				hitSomething = true;
@@ -56,60 +51,55 @@ public class PharahRocket extends Player {
 			}
 		}
 		return false;
-    }
+	}
 
-    public void checkGround() {
-		if(myPos.getX() < 0 || myPos.getX() > SmashGame.APP_WIDTH)
-		{
+	public void checkGround() {
+		if (myPos.getX() < 0 || myPos.getX() > SmashGame.APP_WIDTH) {
 			kill();
 		}
-    }
+	}
 
-    public void respawn()
-    {
-		//None
-    }
+	public void respawn() {
+		// None
+	}
 
-    public void kill()
-    {
+	public void kill() {
 		otherPlayers.removeObject(this);
 	}
 
-	public void explode()
-	{
+	public void explode() {
 		kill();
 	}
 
-    /**
-     * Executes moves on the player based off of key input
-     * 
-     * @param myList Key list generated from Keyput class
-     */
-    public void move(ArrayList<Key> myList) {
-		if(!(hitSomething))
-		{
+	/**
+	 * Executes moves on the rocket
+	 * 
+	 * @param myList Key list generated from Keyput class (Not Used)
+	 */
+	public void move(ArrayList<Key> myList) {
+		if (!(hitSomething)) {
 			checkGround();
-			if(canAttack)
-			{
+			if (canAttack) {
 				attack();
 			}
 			myPos.setX(myPos.getX() + myVector.getX() / 10);
 		}
-    }
+	}
 
-    /**
-     * Draws Player
-     * 
-     * @param g2 Graphics object passthrough
-     */
-    public void drawMe(Graphics2D g2) {
-		if(!(hitSomething))
-		{
-			//TODO: Place Images
-			Rectangle2D me = new Rectangle2D.Double(otherPlayers.myGame.scale * (myPos.getX() - 10), otherPlayers.myGame.scale * (myPos.getY() - 2.5), otherPlayers.myGame.scale * 20, otherPlayers.myGame.scale * 10);
+	/**
+	 * Draws Player
+	 * 
+	 * @param g2 Graphics object passthrough
+	 */
+	public void drawMe(Graphics2D g2) {
+		if (!(hitSomething)) {
+			// TODO: Place Images
+			Rectangle2D me = new Rectangle2D.Double(otherPlayers.myGame.scale * (myPos.getX() - 10),
+					otherPlayers.myGame.scale * (myPos.getY() - 2.5), otherPlayers.myGame.scale * 20,
+					otherPlayers.myGame.scale * 10);
 			g2.setColor(Color.YELLOW);
 			g2.fill(me);
 		}
-    }
+	}
 
 }

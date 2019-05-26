@@ -71,7 +71,7 @@ public class TitleScreen extends JPanel {
 	public static final double ICON_Y = 220.0;
 
 	/**
-	 * name of file with character list (NOTE: Any character not there will not be
+	 * Array with character list (NOTE: Any character not there will not be
 	 * selectable)
 	 */
 	public static final String charactersArray[] = {"random","pharah", "empty", "empty", "empty", "empty", "empty", "empty","empty","empty","empty","empty","empty","empty","empty"};
