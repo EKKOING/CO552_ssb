@@ -2,10 +2,12 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 /**
-Creates a cooldown timer that will set the state of a cooldown after a time period
-@author Nicholas Lorentzen
-@version 05/07/2019
-*/
+ * Creates a cooldown timer that will set the state of a cooldown after a time
+ * period
+ * 
+ * @author Nicholas Lorentzen
+ * @version 05/07/2019
+ */
 public class CooldownTracker {
     /** Timer thread */
     public Timer timer;
@@ -16,9 +18,10 @@ public class CooldownTracker {
 
     /**
      * Constructs a new CD activator
+     * 
      * @param tempPlayer Player to act upon
-     * @param ms Ms of CD time
-     * @param myCD CD to act upon
+     * @param ms         Ms of CD time
+     * @param myCD       CD to act upon
      */
     public CooldownTracker(Player tempPlayer, long ms, String myCD) {
 
@@ -26,30 +29,33 @@ public class CooldownTracker {
         myPlayer = tempPlayer;
         whichCD = myCD;
         timer.schedule(new RemindTask(), ms);
-	}
+    }
 
     /** Thread to manage cooldown */
     class RemindTask extends TimerTask {
         public void run() {
-            switch (whichCD)
-            {
-                case "canWalk":
+            switch (whichCD) {
+            case "canWalk":
                 myPlayer.canWalk = true;
                 break;
 
-                case "canAttack":
+            case "canAttack":
                 myPlayer.canAttack = true;
                 break;
 
-                case "doubleJump":
+            case "doubleJump":
                 myPlayer.doubleJump = true;
                 break;
 
-                case "respawn":
+            case "respawn":
                 myPlayer.respawn();
                 break;
 
-                default:
+            case "attacking":
+                myPlayer.attacking = false;
+                break;
+
+            default:
                 System.err.println("No Such Cooldown Found for Input: \"" + whichCD + "\"");
                 break;
             }

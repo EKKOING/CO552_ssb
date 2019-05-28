@@ -17,6 +17,12 @@ public class Stage {
 
 	public static final double FLOOR_BOTTOM = 758;
 
+	public static final double BALCONY_TOP = 432;
+
+	public static final double BALCONY_GAP = 531;
+
+	public static final double BALCONY_BOTTOM = 468;
+
 	/** Stage Path */
 	public final String BASE_DIREC = "./graphics/stages/";
 
@@ -50,20 +56,20 @@ public class Stage {
 		images = new ArrayList<BufferedImage>();
 
 		boolean fileExists = true;
-		while(fileExists)
-		{
+		while (fileExists) {
 			try {
-				//Create File Directory String
+				// Create File Directory String
 				String fileDirectory = BASE_DIREC + animationDirec + "/";
-				if (myAnimationFrame < 10) {fileDirectory = fileDirectory + "0";}
+				if (myAnimationFrame < 10) {
+					fileDirectory = fileDirectory + "0";
+				}
 				fileDirectory = fileDirectory + (int) myAnimationFrame + ".png";
-	
-				//Create Image
+
+				// Create Image
 				File image = new File(fileDirectory);
 				myImage = myScreen.myGame.iR.resizeImage(ImageIO.read(image));
 				images.add(myImage);
-			} 
-			catch (IOException ioe) {
+			} catch (IOException ioe) {
 				System.err.println(ioe);
 				fileExists = false;
 			}
@@ -72,12 +78,9 @@ public class Stage {
 	}
 
 	public void drawMe(Graphics2D g2) {
-		if(myAnimationFrame < images.size() - 2)
-		{
+		if (myAnimationFrame < images.size() - 2) {
 			myAnimationFrame++;
-		}
-		else
-		{
+		} else {
 			myAnimationFrame = 0;
 		}
 		g2.drawImage(images.get(myAnimationFrame), 0, 0, null);

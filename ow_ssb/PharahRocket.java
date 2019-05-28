@@ -28,7 +28,7 @@ public class PharahRocket extends Player {
 			myVector.setX(-SPEED);
 		}
 		hitSomething = false;
-		System.out.print("Pharah Rocket Created");
+		// System.out.print("Pharah Rocket Created");
 	}
 
 	/**
@@ -40,10 +40,20 @@ public class PharahRocket extends Player {
 		Player enemy = otherPlayers.findPlayer(enemyId);
 		Coord enemyPos = enemy.getPos();
 		Coord distToEnemy = myPos.checkDistance(enemyPos);
-		if (distToEnemy.getX() < (enemy.MY_WIDTH / 2) && distToEnemy.getX() > (-enemy.MY_WIDTH / 2)) {
-			if (distToEnemy.getY() < enemy.MY_HEIGHT && distToEnemy.getY() > 0 && myPos.getY() < enemyPos.getY()) {
-				enemy.healthAmt -= 10;
-				enemy.myVector.setX(enemy.myVector.getX() + (myVector.getX() * 0.5));
+		if (distToEnemy.getX() < (enemy.getWidth() / 2) && distToEnemy.getX() > (-enemy.getWidth() / 2)) {
+			if (distToEnemy.getY() < enemy.getHeight() && distToEnemy.getY() > 0 && myPos.getY() < enemyPos.getY()) {
+
+				// Knockback
+				if (facingRight) {
+					enemy.knockBackX(30 + Math.random() * 7);
+				} else {
+					enemy.knockBackX(-30 - Math.random() * 7);
+				}
+
+				// Damage
+				enemy.getDamaged(20 + (Math.random() * 20 - 10));
+
+				// Stop Duplication
 				canAttack = false;
 				hitSomething = true;
 				explode();

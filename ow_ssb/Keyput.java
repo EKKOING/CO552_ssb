@@ -78,8 +78,7 @@ public class Keyput implements KeyListener {
       // System.out.println(e);
       int code = e.getKeyCode();
 
-      if(code == KeyEvent.VK_ESCAPE)
-      {
+      if (code == KeyEvent.VK_ESCAPE) {
          myGame.screenSwitcher("Menu");
          myGame.myTitleScreen.run();
       }
@@ -90,7 +89,7 @@ public class Keyput implements KeyListener {
          temp.updatekey(true);
 
          // Debug Code
-         //System.out.println("Key #" + temp.keyNumber + " has been pressed");
+         // System.out.println("Key #" + temp.keyNumber + " has been pressed");
       }
 
       dictionary.set(lastKeyIdx, temp);
@@ -109,11 +108,13 @@ public class Keyput implements KeyListener {
       dictionary.set(lastKeyIdx, temp);
 
       // Debug Code
-      //System.out.println("Key #" + temp.keyNumber + " was held down for " + temp.pressLength + " seconds");
+      // System.out.println("Key #" + temp.keyNumber + " was held down for " +
+      // temp.pressLength + " seconds");
    }
 
    /**
     * Doesn't do anything
+    * 
     * @param e KeyEvent to process
     */
    public void keyTyped(KeyEvent e) {
@@ -137,7 +138,7 @@ public class Keyput implements KeyListener {
 
             // Debug Code
             if (myKey.keyState) {
-               //System.out.println("Key #" + myKey.keyNumber + " is still being held down");
+               // System.out.println("Key #" + myKey.keyNumber + " is still being held down");
             }
          }
       }
