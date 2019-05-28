@@ -13,12 +13,9 @@ import java.util.ArrayList;
  * 
  * @author Nicholas Lorentzen
  * @version 2019/05/21
+ *
  */
 public class Player {
-
-    /** Default Height and Width */
-    public static final int MY_HEIGHT = 191;
-    public static final int MY_WIDTH = 166;
 
     /** Coord object that holds the postion of the player */
     public Coord myPos;
@@ -33,7 +30,7 @@ public class Player {
     public int enemyId;
 
     /* Int to hold the health stat **/
-    public int healthAmt;
+    public double healthAmt;
     /* Int to hold the damage done stat **/
     public int dmgDone;
     /* Int to hold the damage taken stat **/
@@ -77,6 +74,11 @@ public class Player {
     /** Has the double jump available */
     public boolean doubleJump;
 
+    // All Variable Below Should be Overridden by any Child Classes
+    /** Default Height and Width */
+    public static final int MY_HEIGHT = 191;
+    public static final int MY_WIDTH = 166;
+
     /* Cooldowns for moves **/
     public boolean canWalk;
     public static final long walkCD = 10;
@@ -91,11 +93,14 @@ public class Player {
     /** Boolean Dead State */
     public boolean dead;
 
+    /** Boolean Invincibilty */
+    public boolean invincible;
+
     /* Passthrough of Players class to be able to interact with others **/
     public Players otherPlayers;
 
     /* Int to hold the default health to start with **/
-    public static final int STARTHEALTH = 100;
+    public static final double STARTHEALTH = 100;
 
     /** Lives Left */
     public int livesLeft;
@@ -123,7 +128,7 @@ public class Player {
         myPos = new Coord((double) xStart, (double) yStart);
         myVector = new Coord(0.0, 0.0);
 
-        healthAmt = STARTHEALTH;
+        healthAmt = getStartHP();
         canWalk = true;
         canAttack = true;
         onGround = true;
@@ -134,9 +139,24 @@ public class Player {
         animationDirec = "";
         prevDirec = "";
         setKeybindings();
-        System.out.print("Player of type ");
+        // System.out.print("Player of type ");
         scale = otherPlayers.myGame.scale;
         livesLeft = SmashGame.NUM_LIVES;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
+        Player compPlayer = (Player) o;
+        return myId == compPlayer.myId;
+    }
+
+    @Override
+    public int hashCode() {
+        return myId;
     }
 
     /**
@@ -154,10 +174,8 @@ public class Player {
             enemyId = 2;
             try {
                 File image = new File(BANNER_DIREC + "1.png");
-                myBanner = otherPlayers.myGame.iR.resizeImage(ImageIO.read(image));
-            } 
-            catch (IOException ioe2) 
-            {
+                myBanner = ImageResizer.resizeImage(ImageIO.read(image), scale);
+            } catch (IOException ioe2) {
 
             }
         }
@@ -173,16 +191,13 @@ public class Player {
             enemyId = 1;
             try {
                 File image = new File(BANNER_DIREC + "2.png");
-                myBanner = otherPlayers.myGame.iR.resizeImage(ImageIO.read(image));
-            } 
-            catch (IOException ioe2) 
-            {
+                myBanner = ImageResizer.resizeImage(ImageIO.read(image), scale);
+            } catch (IOException ioe2) {
 
             }
         }
-        
-        if(myId == 1 || myId == 2)
-        {
+
+        if (myId == 1 || myId == 2) {
             ringOutLeft = new RingOutExplosion(otherPlayers.myGame.myGameScreen, scale, "left");
             ringOutRight = new RingOutExplosion(otherPlayers.myGame.myGameScreen, scale, "right");
             ringOutDown = new RingOutExplosion(otherPlayers.myGame.myGameScreen, scale, "down");
@@ -194,7 +209,7 @@ public class Player {
      * 
      * @return the current health amount
      */
-    public int getHealth() {
+    public double getHealth() {
         return healthAmt;
     }
 
@@ -226,6 +241,289 @@ public class Player {
     }
 
     /**
+     * Damages the player
+     * 
+     * @param dmgDo Amount of damage to attempt to do
+     * @return Amount of damage done to player
+     */
+    public double getDamaged(double dmgDo) {
+        if (invincible) {
+            return 0.0;
+        } else {
+            // Critical Hit Randomizer
+            if (Math.random() > 0.99) {
+                healthAmt -= -dmgDo * 2;
+            } else {
+                healthAmt -= dmgDo;
+            }
+        }
+
+        return 0;
+    }
+
+    /**
+     * Knocks the player back an amount based on current health
+     * 
+     * @param amt Amount to knockback
+     */
+    public void knockBackX(double amt) {
+        double inverseMass = ((double) getStartHP()) / (healthAmt + 50);
+        double knockback = inverseMass * amt;
+        myVector.setX(myVector.getX() + knockback);
+    }
+
+    /**
+     * Knocks the player back an amount based on current health
+     * 
+     * @param amt Amount to knockback
+     */
+    public void knockBackY(double amt) {
+        double inverseMass = ((double) getStartHP()) / (healthAmt + 50);
+        double knockback = inverseMass * amt;
+        myVector.setY(myVector.getY() + knockback);
+    }
+
+    /**
+     * Manages collisions with the main floor and balcony
+     */
+    public void checkGround() {
+        if (myPos.getY() >= Stage.FLOOR_TOP && myPos.getY() <= Stage.FLOOR_TOP + 10 && myPos.getX() > Stage.FLOOR_GAP
+                && myPos.getX() < SmashGame.APP_WIDTH - Stage.FLOOR_GAP) {
+
+            myPos.setY(Stage.FLOOR_TOP);
+            if (myVector.getY() >= 0) {
+                myVector.setY(0);
+            }
+            if (myVector.getY() > -5) {
+                onGround = true;
+                doubleJump = true;
+            }
+        } else if (myPos.getY() >= Stage.BALCONY_TOP && myPos.getY() <= Stage.BALCONY_TOP + 10
+                && myPos.getX() > Stage.BALCONY_GAP && myPos.getX() < SmashGame.APP_WIDTH - Stage.BALCONY_GAP) {
+
+            myPos.setY(Stage.BALCONY_TOP);
+            if (myVector.getY() >= 0) {
+                myVector.setY(0);
+            }
+            if (myVector.getY() > -5) {
+                onGround = true;
+                doubleJump = true;
+            }
+        } else {
+            onGround = false;
+        }
+    }
+
+    /**
+     * Handles resistance physics and absolute maximums for velocities
+     */
+    public void resistance() {
+        if (onGround) {
+            if (myVector.getX() >= 2) {
+                myVector.setX(myVector.getX() * 0.9);
+            } else if (myVector.getX() <= -2) {
+                myVector.setX(myVector.getX() * 0.9);
+            } else {
+                myVector.setX(0);
+            }
+        } else {
+            if (myVector.getY() < 20) {
+                myVector.setY(myVector.getY() + 1);
+            }
+
+            if (myVector.getX() >= 0.5) {
+                myVector.setX(myVector.getX() * 0.99);
+            } else if (myVector.getX() <= 0.5) {
+                myVector.setX(myVector.getX() * 0.99);
+            } else {
+                myVector.setX(0);
+            }
+        }
+    }
+
+    /**
+     * Checks Boundaries of the game and calls appropriate response to violations
+     */
+    public void checkBoundaries() {
+
+        if (SmashGame.MOTION_WRAP) {
+            if (myPos.getX() > SmashGame.APP_WIDTH + 10) {
+                myPos.setX(0);
+            }
+
+            if (myPos.getX() < -10) {
+                myPos.setX(SmashGame.APP_WIDTH);
+            }
+        } else {
+            if (myPos.getX() > SmashGame.APP_WIDTH - 10) {
+                myVector.setX(myVector.getX() - 1);
+            }
+
+            if (myPos.getX() < 10) {
+                myVector.setX(myVector.getX() + 1);
+            }
+
+            if (myPos.getX() > SmashGame.APP_WIDTH + 120 && healthAmt > 0) {
+                kill("right");
+            }
+
+            if (myPos.getX() < -120 && healthAmt > 0) {
+                kill("left");
+            }
+        }
+
+        if (myPos.getY() < 10) {
+            myPos.setY(10);
+        }
+
+        if (myPos.getY() > SmashGame.APP_HEIGHT + 200 && healthAmt > 0) {
+            kill("down");
+        }
+    }
+
+    /**
+     * Respawns Player
+     */
+    public void respawn() {
+        myPos = new Coord(SmashGame.APP_WIDTH / 2, -50);
+        if (SmashGame.NO_SPAWNCAMPING) {
+            myPos.setX(Stage.FLOOR_GAP + (Math.random() * (SmashGame.APP_WIDTH - (2 * Stage.FLOOR_GAP))));
+        }
+        healthAmt = getStartHP();
+        onGround = false;
+        myVector.setY(60);
+        dead = false;
+    }
+
+    /**
+     * Kills the player and executes response based on cause of death
+     * 
+     * @param type The reason for death
+     */
+    public void kill(String type) {
+        if (!dead) {
+            if (type.equals("left")) {
+                ringOutLeft.play(myPos);
+                myPos.setY(SmashGame.APP_HEIGHT + 200);
+            }
+            if (type.equals("right")) {
+                ringOutRight.play(myPos);
+                myPos.setY(SmashGame.APP_HEIGHT + 200);
+            }
+            if (type.equals("down")) {
+                ringOutDown.play(myPos);
+                myPos.setY(SmashGame.APP_HEIGHT + 200);
+            }
+
+            healthAmt = 0;
+            dead = true;
+
+            new CooldownTracker(this, respawnCD, "respawn");
+        }
+    }
+
+    /**
+     * Executes moves on the player based off of key input Sometimes overidden
+     * 
+     * @param myList Key list generated from Keyput class
+     */
+    public void move(ArrayList<Key> myList) {
+        resistance();
+        checkGround();
+        checkBoundaries();
+        if (healthAmt <= 0) {
+            kill("health");
+        } else {
+
+            for (Key currentKey : myList) {
+                if (currentKey.keyState) {
+                    if (currentKey.keyNumber == moveLeft && canWalk) {
+                        walkLeft();
+                    } else if (currentKey.keyNumber == moveRight && canWalk) {
+                        walkRight();
+                    }
+
+                    if (currentKey.keyNumber == moveJump) {
+                        jump();
+                    }
+
+                    if (currentKey.keyNumber == moveAttack && canAttack) {
+                        attack();
+                    }
+                }
+            }
+        }
+        myPos.setX(myPos.getX() + myVector.getX() / 10);
+        myPos.setY(myPos.getY() + myVector.getY() / 10);
+    }
+
+    /**
+     * Draws Player
+     * 
+     * @param g2 Graphics object passthrough
+     */
+    public void drawMe(Graphics2D g2) {
+        prevDirec = facingDirec + animationDirec;
+        g2.drawImage(myBanner, (int) (scale * (myPos.getX() - 48)), (int) (scale * (myPos.getY() - getHeight() - 80)),
+                null);
+
+        if (healthAmt > 0) {
+            if (facingRight) {
+                facingDirec = "/right";
+            } else {
+                facingDirec = "/left";
+            }
+
+            if (myVector.getX() > 0 || myVector.getX() < 0) {
+                animationDirec = "/walking";
+            } else {
+                animationDirec = "/standing";
+            }
+
+            if (!onGround) {
+                animationDirec = "/flying";
+            }
+        } else {
+            facingDirec = "";
+            animationDirec = "/dead";
+        }
+
+        if (attacking) {
+            animationDirec = animationDirec + "shooting";
+        }
+
+        if (!(prevDirec.equals(facingDirec + animationDirec))) {
+            myAnimationFrame = 0;
+        }
+    }
+
+    // All Methods Below Should Be Copied Into New Player Classes
+
+    public int getHeight() {
+        return MY_HEIGHT;
+    }
+
+    public int getWidth() {
+        return MY_WIDTH;
+    }
+
+    public int getMaxWalkV() {
+        return MAX_WALKV;
+    }
+
+    public long getWalkCD() {
+        return walkCD;
+    }
+
+    public long getAttackCD() {
+        return attackCD;
+    }
+
+    public double getStartHP() {
+        return STARTHEALTH;
+    }
+
+    /**
      * Attack method (Just a shell)
      * 
      * @return true if successful attack
@@ -235,22 +533,17 @@ public class Player {
         Player enemy = otherPlayers.findPlayer(enemyId);
         Coord enemyPos = enemy.getPos();
         Coord distToEnemy = myPos.checkDistance(enemy.getPos());
-        //int damage = 0;
-        if(facingRight && distToEnemy.getX() > 0 && distToEnemy.getX() < MY_WIDTH)
-        {
-            if(myPos.getY() + MY_HEIGHT >= enemyPos.getY() && myPos.getY() <= enemyPos.getY() + enemy.MY_HEIGHT)
-            {
+        // int damage = 0;
+        if (facingRight && distToEnemy.getX() > 0 && distToEnemy.getX() < getWidth()) {
+            if (myPos.getY() + getHeight() >= enemyPos.getY() && myPos.getY() <= enemyPos.getY() + enemy.getHeight()) {
                 dmgDone += 25;
                 enemy.healthAmt -= 25;
                 canAttack = false;
                 new CooldownTracker(this, attackCD, "canAttack");
                 return true;
             }
-        }
-        else
-        {
-            if(myPos.getY() + MY_HEIGHT >= enemyPos.getY() && myPos.getY() <= enemyPos.getY() + enemy.MY_HEIGHT)
-            {
+        } else {
+            if (myPos.getY() + getHeight() >= enemyPos.getY() && myPos.getY() <= enemyPos.getY() + enemy.getHeight()) {
                 dmgDone += 25;
                 enemy.healthAmt -= 25;
                 canAttack = false;
@@ -307,228 +600,6 @@ public class Player {
             myVector.setY(myVector.getY() - 20);
             doubleJump = false;
             new CooldownTracker(this, (long) 150, "doubleJump");
-        }
-    }
-
-    public void checkGround() {
-        if (myPos.getY() >= Stage.FLOOR_TOP && myPos.getY() <= Stage.FLOOR_TOP + 10 && myPos.getX() > Stage.FLOOR_GAP && myPos.getX() < SmashGame.APP_WIDTH - Stage.FLOOR_GAP) {
-
-            myPos.setY(Stage.FLOOR_TOP);
-            if (myVector.getY() >= 0) 
-            {
-                myVector.setY(0);
-            }
-            if (myVector.getY() > -5)
-            {
-                onGround = true;
-                doubleJump = true;
-            }
-        }
-        else if (myPos.getY() >= Stage.BALCONY_TOP && myPos.getY() <= Stage.BALCONY_TOP + 10 && myPos.getX() > Stage.BALCONY_GAP && myPos.getX() < SmashGame.APP_WIDTH - Stage.BALCONY_GAP) {
-
-            myPos.setY(Stage.BALCONY_TOP);
-            if (myVector.getY() >= 0) 
-            {
-                myVector.setY(0);
-            }
-            if (myVector.getY() > -5)
-            {
-                onGround = true;
-                doubleJump = true;
-            }
-        }
-        else
-        {
-            onGround = false;
-        }
-    }
-
-    public void resistance() {
-        if (onGround) {
-            if (myVector.getX() >= 2) {
-                myVector.setX(myVector.getX() * 0.9);
-            } else if (myVector.getX() <= -2) {
-                myVector.setX(myVector.getX() * 0.9);
-            } else {
-                myVector.setX(0);
-            }
-        } else {
-            if (myVector.getY() < 20) {
-                myVector.setY(myVector.getY() + 1);
-            }
-
-            if (myVector.getX() >= 0.5) {
-                myVector.setX(myVector.getX() * 0.99);
-            } else if (myVector.getX() <= 0.5) {
-                myVector.setX(myVector.getX() * 0.99);
-            } else {
-                myVector.setX(0);
-            }
-        }
-    }
-
-    public void checkBoundaries() {
-
-        if (SmashGame.MOTION_WRAP)
-        {
-            if(myPos.getX() > SmashGame.APP_WIDTH + 10)
-            {
-                myPos.setX(0);
-            }
-
-            if(myPos.getX() < -10)
-            {
-                myPos.setX(SmashGame.APP_WIDTH);
-            }
-        }
-        else
-        {
-            if(myPos.getX() > SmashGame.APP_WIDTH - 10)
-            {
-                myVector.setX(myVector.getX() - 1);
-            }
-
-            if(myPos.getX() < 10)
-            {
-                myVector.setX(myVector.getX() + 1);
-            }
-
-            if(myPos.getX() > SmashGame.APP_WIDTH + 120 && healthAmt > 0)
-            {
-                kill("right");
-            }
-
-            if(myPos.getX() < -120 && healthAmt > 0)
-            {
-                kill("left");
-            }
-        }
-
-        if(myPos.getY() < 10)
-        {
-            myPos.setY(10);
-        }
-
-        if(myPos.getY() > SmashGame.APP_HEIGHT + 200 && healthAmt > 0)
-        {
-            kill("down");
-        }
-    }
-
-    public void respawn()
-    {
-        myPos = new Coord( SmashGame.APP_WIDTH / 2, -50);
-        if(SmashGame.NO_SPAWNCAMPING)
-        {
-            myPos.setX( Stage.FLOOR_GAP + (Math.random() * (SmashGame.APP_WIDTH - (2 * Stage.FLOOR_GAP))));
-        }
-        healthAmt = STARTHEALTH;
-        onGround = false;
-        myVector.setY(60);
-        dead = false;
-    }
-
-    public void kill(String type)
-    {
-        if(!dead)
-        {
-            if(type.equals("left"))
-            {
-                ringOutLeft.play(myPos);
-                myPos.setY(SmashGame.APP_HEIGHT + 200);
-            }
-            if(type.equals("right"))
-            {
-                ringOutRight.play(myPos);
-                myPos.setY(SmashGame.APP_HEIGHT + 200);
-            }
-            if(type.equals("down"))
-            {
-                ringOutDown.play(myPos);
-                myPos.setY(SmashGame.APP_HEIGHT + 200);
-            }
-
-            healthAmt = 0;
-            dead = true;
-
-            new CooldownTracker(this, respawnCD, "respawn");
-        }
-    }
-
-    /**
-     * Executes moves on the player based off of key input
-     * 
-     * @param myList Key list generated from Keyput class
-     */
-    public void move(ArrayList<Key> myList) {
-        resistance();
-        checkGround();
-        checkBoundaries();
-        if (healthAmt <= 0) {
-            kill("health");
-        } else {
-
-            for (Key currentKey : myList) {
-                if (currentKey.keyState) {
-                    if (currentKey.keyNumber == moveLeft && canWalk) {
-                        walkLeft();
-                    } else if (currentKey.keyNumber == moveRight && canWalk) {
-                        walkRight();
-                    }
-
-                    if (currentKey.keyNumber == moveJump) {
-                        jump();
-                    }
-
-                    if (currentKey.keyNumber == moveAttack && canAttack) {
-                        attack();
-                    }
-                }
-            }
-        }
-        myPos.setX(myPos.getX() + myVector.getX() / 10);
-        myPos.setY(myPos.getY() + myVector.getY() / 10);
-    }
-
-    /**
-     * Draws Player
-     * 
-     * @param g2 Graphics object passthrough
-     */
-    public void drawMe(Graphics2D g2) {
-        prevDirec = facingDirec + animationDirec;
-        g2.drawImage(myBanner, (int) (scale * (myPos.getX() - 48)), (int) (scale * (myPos.getY() - MY_HEIGHT - 30)), null);
-
-        if (healthAmt > 0) {
-            if (facingRight) {
-                facingDirec = "/right";
-            } else {
-                facingDirec = "/left";
-            }
-
-            if (myVector.getX() > 0 || myVector.getX() < 0) {
-                animationDirec = "/walking";
-            } else {
-                animationDirec = "/standing";
-            }
-
-            if (!onGround) {
-                animationDirec = "/flying";
-            }
-        } 
-        else 
-        {
-            facingDirec = "";
-            animationDirec = "/dead";
-        }
-
-        if(attacking)
-        {
-            animationDirec = animationDirec + "shooting";
-        }
-
-        if (!(prevDirec.equals(facingDirec + animationDirec))) {
-            myAnimationFrame = 0;
         }
     }
 }

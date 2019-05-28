@@ -32,8 +32,7 @@ public class CharacterMenuIcon {
 	/**
 	 * 
 	 */
-	public CharacterMenuIcon(String name, double s, double x, double y) 
-	{
+	public CharacterMenuIcon(String name, double s, double x, double y) {
 		myName = name;
 		scale = s;
 		xPos = x;
@@ -42,41 +41,34 @@ public class CharacterMenuIcon {
 		ImageResizer iR = new ImageResizer();
 
 		try {
-			//Create File Directory String
+			// Create File Directory String
 			String fileDirectory = BASE_DIREC + ICON_DIREC + myName + ".png";
 
-			//Create Image
+			// Create Image
 			File image = new File(fileDirectory);
 			myIcon = ImageResizer.resizeImage(ImageIO.read(image), scale);
-		} 
-		catch(IOException e)
-		{
+		} catch (IOException e) {
 			System.err.println(BASE_DIREC + ICON_DIREC + myName + ".png :Does not exist");
 		}
 
 		try {
-			//Create File Directory String
+			// Create File Directory String
 			String fileDirectory = BASE_DIREC + PREVIEW_DIREC + myName + ".png";
 
-			//Create Image
+			// Create Image
 			File image = new File(fileDirectory);
 			myPreview = ImageResizer.resizeImage(ImageIO.read(image), scale);
-		} 
-		catch(IOException e)
-		{
+		} catch (IOException e) {
 			System.err.println(BASE_DIREC + PREVIEW_DIREC + myName + ".png :Does not exist");
 		}
 	}
 
-	public boolean contains(MouseEvent e)
-	{
+	public boolean contains(MouseEvent e) {
 		int x = e.getX();
 		int y = e.getY();
 
-		if(xPos * scale < x && x < scale * (xPos + WIDTH))
-		{
-			if(scale * yPos < y && y < scale * (yPos + HEIGHT))
-			{
+		if (xPos * scale < x && x < scale * (xPos + WIDTH)) {
+			if (scale * yPos < y && y < scale * (yPos + HEIGHT)) {
 				return true;
 			}
 		}
@@ -84,12 +76,11 @@ public class CharacterMenuIcon {
 		return false;
 	}
 
-	public void drawMe(Graphics2D g2)
-	{
+	public void drawMe(Graphics2D g2) {
 		g2.drawImage(myIcon, (int) (xPos * scale), (int) (yPos * scale), null);
 	}
 
-	public BufferedImage getPreview(){
+	public BufferedImage getPreview() {
 		return myPreview;
 	}
 

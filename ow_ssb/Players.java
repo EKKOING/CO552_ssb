@@ -2,8 +2,6 @@ import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.awt.Graphics2D;
-import java.awt.geom.*;
 
 /**
  * Manages the players in a Smash Game
@@ -139,7 +137,7 @@ public class Players {
                         temp.move(myKeyput.getKeys());
                     }
                 } catch (ConcurrentModificationException e) {
-                    System.err.println("Concurrent Modification of Players - Skipped Frame");
+                    //Skip Frame
                 }
             }
         }
