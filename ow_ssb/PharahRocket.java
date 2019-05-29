@@ -12,16 +12,24 @@ import java.util.ArrayList;
  */
 public class PharahRocket extends Player {
 
+	/** Speed of the Rocket */
 	public static final double SPEED = 80;
+	/** Boolean State of Hitting Something */
 	private boolean hitSomething;
 
-	/**
-	 * 
+	/**	
+	 * Constructor for Pharah Rocket Projectile
+	 * @param myId Id number for the rocket
+	 * @param xStart Location to start the rocket X
+	 * @param yStart Location to start the rocket Y
+	 * @param list Other Players
+	 * @param facingR Determines direction facing (Right = true)
+	 * @param enemy Enemy to target
 	 */
 	public PharahRocket(int myId, int xStart, int yStart, Players list, boolean facingR, int enemy) {
 		super(myId, xStart, yStart, list);
 		enemyId = enemy;
-		facingRight = facingR; // This will be used later don't worry
+		facingRight = facingR;
 		if (facingRight) {
 			myVector.setX(SPEED);
 		} else {
@@ -32,7 +40,7 @@ public class PharahRocket extends Player {
 	}
 
 	/**
-	 * Attack method (Just a shell)
+	 * Attack method for Rocket
 	 * 
 	 * @return true if successful attack
 	 */
@@ -53,7 +61,7 @@ public class PharahRocket extends Player {
 				// Damage
 				enemy.getDamaged(20 + (Math.random() * 20 - 10));
 
-				// Stop Duplication
+				// Stop Duplication of Attacks
 				canAttack = false;
 				hitSomething = true;
 				explode();
