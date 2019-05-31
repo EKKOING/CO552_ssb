@@ -33,7 +33,7 @@ public class PharahRocket extends Player {
 	public PharahRocket(int myId, int xStart, int yStart, Players list, boolean facingR, int enemy) {
 		super(myId, xStart, yStart, list);
 		enemyId = enemy;
-		facingRight = facingR; // This will be used later don't worry
+		facingRight = facingR;
 		if (facingRight) {
 			myVector.setX(SPEED);
 		} else {
@@ -44,7 +44,7 @@ public class PharahRocket extends Player {
 	}
 
 	/**
-	 * Attack method (Just a shell)
+	 * Attack method for Rocket
 	 * 
 	 * @return true if successful attack
 	 */
@@ -66,7 +66,7 @@ public class PharahRocket extends Player {
 				// Damage
 				enemy.getDamaged(20 + (Math.random() * 20 - 10));
 
-				// Stop Duplication
+				// Stop Duplication of Attacks
 				canAttack = false;
 				hitSomething = true;
 				explode();
