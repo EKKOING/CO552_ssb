@@ -33,7 +33,7 @@ public class Players {
     /**
      * Creates new collection
      * 
-     * @param game SmashGame passthrough
+     * @param game   SmashGame passthrough
      * @param keyput Keyput passthrough
      */
     public Players(SmashGame game, Keyput keyput) {
@@ -43,13 +43,17 @@ public class Players {
         myNumPlayers = NUM_PLAYERS;
         // mySpeed = SPEED;
         setupPlayers();
-
         myTimer = new Timer();
         myTimer.scheduleAtFixedRate(new UpdateTask(), 0, UPDATE_DELAY);
     }
 
+    public void StartPlayers() {
+
+    }
+
     /**
      * Gets the current number of players
+     * 
      * @return number of players
      */
     public int getNumPlayers() {
@@ -58,6 +62,7 @@ public class Players {
 
     /**
      * Returns arraylist of players
+     * 
      * @return Player arraylist
      */
     public ArrayList<Player> getPlayers() {
@@ -70,31 +75,24 @@ public class Players {
     public void setupPlayers() {
         myPlayers.clear();
         int currentPlayer = 0;
-        for(int idx = 1; idx <= 2; idx++)
-        {
+        for (int idx = 1; idx <= 2; idx++) {
             Player temp = new Player(0, 0, 0, this);
-            if(idx == 1)
-            {   
+            if (idx == 1) {
                 currentPlayer = myGame.player1;
-            }
-            else{
+            } else {
                 currentPlayer = myGame.player2;
             }
-            
-            switch(currentPlayer)
-            {
-                case 1:
+
+            switch (currentPlayer) {
+            case 1:
                 temp = new Pharah(0, 0, 0, this);
                 break;
             }
             temp.myId = idx;
             temp.setKeybindings();
-            if(idx == 1)
-            {
+            if (idx == 1) {
                 temp.myPos = new Coord(Stage.FLOOR_GAP + 20, Stage.FLOOR_TOP);
-            }
-            else
-            {
+            } else {
                 temp.myPos = new Coord(SmashGame.APP_WIDTH - Stage.FLOOR_GAP - 20, Stage.FLOOR_TOP);
             }
             myPlayers.add(temp);
@@ -103,23 +101,20 @@ public class Players {
 
     /**
      * Finds a player based on id num
+     * 
      * @param id id of the player to search for
      * @return the Player found or null if none
      */
-    public Player findPlayer(int id)
-    {
-        for(Player temp : myPlayers)
-        {
-            if(temp.myId == id)
-            {
+    public Player findPlayer(int id) {
+        for (Player temp : myPlayers) {
+            if (temp.myId == id) {
                 return temp;
             }
         }
         return null;
     }
 
-    public void removeObject(Player remove)
-    {
+    public void removeObject(Player remove) {
         myPlayers.remove(remove);
     }
 
@@ -133,11 +128,11 @@ public class Players {
         public void run() {
             if (!myGame.isPaused()) {
                 try {
-                    for (Player temp: myPlayers) {
+                    for (Player temp : myPlayers) {
                         temp.move(myKeyput.getKeys());
                     }
                 } catch (ConcurrentModificationException e) {
-                    //Skip Frame
+                    // Skip Frame
                 }
             }
         }

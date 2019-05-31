@@ -16,10 +16,9 @@ import javax.imageio.*;
  * @version 2019/05/21
  */
 public class GameScreen extends JPanel {
-    /**
-     * 
-     */
+
     private static final long serialVersionUID = 3412334407377724982L;
+
     /** Keyput class for handling User Input */
     public Keyput myKeyput;
     /** Players class for managing the players */
@@ -30,6 +29,7 @@ public class GameScreen extends JPanel {
     /** Stage */
     public Stage myStage;
 
+    /** Base Directory for Images */
     public static final String BASE_DIRECTORY = "./graphics/ingame/topIcon/";
 
     /** Health Bar Overlay */
@@ -57,6 +57,7 @@ public class GameScreen extends JPanel {
     public void run() {
         myAnimations = new ArrayList<Animator>();
         scale = myGame.scale;
+        FightStartAnimation startGameAnimation = new FightStartAnimation(this, scale);
         myStage = new Stage("gibraltar", this);
         myKeyput = new Keyput(myGame);
         myPlayers = new Players(myGame, myKeyput);
@@ -88,6 +89,7 @@ public class GameScreen extends JPanel {
         this.requestFocusInWindow();
         FieldUpdater updater = new FieldUpdater();
         updater.start();
+        startGameAnimation.play();
     }
 
     /**

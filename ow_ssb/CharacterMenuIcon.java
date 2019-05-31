@@ -38,8 +38,6 @@ public class CharacterMenuIcon {
 		xPos = x;
 		yPos = y;
 
-		ImageResizer iR = new ImageResizer();
-
 		try {
 			// Create File Directory String
 			String fileDirectory = BASE_DIREC + ICON_DIREC + myName + ".png";

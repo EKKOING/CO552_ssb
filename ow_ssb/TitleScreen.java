@@ -227,8 +227,6 @@ public class TitleScreen extends JPanel {
 		if (posX > scale * 153 && posX < scale * 252) {
 			if (posY > scale * 470 && posY < scale * 537) {
 				lastButtonClicked = "Exit";
-				myGame.myApp.setVisible(false);
-				myGame.gd.setFullScreenWindow(null);
 				System.exit(0);
 			}
 		}
