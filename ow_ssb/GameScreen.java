@@ -41,6 +41,9 @@ public class GameScreen extends JPanel {
     /** Animations List */
     public ArrayList<Animator> myAnimations;
 
+    /** Boolean State of Game */
+    public boolean gameStarted;
+
     /** Scale */
     public double scale;
 
@@ -93,6 +96,12 @@ public class GameScreen extends JPanel {
         startGameAnimation.play();
     }
 
+    public void startGame()
+    {
+        myPlayers.StartPlayers();
+        gameStarted = true;
+    }
+
     /**
      * Paints screen
      * 
@@ -104,6 +113,7 @@ public class GameScreen extends JPanel {
         // Rectangle2D.Double test = new Rectangle2D.Double(0, 0, 200, 200);
         // g2.fill(test);
         g2.clearRect(0, 0, 1920, 1080);
+        g2.setBackground(Color.BLACK);
 
         myStage.drawMe(g2);
 
@@ -126,7 +136,10 @@ public class GameScreen extends JPanel {
             }
         }
 
-        drawUI(g2);
+        if(gameStarted)
+        {
+            drawUI(g2);
+        }
 
         g2.clearRect((int) (SmashGame.APP_WIDTH * scale), 0, (int) (scale * 500), (int) (scale * SmashGame.APP_HEIGHT));
         g2.clearRect(0, (int) (SmashGame.APP_HEIGHT * scale), (int) (scale * (SmashGame.APP_WIDTH + 500)),

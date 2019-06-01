@@ -17,7 +17,7 @@ public class FightStartAnimation implements Animator {
     public final String BASE_DIREC = "./graphics/ingame/animations/fightstart/Layer ";
 
     /* Current Image Representation **/
-    public BufferedImage myImage;
+    public BufferedImage loadingScreen;
 
     /* Animation Counter **/
     public double myAnimationFrame;
@@ -41,7 +41,7 @@ public class FightStartAnimation implements Animator {
     public boolean shouldPlay;
 
     /** X Location of the animation */
-    private static final int TOP_L_X = 0;
+    private static final int TOP_L_X = -80;
 
     /** Y Location of the animation */
     private static final int TOP_L_Y = 225;
@@ -49,26 +49,43 @@ public class FightStartAnimation implements Animator {
     /** Iteration Amount for Animatioon */
     private static final double FRAME_GAP = 0.2;
 
+    /** Covert from source scale to 900x1400 */
+    private static final double BASE_SCALE = 0.75;
+
     /**
-     * 
+     * Construct a fight start animation
+     * @param myGameScreen Screen stored in
+     * @param scaler Scale to run at
      */
     public FightStartAnimation(GameScreen myGameScreen, double scaler) {
         myAnimationFrame = 0;
         shouldPlay = false;
         myScreen = myGameScreen;
         scale = scaler;
+        try {
+            File image = new File(BASE_DIREC + "loadingscreen.png");
+            loadingScreen = ImageResizer.resizeImage(ImageIO.read(image), scale * BASE_SCALE);
+        } catch (IOException ioe) {
+            //Oh well
+        }
         images = new ArrayList<BufferedImage>();
         timer = new Timer();
         timer.schedule(new Renderer(), 0);
     }
 
+    /** Plays the animation */
     public void play() {
         shouldPlay = true;
     }
 
+    public boolean isRendered()
+    {
+        return rendered;
+    }
+
     public void endAnimation() {
         myScreen.removeAnimation(this);
-        myScreen.myPlayers.StartPlayers();
+        myScreen.startGame();
     }
 
     public void drawMe(Graphics2D g2) {
@@ -82,9 +99,20 @@ public class FightStartAnimation implements Animator {
                 endAnimation();
             }
         }
+        else
+        {
+            try {
+                g2.drawImage(loadingScreen, 0, 0, null);
+            } catch (NullPointerException e) {
+                //This will happen a couple of times depending on processing time
+            }
+        }
     }
 
     class Renderer extends TimerTask {
+        /**
+         *
+         */
         public void run() {
             ArrayList<BufferedImage> temp = new ArrayList<BufferedImage>();
             int renderFrame = 1;
@@ -95,12 +123,12 @@ public class FightStartAnimation implements Animator {
                     String fileDirectory = BASE_DIREC;
                     fileDirectory = fileDirectory + (int) renderFrame + ".png";
 
-                    //System.out.println(fileDirectory);
+                    // System.out.println(fileDirectory);
 
                     // Create Image
                     File image = new File(fileDirectory);
-                    myImage = ImageResizer.resizeImage(ImageIO.read(image), scale * 0.75);
-                    temp.add(myImage);
+                    BufferedImage renderedFrame = ImageResizer.resizeImage(ImageIO.read(image), scale * BASE_SCALE);
+                    temp.add(renderedFrame);
                 } catch (IOException ioe) {
                     fileExists = false;
                 }
