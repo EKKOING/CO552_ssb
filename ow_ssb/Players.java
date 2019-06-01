@@ -48,7 +48,7 @@ public class Players {
     }
 
     public void StartPlayers() {
-
+        gameRunning = true;
     }
 
     /**
@@ -126,7 +126,7 @@ public class Players {
          * runs actions on the players
          */
         public void run() {
-            if (!myGame.isPaused()) {
+            if (!myGame.isPaused() && gameRunning) {
                 try {
                     for (Player temp : myPlayers) {
                         temp.move(myKeyput.getKeys());

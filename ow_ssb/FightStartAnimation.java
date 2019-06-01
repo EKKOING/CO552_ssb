@@ -13,8 +13,8 @@ import java.util.TimerTask;
  */
 public class FightStartAnimation implements Animator {
 
-    /** Stage Path */
-    public final String BASE_DIREC = "./graphics/ingame/animations/fightstart";
+    /** Animation Path */
+    public final String BASE_DIREC = "./graphics/ingame/animations/fightstart/Layer ";
 
     /* Current Image Representation **/
     public BufferedImage myImage;
@@ -40,9 +40,14 @@ public class FightStartAnimation implements Animator {
     /** True when Playing Should Start */
     public boolean shouldPlay;
 
+    /** X Location of the animation */
     private static final int TOP_L_X = 0;
 
-    private static final int TOP_L_Y = 0;
+    /** Y Location of the animation */
+    private static final int TOP_L_Y = 225;
+
+    /** Iteration Amount for Animatioon */
+    private static final double FRAME_GAP = 0.2;
 
     /**
      * 
@@ -62,16 +67,18 @@ public class FightStartAnimation implements Animator {
     }
 
     public void endAnimation() {
-        myScreen.myAnimations.remove(this);
+        myScreen.removeAnimation(this);
         myScreen.myPlayers.StartPlayers();
     }
 
     public void drawMe(Graphics2D g2) {
         if (rendered && shouldPlay) {
             if (myAnimationFrame < images.size() - 1) {
-                myAnimationFrame = myAnimationFrame + 0.01;
-                g2.drawImage(images.get((int) myAnimationFrame), (int) (TOP_L_X * scale), (int) (TOP_L_Y * scale), null);
+                myAnimationFrame = myAnimationFrame + FRAME_GAP;
+                g2.drawImage(images.get((int) myAnimationFrame), (int) (TOP_L_X), (int) (TOP_L_Y), null);
+                //System.out.println("Playing Frame Number " + myAnimationFrame);
             } else {
+                //System.out.println("Animation Ended");
                 endAnimation();
             }
         }
@@ -85,17 +92,14 @@ public class FightStartAnimation implements Animator {
             while (fileExists) {
                 try {
                     // Create File Directory String
-                    String fileDirectory = BASE_DIREC + "/";
-                    if (renderFrame < 10) {
-                        fileDirectory = fileDirectory + "0";
-                    }
+                    String fileDirectory = BASE_DIREC;
                     fileDirectory = fileDirectory + (int) renderFrame + ".png";
 
-                    // System.out.println(fileDirectory);
+                    //System.out.println(fileDirectory);
 
                     // Create Image
                     File image = new File(fileDirectory);
-                    myImage = ImageResizer.resizeImage(ImageIO.read(image), scale * 0.35);
+                    myImage = ImageResizer.resizeImage(ImageIO.read(image), scale * 0.75);
                     temp.add(myImage);
                 } catch (IOException ioe) {
                     fileExists = false;
@@ -104,6 +108,7 @@ public class FightStartAnimation implements Animator {
             }
             images = temp;
             rendered = true;
+            //System.out.println("Game Start Rendered " + images.size() + " Images");
             timer.cancel();
         }
     }

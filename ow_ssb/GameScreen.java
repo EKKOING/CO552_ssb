@@ -58,6 +58,7 @@ public class GameScreen extends JPanel {
         myAnimations = new ArrayList<Animator>();
         scale = myGame.scale;
         FightStartAnimation startGameAnimation = new FightStartAnimation(this, scale);
+        myAnimations.add(startGameAnimation);
         myStage = new Stage("gibraltar", this);
         myKeyput = new Keyput(myGame);
         myPlayers = new Players(myGame, myKeyput);
@@ -130,6 +131,11 @@ public class GameScreen extends JPanel {
         g2.clearRect((int) (SmashGame.APP_WIDTH * scale), 0, (int) (scale * 500), (int) (scale * SmashGame.APP_HEIGHT));
         g2.clearRect(0, (int) (SmashGame.APP_HEIGHT * scale), (int) (scale * (SmashGame.APP_WIDTH + 500)),
                 (int) (scale * 500));
+    }
+
+    public void removeAnimation(Animator animation)
+    {
+        myAnimations.remove(animation);
     }
 
     public void drawUI(Graphics2D g2) {
