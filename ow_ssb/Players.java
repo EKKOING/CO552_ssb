@@ -73,6 +73,7 @@ public class Players {
      * Sets up players
      */
     public void setupPlayers() {
+        gameRunning = false;
         myPlayers.clear();
         int currentPlayer = 0;
         for (int idx = 1; idx <= 2; idx++) {
@@ -129,6 +130,13 @@ public class Players {
             if (!myGame.isPaused() && gameRunning) {
                 try {
                     for (Player temp : myPlayers) {
+                        if(temp.getLives() == 0)
+                        {
+                            temp.livesLeft = -1;
+                            myGame.screenSwitcher("End");
+                            myGame.myWinScreen.run(temp);
+                            myGame.myGameScreen.setVisible(false);
+                        }
                         temp.move(myKeyput.getKeys());
                     }
                 } catch (ConcurrentModificationException e) {

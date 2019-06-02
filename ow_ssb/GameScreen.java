@@ -3,7 +3,6 @@ import java.util.ConcurrentModificationException;
 import java.awt.*;
 import javax.swing.*;
 import java.awt.image.*;
-import java.awt.geom.*;
 import java.awt.geom.Rectangle2D;
 import java.io.*;
 import javax.imageio.*;
@@ -57,7 +56,9 @@ public class GameScreen extends JPanel {
         myGame = game;
     }
 
+    /** Run the class */
     public void run() {
+        gameStarted = false;
         myAnimations = new ArrayList<Animator>();
         scale = myGame.scale;
         FightStartAnimation startGameAnimation = new FightStartAnimation(this, scale);
@@ -96,6 +97,9 @@ public class GameScreen extends JPanel {
         startGameAnimation.play();
     }
 
+    /**
+     * Starts game
+     */
     public void startGame()
     {
         myPlayers.StartPlayers();
@@ -110,10 +114,9 @@ public class GameScreen extends JPanel {
     public void paintComponent(Graphics g) {
         Graphics2D g2 = (Graphics2D) g;
 
-        // Rectangle2D.Double test = new Rectangle2D.Double(0, 0, 200, 200);
-        // g2.fill(test);
-        g2.clearRect(0, 0, 1920, 1080);
         g2.setBackground(Color.BLACK);
+        g2.clearRect(0, 0, 1920, 1080);
+
 
         myStage.drawMe(g2);
 
@@ -142,15 +145,22 @@ public class GameScreen extends JPanel {
         }
 
         g2.clearRect((int) (SmashGame.APP_WIDTH * scale), 0, (int) (scale * 500), (int) (scale * SmashGame.APP_HEIGHT));
-        g2.clearRect(0, (int) (SmashGame.APP_HEIGHT * scale), (int) (scale * (SmashGame.APP_WIDTH + 500)),
-                (int) (scale * 500));
+        g2.clearRect(0, (int) (SmashGame.APP_HEIGHT * scale), (int) (scale * (SmashGame.APP_WIDTH + 500)), (int) (scale * 500));
     }
 
+    /**
+     * Removes animation
+     * @param animation animation to remove
+     */
     public void removeAnimation(Animator animation)
     {
         myAnimations.remove(animation);
     }
 
+    /**
+     * Draws the UI seen in the corners
+     * @param g2 Graphics Object
+     */
     public void drawUI(Graphics2D g2) {
         // Player 1
         g2.drawImage(background, (int) (scale * 0), (int) (scale * 0), null);

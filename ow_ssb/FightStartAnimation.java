@@ -38,6 +38,7 @@ public class FightStartAnimation implements Animator {
     public boolean rendered;
 
     /** True when Playing Should Start */
+    
     public boolean shouldPlay;
 
     /** X Location of the animation */

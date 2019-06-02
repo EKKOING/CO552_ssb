@@ -33,6 +33,9 @@ public class SmashGame {
    /** TitleScreen */
    public TitleScreen myTitleScreen;
 
+   /** Game End Screen */
+   public WinScreen myWinScreen;
+
    /** App panel */
    private JPanel myAppPanel;
 
@@ -100,7 +103,7 @@ public class SmashGame {
       setupFrame();
       iR = new ImageResizer(this);
       scale = getScale();
-      //scale = 0.35; //Manually set Scale
+      scale = 0.85; //Manually set Scale
       myTitleScreen.run();
    }
 
@@ -135,6 +138,10 @@ public class SmashGame {
       myGameScreen = new GameScreen(this);
       myGameScreen.setFocusable(true);
       myAppPanel.add("Game", myGameScreen);
+
+      myWinScreen = new WinScreen(this);
+      myWinScreen.setFocusable(true);
+      myAppPanel.add("End", myWinScreen);
 
       myApp.add(myAppPanel);
       myApp.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

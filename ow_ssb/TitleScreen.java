@@ -9,9 +9,8 @@ import java.awt.image.*;
 import java.awt.geom.*;
 import java.io.*;
 import java.util.Timer;
-
 import javax.imageio.*;
-import javax.lang.model.util.ElementScanner6;
+
 
 /**
  * @author student
@@ -248,6 +247,8 @@ public class TitleScreen extends JPanel {
 		g2 = (Graphics2D) g;
 
 		if (onMainMenu) {
+			g2.clearRect(0, 0, 1920, 1080);
+			g2.setBackground(Color.BLACK);
 			g2.drawImage(background, 0, 0, null);
 		}
 

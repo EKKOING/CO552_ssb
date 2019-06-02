@@ -213,6 +213,14 @@ public class Player {
     }
 
     /**
+     * Gets num lives
+     * @return Num lives left
+     */
+     public int getLives()
+     {
+        return livesLeft;
+     }
+    /**
      * Gets current health
      * 
      * @return the current health amount
@@ -394,6 +402,7 @@ public class Player {
      * Respawns Player
      */
     public void respawn() {
+        livesLeft--;
         myPos = new Coord(SmashGame.APP_WIDTH / 2, -50);
         if (SmashGame.NO_SPAWNCAMPING) {
             myPos.setX(Stage.FLOOR_GAP + (Math.random() * (SmashGame.APP_WIDTH - (2 * Stage.FLOOR_GAP))));
@@ -426,7 +435,6 @@ public class Player {
 
             healthAmt = 0;
             dead = true;
-
             new CooldownTracker(this, respawnCD, "respawn");
         }
     }
