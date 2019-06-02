@@ -9,9 +9,8 @@ import java.awt.image.*;
 import java.awt.geom.*;
 import java.io.*;
 import java.util.Timer;
-
 import javax.imageio.*;
-import javax.lang.model.util.ElementScanner6;
+
 
 /**
  * @author student
@@ -43,11 +42,17 @@ public class TitleScreen extends JPanel {
 	/** Boolean State of Character Menu */
 	public boolean onCharacterMenu;
 
+	/** Boolean State of Instruction Menu */
+	private boolean onInstructionMenu;
+
 	/** Directory for Main Menu */
 	public static final String MAIN_MENU = "./graphics/menus/main/01.png";
 
 	/** Directory for Character Menu */
 	public static final String CHARACTER_MENU = "./graphics/menus/character/";
+
+	/** Directory for Instruction Menu */
+	public static final String INSTRUCTION_MENU = "./graphics/menus/instruction/01.png";
 
 	private String lastButtonClicked;
 
@@ -163,13 +168,26 @@ public class TitleScreen extends JPanel {
 
 		for (String character : charactersArray) {
 			myIcons.add(new CharacterMenuIcon(character, scale, positionX, positionY));
-			positionX = positionX + CharacterMenuIcon.WIDTH + 20;
+			positionX = positionX + CharacterMenuIcon.WIDTH + CharacterMenuIcon.XGAP;
 			if (myIcons.size() == 4 || myIcons.size() == 9) {
 				positionX = ICON_X;
-				positionY = positionY + CharacterMenuIcon.HEIGHT + 40;
+				positionY = positionY + CharacterMenuIcon.HEIGHT + CharacterMenuIcon.YGAP;
 			}
 		}
 		onCharacterMenu = true;
+	}
+
+	public void instructionMenu()
+	{
+		lastButtonClicked = "";
+		buttonClicked = false;
+		try {
+			File image = new File(INSTRUCTION_MENU);
+			background = myGame.iR.resizeImage(ImageIO.read(image));
+		} catch (IOException ioe) {
+			System.err.println(ioe);
+		}
+		onInstructionMenu = true;
 	}
 
 	public void characterMenuButtonHandler(MouseEvent e) {
@@ -200,7 +218,7 @@ public class TitleScreen extends JPanel {
 						isPlayer2 = true;
 						canClick = false;
 						myTimer = new Timer();
-						myTimer.schedule(new RemindTask(), 2000);
+						myTimer.schedule(new ClickDelay(), 2000);
 						characterMenu();
 					}
 				}
@@ -217,7 +235,7 @@ public class TitleScreen extends JPanel {
 				lastButtonClicked = "Play";
 				canClick = false;
 				myTimer = new Timer();
-				myTimer.schedule(new RemindTask(), 1000);
+				myTimer.schedule(new ClickDelay(), 1000);
 				isPlayer1 = true;
 				characterMenu();
 				onMainMenu = false;
@@ -227,19 +245,40 @@ public class TitleScreen extends JPanel {
 		if (posX > scale * 153 && posX < scale * 252) {
 			if (posY > scale * 470 && posY < scale * 537) {
 				lastButtonClicked = "Exit";
-				myGame.myApp.setVisible(false);
-				myGame.gd.setFullScreenWindow(null);
 				System.exit(0);
 			}
 		}
 		if (posX > scale * 153 && posX < scale * 445) {
 			if (posY > scale * 406 && posY < scale * 456) {
 				lastButtonClicked = "Instructions";
+				canClick = false;
+				myTimer = new Timer();
+				myTimer.schedule(new ClickDelay(), 500);
+				instructionMenu();
+				onMainMenu = false;
+				return;
 			}
 		}
 		System.out.println(lastButtonClicked);
 		lastButtonClicked = "";
 	}
+
+	/**
+	 * Executes instruction on Instructions Menu based on clicks
+	 * @param e Mouse Event
+	 */
+	public void instructionMenuButtonHandler(MouseEvent e) {
+		if (canClick) 
+		{
+			lastButtonClicked = "Return To Main Menu";
+			canClick = false;
+			myTimer = new Timer();
+			myTimer.schedule(new ClickDelay(), 500);
+			mainMenu();
+			onInstructionMenu = false;
+		}
+	}
+
 
 	/**
 	 * Paints screen
@@ -249,7 +288,9 @@ public class TitleScreen extends JPanel {
 	public void paintComponent(Graphics g) {
 		g2 = (Graphics2D) g;
 
-		if (onMainMenu) {
+		if (onMainMenu || onInstructionMenu) {
+			g2.clearRect(0, 0, 1920, 1080);
+			g2.setBackground(Color.BLACK);
 			g2.drawImage(background, 0, 0, null);
 		}
 
@@ -266,29 +307,39 @@ public class TitleScreen extends JPanel {
 	}
 
 	private class mouseHandler implements MouseListener {
+		@Override
 		public void mouseClicked(MouseEvent e) {
 			// System.out.println(e);
 
 			if (onMainMenu) {
 				mainMenuButtonHandler(e);
 			}
+
 			if (onCharacterMenu) {
 				characterMenuButtonHandler(e);
 			}
+
+			if (onInstructionMenu) {
+				instructionMenuButtonHandler(e);
+			}
 		}
 
+		@Override
 		public void mouseEntered(MouseEvent e) {
 
 		}
 
+		@Override
 		public void mouseExited(MouseEvent e) {
 
 		}
 
+		@Override
 		public void mousePressed(MouseEvent e) {
 
 		}
 
+		@Override
 		public void mouseReleased(MouseEvent e) {
 
 		}
@@ -331,7 +382,7 @@ public class TitleScreen extends JPanel {
 		}
 	}
 
-	class RemindTask extends TimerTask {
+	class ClickDelay extends TimerTask {
 		public void run() {
 			canClick = true;
 			myTimer.cancel();

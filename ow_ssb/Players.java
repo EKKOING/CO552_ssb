@@ -33,7 +33,7 @@ public class Players {
     /**
      * Creates new collection
      * 
-     * @param game SmashGame passthrough
+     * @param game   SmashGame passthrough
      * @param keyput Keyput passthrough
      */
     public Players(SmashGame game, Keyput keyput) {
@@ -43,13 +43,20 @@ public class Players {
         myNumPlayers = NUM_PLAYERS;
         // mySpeed = SPEED;
         setupPlayers();
-
         myTimer = new Timer();
         myTimer.scheduleAtFixedRate(new UpdateTask(), 0, UPDATE_DELAY);
     }
 
     /**
+     * Starts the players
+     */
+    public void StartPlayers() {
+        gameRunning = true;
+    }
+
+    /**
      * Gets the current number of players
+     * 
      * @return number of players
      */
     public int getNumPlayers() {
@@ -58,6 +65,7 @@ public class Players {
 
     /**
      * Returns arraylist of players
+     * 
      * @return Player arraylist
      */
     public ArrayList<Player> getPlayers() {
@@ -68,58 +76,53 @@ public class Players {
      * Sets up players
      */
     public void setupPlayers() {
+        gameRunning = false;
         myPlayers.clear();
         int currentPlayer = 0;
-        for(int idx = 1; idx <= 2; idx++)
-        {
+        for (int idx = 1; idx <= NUM_PLAYERS; idx++) {
             Player temp = new Player(0, 0, 0, this);
-            if(idx == 1)
-            {   
+            if (idx == 1) {
                 currentPlayer = myGame.player1;
-            }
-            else{
+            } else {
                 currentPlayer = myGame.player2;
             }
-            
-            switch(currentPlayer)
+
+            switch (currentPlayer) 
             {
                 case 1:
-                temp = new Pharah(0, 0, 0, this);
-                break;
+                    temp = new Pharah(0, 0, 0, this);
+                    break;
             }
+
             temp.myId = idx;
             temp.setKeybindings();
-            if(idx == 1)
-            {
-                temp.myPos = new Coord(Stage.FLOOR_GAP + 20, Stage.FLOOR_TOP);
+
+            if (idx == 1) {
+                temp.myPos = new Coord(Stage.FLOOR_GAP + temp.getWidth(), Stage.FLOOR_TOP);
+            } else {
+                temp.myPos = new Coord(SmashGame.APP_WIDTH - Stage.FLOOR_GAP - temp.getWidth(), Stage.FLOOR_TOP);
             }
-            else
-            {
-                temp.myPos = new Coord(SmashGame.APP_WIDTH - Stage.FLOOR_GAP - 20, Stage.FLOOR_TOP);
-            }
+            temp.setLives(SmashGame.NUM_LIVES);
             myPlayers.add(temp);
         }
     }
 
     /**
      * Finds a player based on id num
+     * 
      * @param id id of the player to search for
      * @return the Player found or null if none
      */
-    public Player findPlayer(int id)
-    {
-        for(Player temp : myPlayers)
-        {
-            if(temp.myId == id)
-            {
+    public Player findPlayer(int id) {
+        for (Player temp : myPlayers) {
+            if (temp.myId == id) {
                 return temp;
             }
         }
         return null;
     }
 
-    public void removeObject(Player remove)
-    {
+    public void removeObject(Player remove) {
         myPlayers.remove(remove);
     }
 
@@ -131,13 +134,22 @@ public class Players {
          * runs actions on the players
          */
         public void run() {
-            if (!myGame.isPaused()) {
+            if (!myGame.isPaused() && gameRunning) {
                 try {
-                    for (Player temp: myPlayers) {
+                    for (Player temp : myPlayers) {
+                        if(temp.getLives() == 0)
+                        {
+                            //temp.setLives(-1);
+                            myGame.screenSwitcher("End");
+                            myGame.myWinScreen.run(temp);
+                            gameRunning = false;
+                            myPlayers.clear();
+                            break;
+                        }
                         temp.move(myKeyput.getKeys());
                     }
                 } catch (ConcurrentModificationException e) {
-                    //Skip Frame
+                    // Skip Frame
                 }
             }
         }

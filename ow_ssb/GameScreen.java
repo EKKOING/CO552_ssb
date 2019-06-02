@@ -3,7 +3,6 @@ import java.util.ConcurrentModificationException;
 import java.awt.*;
 import javax.swing.*;
 import java.awt.image.*;
-import java.awt.geom.*;
 import java.awt.geom.Rectangle2D;
 import java.io.*;
 import javax.imageio.*;
@@ -16,10 +15,9 @@ import javax.imageio.*;
  * @version 2019/05/21
  */
 public class GameScreen extends JPanel {
-    /**
-     * 
-     */
+
     private static final long serialVersionUID = 3412334407377724982L;
+
     /** Keyput class for handling User Input */
     public Keyput myKeyput;
     /** Players class for managing the players */
@@ -30,6 +28,7 @@ public class GameScreen extends JPanel {
     /** Stage */
     public Stage myStage;
 
+    /** Base Directory for Images */
     public static final String BASE_DIRECTORY = "./graphics/ingame/topIcon/";
 
     /** Health Bar Overlay */
@@ -40,6 +39,9 @@ public class GameScreen extends JPanel {
 
     /** Animations List */
     public ArrayList<Animator> myAnimations;
+
+    /** Boolean State of Game */
+    public boolean gameStarted;
 
     /** Scale */
     public double scale;
@@ -54,9 +56,14 @@ public class GameScreen extends JPanel {
         myGame = game;
     }
 
+    /** Run the class */
     public void run() {
+        gameStarted = false;
         myAnimations = new ArrayList<Animator>();
+        myAnimations.clear();
         scale = myGame.scale;
+        FightStartAnimation startGameAnimation = new FightStartAnimation(this, scale);
+        myAnimations.add(startGameAnimation);
         myStage = new Stage("gibraltar", this);
         myKeyput = new Keyput(myGame);
         myPlayers = new Players(myGame, myKeyput);
@@ -88,6 +95,16 @@ public class GameScreen extends JPanel {
         this.requestFocusInWindow();
         FieldUpdater updater = new FieldUpdater();
         updater.start();
+        startGameAnimation.play();
+    }
+
+    /**
+     * Starts game
+     */
+    public void startGame()
+    {
+        myPlayers.StartPlayers();
+        gameStarted = true;
     }
 
     /**
@@ -98,9 +115,9 @@ public class GameScreen extends JPanel {
     public void paintComponent(Graphics g) {
         Graphics2D g2 = (Graphics2D) g;
 
-        // Rectangle2D.Double test = new Rectangle2D.Double(0, 0, 200, 200);
-        // g2.fill(test);
+        g2.setBackground(Color.BLACK);
         g2.clearRect(0, 0, 1920, 1080);
+
 
         myStage.drawMe(g2);
 
@@ -123,13 +140,28 @@ public class GameScreen extends JPanel {
             }
         }
 
-        drawUI(g2);
+        if(gameStarted)
+        {
+            drawUI(g2);
+        }
 
         g2.clearRect((int) (SmashGame.APP_WIDTH * scale), 0, (int) (scale * 500), (int) (scale * SmashGame.APP_HEIGHT));
-        g2.clearRect(0, (int) (SmashGame.APP_HEIGHT * scale), (int) (scale * (SmashGame.APP_WIDTH + 500)),
-                (int) (scale * 500));
+        g2.clearRect(0, (int) (SmashGame.APP_HEIGHT * scale), (int) (scale * (SmashGame.APP_WIDTH + 500)), (int) (scale * 500));
     }
 
+    /**
+     * Removes animation
+     * @param animation animation to remove
+     */
+    public void removeAnimation(Animator animation)
+    {
+        myAnimations.remove(animation);
+    }
+
+    /**
+     * Draws the UI seen in the corners
+     * @param g2 Graphics Object
+     */
     public void drawUI(Graphics2D g2) {
         // Player 1
         g2.drawImage(background, (int) (scale * 0), (int) (scale * 0), null);

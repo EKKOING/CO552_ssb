@@ -1,12 +1,12 @@
 import java.awt.event.KeyEvent;
 import java.awt.*;
 import java.awt.image.*;
-import java.awt.geom.*;
 import java.io.*;
 import javax.imageio.*;
-import javax.lang.model.util.ElementScanner6;
 
 import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * Class from which all characters inherit properties from
@@ -39,6 +39,9 @@ public class Player {
     /* Image Representation **/
     public BufferedImage myImage;
 
+    /** Thread Manager for Rendering */
+    public Timer timer;
+
     /* Key Bindings **/
     public int moveLeft;
     public int moveRight;
@@ -53,6 +56,9 @@ public class Player {
     /* Base Directory of Images **/
     public final String BANNER_DIREC = "./graphics/ingame/banner/";
 
+    /* ArrayList of Images **/
+    public ArrayList<BufferedImage> images;
+
     /** Directory for direction facing */
     public String facingDirec;
 
@@ -65,7 +71,7 @@ public class Player {
     /** Animation Frame Number */
     public double myAnimationFrame;
 
-    /* Direction currently facing **/
+    /** Direction currently facing */
     public boolean facingRight;
 
     /** On the ground or not */
@@ -103,7 +109,7 @@ public class Player {
     public static final double STARTHEALTH = 100;
 
     /** Lives Left */
-    public int livesLeft;
+    private int livesLeft;
 
     /* Buffered Image of Banner **/
     private BufferedImage myBanner;
@@ -124,6 +130,8 @@ public class Player {
     public Player(int playerNum, int xStart, int yStart, Players list) {
         myId = playerNum;
         otherPlayers = list;
+
+        images = new ArrayList<BufferedImage>();
 
         myPos = new Coord((double) xStart, (double) yStart);
         myVector = new Coord(0.0, 0.0);
@@ -205,6 +213,14 @@ public class Player {
     }
 
     /**
+     * Gets num lives
+     * @return Num lives left
+     */
+     public int getLives()
+     {
+        return livesLeft;
+     }
+    /**
      * Gets current health
      * 
      * @return the current health amount
@@ -239,6 +255,10 @@ public class Player {
     public int getDmgDone() {
         return dmgDone;
     }
+
+    public void setLives(int i) {
+        livesLeft = i;
+	}
 
     /**
      * Damages the player
@@ -294,6 +314,7 @@ public class Player {
             if (myVector.getY() >= 0) {
                 myVector.setY(0);
             }
+
             if (myVector.getY() > -5) {
                 onGround = true;
                 doubleJump = true;
@@ -385,6 +406,7 @@ public class Player {
      * Respawns Player
      */
     public void respawn() {
+        livesLeft--;
         myPos = new Coord(SmashGame.APP_WIDTH / 2, -50);
         if (SmashGame.NO_SPAWNCAMPING) {
             myPos.setX(Stage.FLOOR_GAP + (Math.random() * (SmashGame.APP_WIDTH - (2 * Stage.FLOOR_GAP))));
@@ -417,7 +439,6 @@ public class Player {
 
             healthAmt = 0;
             dead = true;
-
             new CooldownTracker(this, respawnCD, "respawn");
         }
     }
@@ -467,6 +488,32 @@ public class Player {
         g2.drawImage(myBanner, (int) (scale * (myPos.getX() - 48)), (int) (scale * (myPos.getY() - getHeight() - 80)),
                 null);
 
+        createDirectoryString();
+
+        if (!(prevDirec.equals(facingDirec + animationDirec))) {
+            myAnimationFrame = 0;
+            timer = new Timer();
+            timer.schedule(new Renderer(), 0);
+        }
+
+        if (myAnimationFrame < images.size() - 2) {
+            myAnimationFrame = myAnimationFrame + 0.1;
+        } else {
+            myAnimationFrame = 0;
+        }
+
+        try {
+            g2.drawImage(images.get((int) myAnimationFrame), (int) (scale * (myPos.getX() - (getWidth() / 2))),
+                    (int) (scale * (myPos.getY() - getHeight())), null);
+        } catch (IndexOutOfBoundsException e) {
+
+        }
+    }
+
+    /**
+     * Creates Image Directory String
+     */
+    public void createDirectoryString() {
         if (healthAmt > 0) {
             if (facingRight) {
                 facingDirec = "/right";
@@ -490,10 +537,6 @@ public class Player {
 
         if (attacking) {
             animationDirec = animationDirec + "shooting";
-        }
-
-        if (!(prevDirec.equals(facingDirec + animationDirec))) {
-            myAnimationFrame = 0;
         }
     }
 
@@ -521,6 +564,10 @@ public class Player {
 
     public double getStartHP() {
         return STARTHEALTH;
+    }
+
+    public String getBaseDirectory() {
+        return BASE_DIREC;
     }
 
     /**
@@ -600,6 +647,34 @@ public class Player {
             myVector.setY(myVector.getY() - 20);
             doubleJump = false;
             new CooldownTracker(this, (long) 150, "doubleJump");
+        }
+    }
+
+    class Renderer extends TimerTask {
+        public void run() {
+            ArrayList<BufferedImage> temp = new ArrayList<BufferedImage>();
+            int renderFrame = 1;
+            boolean fileExists = true;
+            while (fileExists) {
+                try {
+                    // Create File Directory String
+                    String fileDirectory = getBaseDirectory() + facingDirec + animationDirec + "/";
+                    if (renderFrame < 10) {
+                        fileDirectory = fileDirectory + "0";
+                    }
+                    fileDirectory = fileDirectory + (int) renderFrame + ".png";
+
+                    // Create Image
+                    File image = new File(fileDirectory);
+                    myImage = ImageResizer.resizeImage(ImageIO.read(image), scale);
+                    temp.add(myImage);
+                } catch (IOException ioe) {
+                    fileExists = false;
+                }
+                renderFrame++;
+            }
+            images = temp;
+            timer.cancel();
         }
     }
 }

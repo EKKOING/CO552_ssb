@@ -12,16 +12,28 @@ import java.util.ArrayList;
  */
 public class PharahRocket extends Player {
 
+	/** Speed of the rocket */
 	public static final double SPEED = 80;
+
+	/** Distance from Pharah Center Line to Start Rocket */
+	public static final int PHARAH_ARM_OFFSET = 55;
+
+	/** True if a target has been hit */
 	private boolean hitSomething;
 
 	/**
 	 * 
+	 * @param myId
+	 * @param xStart
+	 * @param yStart
+	 * @param list
+	 * @param facingR
+	 * @param enemy
 	 */
 	public PharahRocket(int myId, int xStart, int yStart, Players list, boolean facingR, int enemy) {
 		super(myId, xStart, yStart, list);
 		enemyId = enemy;
-		facingRight = facingR; // This will be used later don't worry
+		facingRight = facingR;
 		if (facingRight) {
 			myVector.setX(SPEED);
 		} else {
@@ -32,10 +44,11 @@ public class PharahRocket extends Player {
 	}
 
 	/**
-	 * Attack method (Just a shell)
+	 * Attack method for Rocket
 	 * 
 	 * @return true if successful attack
 	 */
+	@Override
 	public boolean attack() {
 		Player enemy = otherPlayers.findPlayer(enemyId);
 		Coord enemyPos = enemy.getPos();
@@ -53,7 +66,7 @@ public class PharahRocket extends Player {
 				// Damage
 				enemy.getDamaged(20 + (Math.random() * 20 - 10));
 
-				// Stop Duplication
+				// Stop Duplication of Attacks
 				canAttack = false;
 				hitSomething = true;
 				explode();
@@ -63,22 +76,20 @@ public class PharahRocket extends Player {
 		return false;
 	}
 
-	public void checkGround() {
+	@Override
+	public void checkBoundaries() {
 		if (myPos.getX() < 0 || myPos.getX() > SmashGame.APP_WIDTH) {
-			kill();
+			kill("outOfBoundaries");
 		}
 	}
 
-	public void respawn() {
-		// None
-	}
-
-	public void kill() {
+	@Override
+	public void kill(String type) {
 		otherPlayers.removeObject(this);
 	}
 
 	public void explode() {
-		kill();
+		kill("hit");
 	}
 
 	/**
@@ -86,9 +97,10 @@ public class PharahRocket extends Player {
 	 * 
 	 * @param myList Key list generated from Keyput class (Not Used)
 	 */
+	@Override
 	public void move(ArrayList<Key> myList) {
 		if (!(hitSomething)) {
-			checkGround();
+			checkBoundaries();
 			if (canAttack) {
 				attack();
 			}
@@ -101,6 +113,7 @@ public class PharahRocket extends Player {
 	 * 
 	 * @param g2 Graphics object passthrough
 	 */
+	@Override
 	public void drawMe(Graphics2D g2) {
 		if (!(hitSomething)) {
 			// TODO: Place Images

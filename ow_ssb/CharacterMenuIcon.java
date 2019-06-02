@@ -17,6 +17,9 @@ public class CharacterMenuIcon {
 	public static final double HEIGHT = 140;
 	public static final double WIDTH = 109;
 
+	public static final double YGAP = 40;
+	public static final double XGAP = 20;
+
 	public BufferedImage myIcon;
 
 	public BufferedImage myPreview;
@@ -37,8 +40,6 @@ public class CharacterMenuIcon {
 		scale = s;
 		xPos = x;
 		yPos = y;
-
-		ImageResizer iR = new ImageResizer();
 
 		try {
 			// Create File Directory String
