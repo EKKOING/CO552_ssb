@@ -9,34 +9,37 @@ import java.util.TimerTask;
  * @author Nicholas Lorentzen
  * @version 05/06/2019
  */
-public class Players {
+public class Players
+{
+    
     /** State of the game */
     public static boolean gameRunning;
     /** Number of players */
     public static final int NUM_PLAYERS = 2;
     /** Time between updates in ms */
     public static final int UPDATE_DELAY = 10;
-
+    
     /** List of players */
     public ArrayList<Player> myPlayers;
     /** Num of players int */
     private int myNumPlayers;
-
+    
     /** Timer reference */
     private Timer myTimer;
     /** Orb App */
     public SmashGame myGame;
-
+    
     /** Keyput passthrough */
     public Keyput myKeyput;
-
+    
     /**
      * Creates new collection
      * 
      * @param game   SmashGame passthrough
      * @param keyput Keyput passthrough
      */
-    public Players(SmashGame game, Keyput keyput) {
+    public Players(SmashGame game, Keyput keyput)
+    {
         myGame = game;
         myKeyput = keyput;
         myPlayers = new ArrayList<Player>();
@@ -46,100 +49,120 @@ public class Players {
         myTimer = new Timer();
         myTimer.scheduleAtFixedRate(new UpdateTask(), 0, UPDATE_DELAY);
     }
-
+    
     /**
      * Starts the players
      */
-    public void StartPlayers() {
+    public void StartPlayers()
+    {
         gameRunning = true;
     }
-
+    
     /**
      * Gets the current number of players
      * 
      * @return number of players
      */
-    public int getNumPlayers() {
+    public int getNumPlayers()
+    {
         return myNumPlayers;
     }
-
+    
     /**
      * Returns arraylist of players
      * 
      * @return Player arraylist
      */
-    public ArrayList<Player> getPlayers() {
+    public ArrayList<Player> getPlayers()
+    {
         return myPlayers;
     }
-
+    
     /**
      * Sets up players
      */
-    public void setupPlayers() {
+    public void setupPlayers()
+    {
         gameRunning = false;
         myPlayers.clear();
         int currentPlayer = 0;
-        for (int idx = 1; idx <= NUM_PLAYERS; idx++) {
+        for (int idx = 1; idx <= NUM_PLAYERS; idx++)
+        {
             Player temp = new Player(0, 0, 0, this);
-            if (idx == 1) {
+            if (idx == 1)
+            {
                 currentPlayer = myGame.player1;
-            } else {
+            }
+            else
+            {
                 currentPlayer = myGame.player2;
             }
-
-            switch (currentPlayer) 
+            
+            switch (currentPlayer)
             {
                 case 1:
                     temp = new Pharah(0, 0, 0, this);
                     break;
             }
-
+            
             temp.myId = idx;
             temp.setKeybindings();
-
-            if (idx == 1) {
+            
+            if (idx == 1)
+            {
                 temp.myPos = new Coord(Stage.FLOOR_GAP + temp.getWidth(), Stage.FLOOR_TOP);
-            } else {
+            }
+            else
+            {
                 temp.myPos = new Coord(SmashGame.APP_WIDTH - Stage.FLOOR_GAP - temp.getWidth(), Stage.FLOOR_TOP);
             }
             temp.setLives(SmashGame.NUM_LIVES);
             myPlayers.add(temp);
         }
     }
-
+    
     /**
      * Finds a player based on id num
      * 
      * @param id id of the player to search for
      * @return the Player found or null if none
      */
-    public Player findPlayer(int id) {
-        for (Player temp : myPlayers) {
-            if (temp.myId == id) {
-                return temp;
-            }
+    public Player findPlayer(int id)
+    {
+        for (Player temp : myPlayers)
+        {
+            if (temp.myId == id)
+            { return temp; }
         }
         return null;
     }
-
-    public void removeObject(Player remove) {
+    
+    public void removeObject(Player remove)
+    {
         myPlayers.remove(remove);
     }
-
+    
+    
     /**
      * Runs tasks on the players
      */
-    private class UpdateTask extends TimerTask {
+    private class UpdateTask extends TimerTask
+    {
+        
         /**
          * runs actions on the players
          */
-        public void run() {
-            if (!myGame.isPaused() && gameRunning) {
-                try {
-                    for (Player temp : myPlayers) {
-                        if(temp.getLives() == 0)
+        public void run()
+        {
+            if (!myGame.isPaused() && gameRunning)
+            {
+                try
+                {
+                    for (Player temp : myPlayers)
+                    {
+                        if (temp.getLives() == 0)
                         {
-                            //temp.setLives(-1);
+                            // temp.setLives(-1);
                             myGame.screenSwitcher("End");
                             myGame.myWinScreen.run(temp);
                             gameRunning = false;
@@ -148,7 +171,9 @@ public class Players {
                         }
                         temp.move(myKeyput.getKeys());
                     }
-                } catch (ConcurrentModificationException e) {
+                }
+                catch (ConcurrentModificationException e)
+                {
                     // Skip Frame
                 }
             }
