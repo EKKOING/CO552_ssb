@@ -109,7 +109,7 @@ public class Player {
     public static final double STARTHEALTH = 100;
 
     /** Lives Left */
-    public int livesLeft;
+    private int livesLeft;
 
     /* Buffered Image of Banner **/
     private BufferedImage myBanner;
@@ -255,6 +255,10 @@ public class Player {
     public int getDmgDone() {
         return dmgDone;
     }
+
+    public void setLives(int i) {
+        livesLeft = i;
+	}
 
     /**
      * Damages the player

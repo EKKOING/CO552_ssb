@@ -47,6 +47,9 @@ public class Players {
         myTimer.scheduleAtFixedRate(new UpdateTask(), 0, UPDATE_DELAY);
     }
 
+    /**
+     * Starts the players
+     */
     public void StartPlayers() {
         gameRunning = true;
     }
@@ -76,7 +79,7 @@ public class Players {
         gameRunning = false;
         myPlayers.clear();
         int currentPlayer = 0;
-        for (int idx = 1; idx <= 2; idx++) {
+        for (int idx = 1; idx <= NUM_PLAYERS; idx++) {
             Player temp = new Player(0, 0, 0, this);
             if (idx == 1) {
                 currentPlayer = myGame.player1;
@@ -84,18 +87,22 @@ public class Players {
                 currentPlayer = myGame.player2;
             }
 
-            switch (currentPlayer) {
-            case 1:
-                temp = new Pharah(0, 0, 0, this);
-                break;
+            switch (currentPlayer) 
+            {
+                case 1:
+                    temp = new Pharah(0, 0, 0, this);
+                    break;
             }
+
             temp.myId = idx;
             temp.setKeybindings();
+
             if (idx == 1) {
-                temp.myPos = new Coord(Stage.FLOOR_GAP + 20, Stage.FLOOR_TOP);
+                temp.myPos = new Coord(Stage.FLOOR_GAP + temp.getWidth(), Stage.FLOOR_TOP);
             } else {
-                temp.myPos = new Coord(SmashGame.APP_WIDTH - Stage.FLOOR_GAP - 20, Stage.FLOOR_TOP);
+                temp.myPos = new Coord(SmashGame.APP_WIDTH - Stage.FLOOR_GAP - temp.getWidth(), Stage.FLOOR_TOP);
             }
+            temp.setLives(SmashGame.NUM_LIVES);
             myPlayers.add(temp);
         }
     }
@@ -132,10 +139,12 @@ public class Players {
                     for (Player temp : myPlayers) {
                         if(temp.getLives() == 0)
                         {
-                            temp.livesLeft = -1;
+                            //temp.setLives(-1);
                             myGame.screenSwitcher("End");
                             myGame.myWinScreen.run(temp);
-                            myGame.myGameScreen.setVisible(false);
+                            gameRunning = false;
+                            myPlayers.clear();
+                            break;
                         }
                         temp.move(myKeyput.getKeys());
                     }

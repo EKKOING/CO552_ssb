@@ -63,6 +63,7 @@ public class RingOutExplosion implements Animator {
         timer.schedule(new Renderer(), 0);
     }
 
+    @Override
     public void play() {
 
     }
@@ -82,6 +83,7 @@ public class RingOutExplosion implements Animator {
         myScreen.myAnimations.add(this);
     }
 
+    @Override
     public void endAnimation() {
         myScreen.myAnimations.remove(this);
         myAnimationFrame = 1;
@@ -91,6 +93,7 @@ public class RingOutExplosion implements Animator {
         timer.schedule(new Renderer(), 0);
     }
 
+    @Override
     public void drawMe(Graphics2D g2) {
         if (rendered) {
             if (myAnimationFrame < images.size() - 1) {

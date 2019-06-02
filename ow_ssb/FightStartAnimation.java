@@ -75,6 +75,7 @@ public class FightStartAnimation implements Animator {
     }
 
     /** Plays the animation */
+    @Override
     public void play() {
         shouldPlay = true;
     }
@@ -84,11 +85,13 @@ public class FightStartAnimation implements Animator {
         return rendered;
     }
 
+    @Override
     public void endAnimation() {
         myScreen.removeAnimation(this);
         myScreen.startGame();
     }
 
+    @Override
     public void drawMe(Graphics2D g2) {
         if (rendered && shouldPlay) {
             if (myAnimationFrame < images.size() - 1) {
