@@ -22,7 +22,7 @@ public class SmashGame {
    public static final boolean NO_SPAWNCAMPING = true;
 
    /** Int for number of lives given to players */
-  public static final int NUM_LIVES = 3;
+   public static final int NUM_LIVES = 3;
 
    /** JFrame that holds the entirety of the game */
    public JFrame myApp;
@@ -65,6 +65,10 @@ public class SmashGame {
       app.run();
    }
 
+   /**
+    * Gets and returns the scale modifier
+    * @return the scale modifier as a double
+    */
    public double getScale()
    {
       if(myApp.getSize().getWidth() / (double) APP_WIDTH > myApp.getSize().getHeight() / (double) APP_HEIGHT)
@@ -148,6 +152,10 @@ public class SmashGame {
       myApp.setVisible(true);
    }
 
+   /**
+    * Switches Card Layout Screen
+    * @param screenName Screen to switch to
+    */
    public void screenSwitcher(String screenName)
    {
       CardLayout layout = (CardLayout) myAppPanel.getLayout();

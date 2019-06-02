@@ -32,6 +32,8 @@ public class WinScreen extends JPanel
 
 	private static final double NUM_HIGHLIGHTS = 2;
 
+	private static final int MIN_NUM_FRAMES = 119;
+
 	/** Winning Character Name */
 	private String characterName;
 
@@ -89,6 +91,7 @@ public class WinScreen extends JPanel
 
 	/** Runs The Screen */
 	public void run(Player winner) {
+		rendered = false;
 		characterName = winner.getClass().getSimpleName().toLowerCase();
 		myAnimationFrame = 0;
 		//System.out.println(characterName);
@@ -106,6 +109,7 @@ public class WinScreen extends JPanel
 		this.requestFocusInWindow(true);
 		FieldUpdater updater = new FieldUpdater();
 		updater.start();
+		images.clear();
 		timer = new Timer();
 		timer.schedule(new Renderer(), 0);
 		
@@ -168,12 +172,36 @@ public class WinScreen extends JPanel
         {
 			g2.clearRect(0, 0, 1920, 1080);
 			g2.setBackground(Color.BLACK);
+
+			//Draw Loading Indicators
+			double rectangleHeight = (double) images.size() / (double) MIN_NUM_FRAMES;
+			if(rectangleHeight > MIN_NUM_FRAMES){rectangleHeight = MIN_NUM_FRAMES;}
+			rectangleHeight = rectangleHeight * (double) SmashGame.APP_HEIGHT;
+
+			int rectangleNum = 0;
+			for(int xLoc = 0; xLoc < SmashGame.APP_WIDTH; xLoc += 100 * scale)
+			{
+				Rectangle2D bars = new Rectangle2D.Double(scale * xLoc, scale * 0, 70, rectangleHeight * scale);
+				if(rectangleNum % 2 == 0)
+				{
+					g2.setColor(Color.LIGHT_GRAY);
+				}
+				else
+				{
+					g2.setColor(Color.DARK_GRAY);
+				}
+				g2.fill(bars);
+				rectangleNum ++;
+			}
+
+			//Draw Game Over Image
             try {
-                g2.drawImage(loadingScreen, 0, 0, null);
+                g2.drawImage(loadingScreen, (int) (619 * scale * BASE_SCALE), (int) (108 * scale * BASE_SCALE), null);
             } catch (NullPointerException e) {
-				System.err.println(e);
+				//System.err.println(e);
                 //This will happen a couple of times depending on processing time
-            }
+			}
+			//System.out.println("Loading: Size = " + images.size() + " Height = " + rectangleHeight);
         }
 	}
 
@@ -234,7 +262,7 @@ public class WinScreen extends JPanel
          */
 		@Override
         public void run() {
-            ArrayList<BufferedImage> temp = new ArrayList<BufferedImage>();
+            //ArrayList<BufferedImage> temp = new ArrayList<BufferedImage>();
             int renderFrame = 1;
             boolean fileExists = true;
             while (fileExists) {
@@ -248,13 +276,13 @@ public class WinScreen extends JPanel
                     // Create Image
                     File image = new File(fileDirectory);
                     BufferedImage renderedFrame = ImageResizer.resizeImage(ImageIO.read(image), scale * BASE_SCALE);
-                    temp.add(renderedFrame);
+                    images.add(renderedFrame);
 				} catch (IOException ioe) {
                     fileExists = false;
                 }
                 renderFrame++;
             }
-            images = temp;
+            //images = temp;
             rendered = true;
             //System.out.println("Win Screen Rendered " + images.size() + " Images");
             timer.cancel();

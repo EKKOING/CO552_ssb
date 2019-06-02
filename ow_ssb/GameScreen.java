@@ -60,6 +60,7 @@ public class GameScreen extends JPanel {
     public void run() {
         gameStarted = false;
         myAnimations = new ArrayList<Animator>();
+        myAnimations.clear();
         scale = myGame.scale;
         FightStartAnimation startGameAnimation = new FightStartAnimation(this, scale);
         myAnimations.add(startGameAnimation);
