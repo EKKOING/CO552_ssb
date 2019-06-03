@@ -1,9 +1,10 @@
-import java.awt.*;
-import java.awt.image.*;
-import java.io.*;
-import javax.imageio.*;
+import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
+
+import javax.imageio.ImageIO;
 
 /**
  * @author Nicholas Lorentzen
@@ -12,17 +13,21 @@ import java.util.ArrayList;
 public class Stage
 {
 	
+	/** Y Location of the Top of the Floor */
 	public static final double FLOOR_TOP = 722;
-	
+	/** Gap Length on Sides of Floor */
 	public static final double FLOOR_GAP = 104;
-	
+	/** Y Location on the Bottom of the Floor */
 	public static final double FLOOR_BOTTOM = 758;
-	
+	/** Y Location of the Top of the Balcony */
 	public static final double BALCONY_TOP = 432;
-	
+	/** Gap Length on Sides of Balcony */
 	public static final double BALCONY_GAP = 531;
-	
+	/** Y Location of the Bottom of the Balcony */
 	public static final double BALCONY_BOTTOM = 468;
+	
+	/** Distance Off Screen to Kill Players */
+	public static final double KILL_BARRIER_SIDE = 120;
 	
 	/** Stage Path */
 	public final String BASE_DIREC = "./graphics/stages/";
@@ -46,7 +51,10 @@ public class Stage
 	private double scale;
 	
 	/**
+	 * Constructs A Stage
 	 * 
+	 * @param name   Name of Map
+	 * @param screen Screen to Add to
 	 */
 	public Stage(String name, GameScreen screen)
 	{
@@ -82,6 +90,11 @@ public class Stage
 		}
 	}
 	
+	/**
+	 * Draws Stage
+	 * 
+	 * @param g2 Graphics Object Passthrough
+	 */
 	public void drawMe(Graphics2D g2)
 	{
 		if (myAnimationFrame < images.size() - 2)

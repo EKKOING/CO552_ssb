@@ -1,5 +1,11 @@
-import java.awt.*;
-import javax.swing.*;
+import java.awt.CardLayout;
+import java.awt.Dimension;
+import java.awt.GraphicsDevice;
+import java.awt.GraphicsEnvironment;
+import java.awt.Toolkit;
+
+import javax.swing.JFrame;
+import javax.swing.JPanel;
 
 /**
  * Class to run the Super Smash Bros Game
@@ -111,7 +117,7 @@ public class SmashGame
       isPaused = false;
       setupFrame();
       scale = getScale();
-      //scale = 0.85; // Manually set Scale
+      // scale = 0.85; // Manually set Scale
       myTitleScreen.run();
    }
    
@@ -168,66 +174,111 @@ public class SmashGame
       layout.show(myAppPanel, screenName);
    }
    
+   /**
+    * Gets myGameScreen
+    * 
+    * @return myGameScreen
+    */
    public GameScreen getMyGameScreen()
    {
       return myGameScreen;
    }
    
+   /**
+    * Sets myGameScreen
+    * 
+    * @param myGameScreen Value to set
+    */
    public void setMyGameScreen(GameScreen myGameScreen)
    {
       this.myGameScreen = myGameScreen;
    }
    
+   /**
+    * Gets myTitleScreen
+    * 
+    * @return myTitleScreen
+    */
    public TitleScreen getMyTitleScreen()
    {
       return myTitleScreen;
    }
    
-   public void setMyTitleScreen(TitleScreen myTitleScreen)
-   {
-      this.myTitleScreen = myTitleScreen;
-   }
-   
+   /**
+    * Gets myWinScreen
+    * 
+    * @return myWinScreen
+    */
    public WinScreen getMyWinScreen()
    {
       return myWinScreen;
    }
    
-   public void setMyWinScreen(WinScreen myWinScreen)
-   {
-      this.myWinScreen = myWinScreen;
-   }
-   
+   /**
+    * Gets stage
+    * 
+    * @return stage
+    */
    public int getStage()
    {
       return stage;
    }
    
+   /**
+    * Sets stage
+    * 
+    * @param stage value to set
+    */
    public void setStage(int stage)
    {
       this.stage = stage;
    }
    
+   /**
+    * Gets player1
+    * 
+    * @return player1
+    */
    public int getPlayer1()
    {
       return player1;
    }
    
+   /**
+    * Sets player1
+    * 
+    * @param player1 Value to set
+    */
    public void setPlayer1(int player1)
    {
       this.player1 = player1;
    }
    
+   /**
+    * Gets player2
+    * 
+    * @return player2
+    */
    public int getPlayer2()
    {
       return player2;
    }
    
+   /**
+    * Sets player2
+    * 
+    * @param player2 Value to set
+    */
    public void setPlayer2(int player2)
    {
       this.player2 = player2;
    }
    
+   /**
+    * Sets scale
+    * 
+    * @param scale Value to set
+    */
    public void setScale(double scale)
    {
       this.scale = scale;

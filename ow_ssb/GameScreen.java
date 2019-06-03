@@ -1,11 +1,15 @@
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.geom.Rectangle2D;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
-import java.awt.*;
-import javax.swing.*;
-import java.awt.image.*;
-import java.awt.geom.Rectangle2D;
-import java.io.*;
-import javax.imageio.*;
+
+import javax.imageio.ImageIO;
+import javax.swing.JPanel;
 
 /**
  * Game Screen Class for when the game is actually running
@@ -16,20 +20,34 @@ import javax.imageio.*;
 public class GameScreen extends JPanel
 {
     
-    private static final long serialVersionUID = 3412334407377724982L;
+    /** Amount to Offset Inner Part of the Healthbar by */
+    private static final double HEALTHBAR_OUTER_OFFSET = 5;
+    /** Healthbar Height */
+    private static final int HEALTHBAR_HEIGHT = 19;
+    /** X Location of Player 2 Healthbar */
+    private static final int HEALTHBAR_PLAYER_2_X = 1232;
+    /** X Location of Player 1 Healthbar */
+    private static final int HEALTHBAR_PLAYER_1_X = 11;
+    /** Y Location of Healthbars */
+    private static final int HEALTHBAR_Y_LOCATION = 73;
+    /** Length of Healthbars */
+    private static final int HEALTHBAR_LENGTH = 200;
+    
+    /** Area to Clean Up on Edges of Screen */
+    private static final int AREA_TO_CLEAR = 500;
+    
+    /** Base Directory for Images */
+    public static final String BASE_DIRECTORY = "./graphics/ingame/topIcon/";
     
     /** Keyput class for handling User Input */
     private Keyput myKeyput;
     /** Players class for managing the players */
     private Players myPlayers;
-    /** Passthrough of the SmashGame class to allow reference to the gamestate */
-    private SmashGame myGame;
-    
-    /** Stage */
+    /** Current Stage */
     private Stage myStage;
     
-    /** Base Directory for Images */
-    public static final String BASE_DIRECTORY = "./graphics/ingame/topIcon/";
+    /** Passthrough of the SmashGame class to allow reference to the gamestate */
+    private SmashGame myGame;
     
     /** Health Bar Overlay */
     private BufferedImage healthBar;
@@ -155,9 +173,10 @@ public class GameScreen extends JPanel
         if (gameStarted)
         { drawUI(g2); }
         
-        g2.clearRect((int) (SmashGame.APP_WIDTH * scale), 0, (int) (scale * 500), (int) (scale * SmashGame.APP_HEIGHT));
-        g2.clearRect(0, (int) (SmashGame.APP_HEIGHT * scale), (int) (scale * (SmashGame.APP_WIDTH + 500)),
-            (int) (scale * 500));
+        g2.clearRect((int) (SmashGame.APP_WIDTH * scale), 0, (int) (scale * AREA_TO_CLEAR),
+            (int) (scale * SmashGame.APP_HEIGHT));
+        g2.clearRect(0, (int) (SmashGame.APP_HEIGHT * scale), (int) (scale * (SmashGame.APP_WIDTH + AREA_TO_CLEAR)),
+            (int) (scale * AREA_TO_CLEAR));
     }
     
     /**
@@ -184,26 +203,30 @@ public class GameScreen extends JPanel
         for (int idx = 1; idx <= 2; idx++)
         {
             Player temp = myPlayers.findPlayer(idx);
-            int rectangleLength = (int) (((scale * 200) / temp.getStartHP()) * temp.getHealth());
+            int rectangleLength = (int) (((scale * HEALTHBAR_LENGTH) / temp.getStartHP()) * temp.getHealth());
             if (idx == 1)
             {
-                Rectangle2D healthInner = new Rectangle2D.Double(scale * 11, scale * 73, rectangleLength, scale * 19);
+                Rectangle2D healthInner = new Rectangle2D.Double(
+                    scale * (HEALTHBAR_PLAYER_1_X + HEALTHBAR_OUTER_OFFSET), scale * HEALTHBAR_Y_LOCATION,
+                    rectangleLength, scale * HEALTHBAR_HEIGHT);
                 g2.setColor(Color.WHITE);
                 g2.fill(healthInner);
             }
             else
             {
-                Rectangle2D healthInner = new Rectangle2D.Double(scale * 1232, scale * 73, rectangleLength, scale * 19);
+                Rectangle2D healthInner = new Rectangle2D.Double(
+                    scale * (HEALTHBAR_PLAYER_2_X + HEALTHBAR_OUTER_OFFSET), scale * HEALTHBAR_Y_LOCATION,
+                    rectangleLength, scale * HEALTHBAR_HEIGHT);
                 g2.setColor(Color.WHITE);
                 g2.fill(healthInner);
             }
         }
         
         // Player 1
-        g2.drawImage(healthBar, (int) (scale * 7), (int) (scale * 73), null);
+        g2.drawImage(healthBar, (int) (scale * HEALTHBAR_PLAYER_1_X), (int) (scale * HEALTHBAR_Y_LOCATION), null);
         
         // Player 2
-        g2.drawImage(healthBar, (int) (scale * 1228), (int) (scale * 73), null);
+        g2.drawImage(healthBar, (int) (scale * HEALTHBAR_PLAYER_2_X), (int) (scale * HEALTHBAR_Y_LOCATION), null);
     }
     
     

@@ -1,9 +1,6 @@
-import java.awt.*;
-import java.awt.image.*;
-import java.awt.geom.*;
+import java.awt.Color;
+import java.awt.Graphics2D;
 import java.awt.geom.Rectangle2D;
-import java.io.*;
-import javax.imageio.*;
 import java.util.ArrayList;
 
 /**
@@ -12,6 +9,27 @@ import java.util.ArrayList;
  */
 public class PharahRocket extends Player
 {
+	
+	/** Width */
+	private static final int MY_WIDTH = 20;
+	/** Height */
+	private static final int MY_HEIGHT = 10;
+	
+	/** Identifier to Prevent Hash Collisions */
+	public static final int IDENTIFIER = 311;
+	
+	/** Scale Grid to Screen */
+	private static final int MOVEMENT_SCALE = 10;
+	
+	/** Amount of Damage to be Randomized */
+	private static final int RANDOMIZED_DAMAGE = 20;
+	/** Base Damage Amount */
+	private static final int BASE_DAMAGE = 20;
+	
+	/** Base Knockback */
+	private static final int STANDARD_KNOCKBACK = 30;
+	/** Amount of Knockback to be Randomized */
+	private static final int RANDOMIZED_KNOCKBACK = 7;
 	
 	/** Speed of the rocket */
 	public static final double SPEED = 80;
@@ -23,13 +41,14 @@ public class PharahRocket extends Player
 	private boolean hitSomething;
 	
 	/**
+	 * Constructs a new Pharah Rocket with Properties
 	 * 
-	 * @param myId
-	 * @param xStart
-	 * @param yStart
-	 * @param list
-	 * @param facingR
-	 * @param enemy
+	 * @param myId    Id of Rocket
+	 * @param xStart  Starting X Location
+	 * @param yStart  Starting Y Location
+	 * @param list    Passthrough for Access to List
+	 * @param facingR Directinal Boolean True if Right else False
+	 * @param enemy   Target of Rocket
 	 */
 	public PharahRocket(int myId, int xStart, int yStart, Players list, boolean facingR, int enemy)
 	{
@@ -67,15 +86,15 @@ public class PharahRocket extends Player
 				// Knockback
 				if (isFacingRight())
 				{
-					enemy.knockBackX(30 + Math.random() * 7);
+					enemy.knockBackX(STANDARD_KNOCKBACK + Math.random() * RANDOMIZED_KNOCKBACK);
 				}
 				else
 				{
-					enemy.knockBackX(-30 - Math.random() * 7);
+					enemy.knockBackX(-STANDARD_KNOCKBACK - Math.random() * RANDOMIZED_KNOCKBACK);
 				}
 				
 				// Damage
-				enemy.getDamaged(20 + (Math.random() * 20 - 10));
+				enemy.getDamaged(BASE_DAMAGE + (Math.random() * RANDOMIZED_DAMAGE - (RANDOMIZED_DAMAGE / 2)));
 				
 				// Stop Duplication of Attacks
 				setCanAttack(false);
@@ -118,7 +137,7 @@ public class PharahRocket extends Player
 			checkBoundaries();
 			if (isCanAttack())
 			{ attack(); }
-			getMyPos().setX(getMyPos().getX() + getMyVector().getX() / 10);
+			getMyPos().setX(getMyPos().getX() + getMyVector().getX() / MOVEMENT_SCALE);
 		}
 	}
 	
@@ -133,9 +152,11 @@ public class PharahRocket extends Player
 		if (!(hitSomething))
 		{
 			// TODO: Place Images
-			Rectangle2D me = new Rectangle2D.Double(getOtherPlayers().getMyGame().getScale() * (getMyPos().getX() - 10),
-				getOtherPlayers().getMyGame().getScale() * (getMyPos().getY() - 2.5), getOtherPlayers().getMyGame().getScale() * 20,
-				getOtherPlayers().getMyGame().getScale() * 10);
+			Rectangle2D me = new Rectangle2D.Double(
+				getOtherPlayers().getMyGame().getScale() * (getMyPos().getX() - MY_WIDTH),
+				getOtherPlayers().getMyGame().getScale() * (getMyPos().getY() - (MY_HEIGHT / 2)),
+				getOtherPlayers().getMyGame().getScale() * MY_WIDTH,
+				getOtherPlayers().getMyGame().getScale() * MY_HEIGHT);
 			g2.setColor(Color.YELLOW);
 			g2.fill(me);
 		}

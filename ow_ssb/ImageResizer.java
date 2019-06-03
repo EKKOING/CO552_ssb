@@ -1,6 +1,6 @@
 import java.awt.geom.AffineTransform;
 import java.awt.image.AffineTransformOp;
-import java.awt.image.*;
+import java.awt.image.BufferedImage;
 
 /**
  * @author Nicholas Lorentzen
@@ -8,11 +8,13 @@ import java.awt.image.*;
  */
 public class ImageResizer
 {
+	
 	/** Smash Game Passthrough */
 	private SmashGame myGame;
 	
 	/**
 	 * Constructor with SmashGame param
+	 * 
 	 * @param frame SmashGame that controls scale
 	 */
 	@Deprecated
@@ -23,6 +25,7 @@ public class ImageResizer
 	
 	/**
 	 * Resizes An Image Based off of the SmashGame that it was given
+	 * 
 	 * @param bi Image to resize
 	 * @return The resized image
 	 */

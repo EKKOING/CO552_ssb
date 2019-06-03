@@ -1,15 +1,18 @@
-import java.util.ArrayList;
-import java.util.TimerTask;
-import java.awt.*;
-import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionListener;
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.event.MouseEvent;
-import javax.swing.*;
-import java.awt.image.*;
-import java.awt.geom.*;
-import java.io.*;
+import java.awt.event.MouseListener;
+import java.awt.geom.Rectangle2D;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Timer;
-import javax.imageio.*;
+import java.util.TimerTask;
+
+import javax.imageio.ImageIO;
+import javax.swing.JPanel;
 
 /**
  * @author Nicholas Lorentzen
@@ -17,6 +20,23 @@ import javax.imageio.*;
  */
 public class WinScreen extends JPanel
 {
+	
+	/** Game Over Text Y Position */
+	private static final int GAMEOVER_TEXT_Y = 108;
+	/** Game Over Text X Position */
+	private static final int GAMEOVER_TEXT_X = 619;
+	/** Continue Text Y Position */
+	private static final int CONTINUE_TEXT_Y = 859;
+	/** Continue Text X Position */
+	private static final int CONTINUE_TEXT_X = 1158;
+	/** Spacing For Loading Bars */
+	private static final int LOADING_BAR_SPACING = 30;
+	/** Winner Text Y Position */
+	private static final int FOREGROUND_Y = 108;
+	/** Player Text Y Position */
+	private static final int PLAYERNUM_Y = 218;
+	/** X Location for Left Aligned Text */
+	private static final int TEXT_ALIGNED_LEFT_X = 192;
 	
 	/** Animation Path */
 	private final String BASE_DIREC = "./graphics/endgame/";
@@ -30,9 +50,14 @@ public class WinScreen extends JPanel
 	/** Directory of the highlights */
 	private static final String HIGHLIGHT_DIREC = "./graphics/endgame/highlights/";
 	
+	/** Number of Highlights */
 	private static final double NUM_HIGHLIGHTS = 2;
-	
+	/** Least Possible Frames Used By Animation */
 	private static final int MIN_NUM_FRAMES = 119;
+	/** Maximum Screen Height */
+	private static final int MAX_SCREEN_SIZE_HEIGHT = 1080;
+	/** Maximum Screen Width */
+	private static final int MAX_SCREEN_SIZE_WIDTH = 1920;
 	
 	/** Winning Character Name */
 	private String characterName;
@@ -76,6 +101,11 @@ public class WinScreen extends JPanel
 	/** Current Frame */
 	private double myAnimationFrame;
 	
+	/**
+	 * Constructs A Win Screen
+	 * 
+	 * @param game Game Passthrough
+	 */
 	public WinScreen(SmashGame game)
 	{
 		super();
@@ -89,7 +119,11 @@ public class WinScreen extends JPanel
 		images = new ArrayList<BufferedImage>();
 	}
 	
-	/** Runs The Screen */
+	/**
+	 * Runs The Screen
+	 * 
+	 * @param winner Winning Player
+	 */
 	public void run(Player winner)
 	{
 		rendered = false;
@@ -130,6 +164,9 @@ public class WinScreen extends JPanel
 		renderUI();
 	}
 	
+	/**
+	 * Renders The UI Files
+	 */
 	private void renderUI()
 	{
 		try
@@ -165,31 +202,35 @@ public class WinScreen extends JPanel
 		Graphics2D g2 = (Graphics2D) g;
 		if (rendered)
 		{
-			g2.clearRect(0, 0, 1920, 1080);
+			g2.clearRect(0, 0, MAX_SCREEN_SIZE_WIDTH, MAX_SCREEN_SIZE_HEIGHT);
 			g2.setBackground(Color.WHITE);
 			if (myAnimationFrame < images.size() - 1)
 			{
 				myAnimationFrame = myAnimationFrame + FRAME_GAP;
 				g2.drawImage(images.get((int) myAnimationFrame), 0, 0, null);
 				
-				g2.drawImage(playerNum, (int) (scale * (192 * BASE_SCALE)), (int) (scale * (218 * BASE_SCALE)), null);
-				g2.drawImage(foreground, (int) (scale * (192 * BASE_SCALE)), (int) (scale * (108 * BASE_SCALE)), null);
+				g2.drawImage(playerNum, (int) (scale * (TEXT_ALIGNED_LEFT_X * BASE_SCALE)),
+					(int) (scale * (PLAYERNUM_Y * BASE_SCALE)), null);
+				g2.drawImage(foreground, (int) (scale * (TEXT_ALIGNED_LEFT_X * BASE_SCALE)),
+					(int) (scale * (FOREGROUND_Y * BASE_SCALE)), null);
 				// System.out.println("Playing Frame Number " + myAnimationFrame);
 			}
 			else
 			{
 				// System.out.println("Animation Ended");
 				g2.drawImage(images.get(images.size() - 1), 0, 0, null);
-				g2.drawImage(playerNum, (int) (scale * (192 * BASE_SCALE)), (int) (scale * (218 * BASE_SCALE)), null);
-				g2.drawImage(foreground, (int) (scale * (192 * BASE_SCALE)), (int) (scale * (108 * BASE_SCALE)), null);
-				g2.drawImage(continueImage, (int) (scale * (1158 * BASE_SCALE)), (int) (scale * (859 * BASE_SCALE)),
-					null);
+				g2.drawImage(playerNum, (int) (scale * (TEXT_ALIGNED_LEFT_X * BASE_SCALE)),
+					(int) (scale * (PLAYERNUM_Y * BASE_SCALE)), null);
+				g2.drawImage(foreground, (int) (scale * (TEXT_ALIGNED_LEFT_X * BASE_SCALE)),
+					(int) (scale * (FOREGROUND_Y * BASE_SCALE)), null);
+				g2.drawImage(continueImage, (int) (scale * (CONTINUE_TEXT_X * BASE_SCALE)),
+					(int) (scale * (CONTINUE_TEXT_Y * BASE_SCALE)), null);
 				animationDone = true;
 			}
 		}
 		else
 		{
-			g2.clearRect(0, 0, 1920, 1080);
+			g2.clearRect(0, 0, MAX_SCREEN_SIZE_WIDTH, MAX_SCREEN_SIZE_HEIGHT);
 			g2.setBackground(Color.BLACK);
 			
 			// Draw Loading Indicators
@@ -199,9 +240,10 @@ public class WinScreen extends JPanel
 			rectangleHeight = rectangleHeight * (double) SmashGame.APP_HEIGHT;
 			
 			int rectangleNum = 0;
-			for (int xLoc = 0; xLoc < SmashGame.APP_WIDTH; xLoc += 100 * scale)
+			for (int xLoc = 0; xLoc < SmashGame.APP_WIDTH; xLoc += LOADING_BAR_SPACING * scale)
 			{
-				Rectangle2D bars = new Rectangle2D.Double(scale * xLoc, scale * 0, 70, rectangleHeight * scale);
+				Rectangle2D bars = new Rectangle2D.Double(scale * xLoc, scale * 0, LOADING_BAR_SPACING,
+					rectangleHeight * scale);
 				if (rectangleNum % 2 == 0)
 				{
 					g2.setColor(Color.LIGHT_GRAY);
@@ -217,7 +259,8 @@ public class WinScreen extends JPanel
 			// Draw Game Over Image
 			try
 			{
-				g2.drawImage(loadingScreen, (int) (619 * scale * BASE_SCALE), (int) (108 * scale * BASE_SCALE), null);
+				g2.drawImage(loadingScreen, (int) (GAMEOVER_TEXT_X * scale * BASE_SCALE),
+					(int) (GAMEOVER_TEXT_Y * scale * BASE_SCALE), null);
 			}
 			catch (NullPointerException e)
 			{
@@ -297,6 +340,9 @@ public class WinScreen extends JPanel
 	}
 	
 	
+	/**
+	 * Renderer Class
+	 */
 	class Renderer extends TimerTask
 	{
 		

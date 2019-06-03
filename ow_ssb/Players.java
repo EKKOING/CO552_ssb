@@ -11,6 +11,7 @@ import java.util.TimerTask;
  */
 public class Players
 {
+    
     /** State of the game */
     private boolean gameRunning;
     /** Number of players */
@@ -25,7 +26,7 @@ public class Players
     
     /** Timer reference */
     private Timer myTimer;
-
+    
     /** Orb App */
     private SmashGame myGame;
     
@@ -180,23 +181,33 @@ public class Players
         }
     }
     
+    /**
+     * Gets myPlayers
+     * 
+     * @return myPlayers
+     */
     public ArrayList<Player> getMyPlayers()
     {
         return myPlayers;
     }
     
+    /**
+     * Sets myPlayers
+     * 
+     * @param myPlayers Value to set
+     */
     public void setMyPlayers(ArrayList<Player> myPlayers)
     {
         this.myPlayers = myPlayers;
     }
     
+    /**
+     * Gets myGame
+     * 
+     * @return myGame
+     */
     public SmashGame getMyGame()
     {
         return myGame;
-    }
-    
-    public void setMyGame(SmashGame myGame)
-    {
-        this.myGame = myGame;
     }
 }

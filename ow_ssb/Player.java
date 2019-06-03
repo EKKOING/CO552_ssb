@@ -1,12 +1,13 @@
+import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
-import java.awt.*;
-import java.awt.image.*;
-import java.io.*;
-import javax.imageio.*;
-
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
+
+import javax.imageio.ImageIO;
 
 /**
  * Class from which all characters inherit properties from
@@ -17,6 +18,34 @@ import java.util.TimerTask;
  */
 public class Player
 {
+    
+    private static final int WALK_ACCELERATION = 2;
+    
+    private static final double ANIMATION_FRAME_STEPPER = 0.1;
+    
+    private static final int BANNER_Y_OFFSET = 80;
+    
+    private static final int BANNER_X_OFFSET = 48;
+    
+    private static final int MAP_TO_SCREEN = 10;
+    
+    private static final double AIR_RESISTANCE_PERCENT = 0.99;
+    
+    private static final int GRAVITATIONAL_ACCELERATION = 1;
+    
+    private static final int TERMINAL_VELOCITY = 20;
+    
+    private static final double GROUND_RESISTANCE_PERCENT = 0.9;
+    
+    private static final int SLOWEST_WALK_VELOCITY = 2;
+    
+    private static final int FLOOR_HIT_BOX = 10;
+    
+    private static final int GROUND_COLLISION_MAX_VELOCITY = -5;
+    
+    private static final int KNOCKBACK_DAMPENER_AMT = 50;
+    
+    private static final double CRITICAL_HIT_PERCENT = 0.01;
     
     /** Coord object that holds the postion of the player */
     private Coord myPos;
@@ -294,7 +323,7 @@ public class Player
         else
         {
             // Critical Hit Randomizer
-            if (Math.random() > 0.99)
+            if (Math.random() < CRITICAL_HIT_PERCENT)
             {
                 healthAmt -= -dmgDo * 2;
             }
@@ -314,7 +343,7 @@ public class Player
      */
     public void knockBackX(double amt)
     {
-        double inverseMass = ((double) getStartHP()) / (healthAmt + 50);
+        double inverseMass = ((double) getStartHP()) / (healthAmt + KNOCKBACK_DAMPENER_AMT);
         double knockback = inverseMass * amt;
         myVector.setX(myVector.getX() + knockback);
     }
@@ -326,7 +355,7 @@ public class Player
      */
     public void knockBackY(double amt)
     {
-        double inverseMass = ((double) getStartHP()) / (healthAmt + 50);
+        double inverseMass = ((double) getStartHP()) / (healthAmt + KNOCKBACK_DAMPENER_AMT);
         double knockback = inverseMass * amt;
         myVector.setY(myVector.getY() + knockback);
     }
@@ -344,20 +373,20 @@ public class Player
             if (myVector.getY() >= 0)
             { myVector.setY(0); }
             
-            if (myVector.getY() > -5)
+            if (myVector.getY() > GROUND_COLLISION_MAX_VELOCITY)
             {
                 onGround = true;
                 doubleJump = true;
             }
         }
-        else if (myPos.getY() >= Stage.BALCONY_TOP && myPos.getY() <= Stage.BALCONY_TOP + 10
+        else if (myPos.getY() >= Stage.BALCONY_TOP && myPos.getY() <= Stage.BALCONY_TOP + FLOOR_HIT_BOX
             && myPos.getX() > Stage.BALCONY_GAP && myPos.getX() < SmashGame.APP_WIDTH - Stage.BALCONY_GAP)
         {
             
             myPos.setY(Stage.BALCONY_TOP);
             if (myVector.getY() >= 0)
             { myVector.setY(0); }
-            if (myVector.getY() > -5)
+            if (myVector.getY() > GROUND_COLLISION_MAX_VELOCITY)
             {
                 onGround = true;
                 doubleJump = true;
@@ -376,13 +405,9 @@ public class Player
     {
         if (onGround)
         {
-            if (myVector.getX() >= 2)
+            if (myVector.getX() >= SLOWEST_WALK_VELOCITY || myVector.getX() <= -SLOWEST_WALK_VELOCITY)
             {
-                myVector.setX(myVector.getX() * 0.9);
-            }
-            else if (myVector.getX() <= -2)
-            {
-                myVector.setX(myVector.getX() * 0.9);
+                myVector.setX(myVector.getX() * GROUND_RESISTANCE_PERCENT);
             }
             else
             {
@@ -391,16 +416,12 @@ public class Player
         }
         else
         {
-            if (myVector.getY() < 20)
-            { myVector.setY(myVector.getY() + 1); }
+            if (myVector.getY() < TERMINAL_VELOCITY)
+            { myVector.setY(myVector.getY() + GRAVITATIONAL_ACCELERATION); }
             
-            if (myVector.getX() >= 0.5)
+            if (myVector.getX() >= SLOWEST_WALK_VELOCITY || myVector.getX() <= -SLOWEST_WALK_VELOCITY)
             {
-                myVector.setX(myVector.getX() * 0.99);
-            }
-            else if (myVector.getX() <= 0.5)
-            {
-                myVector.setX(myVector.getX() * 0.99);
+                myVector.setX(myVector.getX() * AIR_RESISTANCE_PERCENT);
             }
             else
             {
@@ -426,22 +447,22 @@ public class Player
         else
         {
             if (myPos.getX() > SmashGame.APP_WIDTH - 10)
-            { myVector.setX(myVector.getX() - 1); }
+            { myVector.setX(myVector.getX() - GRAVITATIONAL_ACCELERATION); }
             
             if (myPos.getX() < 10)
-            { myVector.setX(myVector.getX() + 1); }
+            { myVector.setX(myVector.getX() + GRAVITATIONAL_ACCELERATION); }
             
-            if (myPos.getX() > SmashGame.APP_WIDTH + 120 && healthAmt > 0)
+            if (myPos.getX() > SmashGame.APP_WIDTH + Stage.KILL_BARRIER_SIDE && healthAmt > 0)
             { kill("right"); }
             
-            if (myPos.getX() < -120 && healthAmt > 0)
+            if (myPos.getX() < -Stage.KILL_BARRIER_SIDE && healthAmt > 0)
             { kill("left"); }
         }
         
         if (myPos.getY() < 10)
         { myPos.setY(10); }
         
-        if (myPos.getY() > SmashGame.APP_HEIGHT + 200 && healthAmt > 0)
+        if (myPos.getY() > SmashGame.APP_HEIGHT + getHeight() && healthAmt > 0)
         { kill("down"); }
     }
     
@@ -451,12 +472,12 @@ public class Player
     public void respawn()
     {
         livesLeft--;
-        myPos = new Coord(SmashGame.APP_WIDTH / 2, -50);
+        myPos = new Coord(SmashGame.APP_WIDTH / 2, -getHeight());
         if (SmashGame.NO_SPAWNCAMPING)
         { myPos.setX(Stage.FLOOR_GAP + (Math.random() * (SmashGame.APP_WIDTH - (2 * Stage.FLOOR_GAP)))); }
         healthAmt = getStartHP();
         onGround = false;
-        myVector.setY(60);
+        myVector.setY(TERMINAL_VELOCITY);
         dead = false;
     }
     
@@ -472,17 +493,17 @@ public class Player
             if (type.equals("left"))
             {
                 ringOutLeft.play(myPos);
-                myPos.setY(SmashGame.APP_HEIGHT + 200);
+                myPos.setY(SmashGame.APP_HEIGHT * 2);
             }
             if (type.equals("right"))
             {
                 ringOutRight.play(myPos);
-                myPos.setY(SmashGame.APP_HEIGHT + 200);
+                myPos.setY(SmashGame.APP_HEIGHT * 2);
             }
             if (type.equals("down"))
             {
                 ringOutDown.play(myPos);
-                myPos.setY(SmashGame.APP_HEIGHT + 200);
+                myPos.setY(SmashGame.APP_HEIGHT * 2);
             }
             
             healthAmt = 0;
@@ -527,8 +548,8 @@ public class Player
                 }
             }
         }
-        myPos.setX(myPos.getX() + myVector.getX() / 10);
-        myPos.setY(myPos.getY() + myVector.getY() / 10);
+        myPos.setX(myPos.getX() + myVector.getX() / MAP_TO_SCREEN);
+        myPos.setY(myPos.getY() + myVector.getY() / MAP_TO_SCREEN);
     }
     
     /**
@@ -539,8 +560,8 @@ public class Player
     public void drawMe(Graphics2D g2)
     {
         prevDirec = facingDirec + animationDirec;
-        g2.drawImage(myBanner, (int) (scale * (myPos.getX() - 48)), (int) (scale * (myPos.getY() - getHeight() - 80)),
-            null);
+        g2.drawImage(myBanner, (int) (scale * (myPos.getX() - BANNER_X_OFFSET)),
+            (int) (scale * (myPos.getY() - getHeight() - BANNER_Y_OFFSET)), null);
         
         createDirectoryString();
         
@@ -553,7 +574,7 @@ public class Player
         
         if (myAnimationFrame < images.size() - 2)
         {
-            myAnimationFrame = myAnimationFrame + 0.1;
+            myAnimationFrame = myAnimationFrame + ANIMATION_FRAME_STEPPER;
         }
         else
         {
@@ -662,8 +683,8 @@ public class Player
         {
             if (myPos.getY() + getHeight() >= enemyPos.getY() && myPos.getY() <= enemyPos.getY() + enemy.getHeight())
             {
-                dmgDone += 25;
-                enemy.healthAmt -= 25;
+                dmgDone += 0;
+                enemy.healthAmt -= 0;
                 canAttack = false;
                 new CooldownTracker(this, attackCD, "canAttack");
                 return true;
@@ -673,8 +694,8 @@ public class Player
         {
             if (myPos.getY() + getHeight() >= enemyPos.getY() && myPos.getY() <= enemyPos.getY() + enemy.getHeight())
             {
-                dmgDone += 25;
-                enemy.healthAmt -= 25;
+                dmgDone += 0;
+                enemy.healthAmt -= 0;
                 canAttack = false;
                 new CooldownTracker(this, attackCD, "canAttack");
                 return true;
@@ -703,7 +724,7 @@ public class Player
         {
             if (myVector.getX() > -MAX_WALKV)
             {
-                myVector.setX(myVector.getX() - 2);
+                myVector.setX(myVector.getX() - WALK_ACCELERATION);
                 canWalk = false;
                 facingRight = false;
                 new CooldownTracker(this, walkCD, "canWalk");
@@ -718,34 +739,41 @@ public class Player
     {
         if (myVector.getX() < MAX_WALKV)
         {
-            myVector.setX(myVector.getX() + 2);
+            myVector.setX(myVector.getX() + WALK_ACCELERATION);
             canWalk = false;
             facingRight = true;
             new CooldownTracker(this, walkCD, "canWalk");
         }
     }
     
+    /**
+     * Executes A Jump Based Off Variables
+     */
     public void jump()
     {
         if (onGround)
         {
-            myVector.setY(-30);
+            myVector.setY(0);
             onGround = false;
             doubleJump = false;
-            new CooldownTracker(this, (long) 300, "doubleJump");
         }
         else if (doubleJump)
         {
             myVector.setY(myVector.getY() - 20);
             doubleJump = false;
-            new CooldownTracker(this, (long) 150, "doubleJump");
         }
     }
     
     
+    /**
+     * Renderer Class
+     */
     class Renderer extends TimerTask
     {
         
+        /**
+         * Renders New Frames
+         */
         public void run()
         {
             ArrayList<BufferedImage> temp = new ArrayList<BufferedImage>();
@@ -777,121 +805,241 @@ public class Player
         }
     }
     
+    /**
+     * Gets Coord
+     * 
+     * @return Position as a COORD
+     */
     public Coord getMyPos()
     {
         return myPos;
     }
     
+    /**
+     * Sets Coord
+     * 
+     * @param myPos Cord to Set To
+     */
     public void setMyPos(Coord myPos)
     {
         this.myPos = myPos;
     }
     
+    /**
+     * Gets Vector
+     * 
+     * @return My Vector as a Coord
+     */
     public Coord getMyVector()
     {
         return myVector;
     }
     
+    /**
+     * Sets Vector
+     * 
+     * @param myVector Vector to set to
+     */
     public void setMyVector(Coord myVector)
     {
         this.myVector = myVector;
     }
     
+    /**
+     * Gets ID
+     * 
+     * @return My ID
+     */
     public int getMyId()
     {
         return myId;
     }
     
+    /**
+     * Sets ID
+     * 
+     * @param myId ID to Set
+     */
     public void setMyId(int myId)
     {
         this.myId = myId;
     }
     
+    /**
+     * Gets Enemy ID
+     * 
+     * @return Enemy ID
+     */
     public int getEnemyId()
     {
         return enemyId;
     }
     
+    /**
+     * Sets Enemy ID
+     * 
+     * @param enemyId Enemy ID to Set
+     */
     public void setEnemyId(int enemyId)
     {
         this.enemyId = enemyId;
     }
     
+    /**
+     * Gets Animation Directory
+     * 
+     * @return Animation Directory
+     */
     public String getAnimationDirec()
     {
         return animationDirec;
     }
     
+    /**
+     * Sets Animation Directory
+     * 
+     * @param animationDirec Directory to Set
+     */
     public void setAnimationDirec(String animationDirec)
     {
         this.animationDirec = animationDirec;
     }
     
+    /**
+     * Gets Facing Right
+     * 
+     * @return Boolean Value of Facing Right
+     */
     public boolean isFacingRight()
     {
         return facingRight;
     }
     
+    /**
+     * Sets Facing Right
+     * 
+     * @param facingRight Boolean Value to Set
+     */
     public void setFacingRight(boolean facingRight)
     {
         this.facingRight = facingRight;
     }
     
+    /**
+     * Gets OnGround
+     * 
+     * @return OnGround Boolean
+     */
     public boolean isOnGround()
     {
         return onGround;
     }
     
+    /**
+     * Sets OnGround
+     * 
+     * @param onGround Boolean Value to Set
+     */
     public void setOnGround(boolean onGround)
     {
         this.onGround = onGround;
     }
     
+    /**
+     * Gets Double Jump
+     * 
+     * @return Boolean of DoubleJump
+     */
     public boolean isDoubleJump()
     {
         return doubleJump;
     }
     
+    /**
+     * Sets DoubleJump
+     * 
+     * @param doubleJump Boolean Value of DoubleJump
+     */
     public void setDoubleJump(boolean doubleJump)
     {
         this.doubleJump = doubleJump;
     }
     
+    /**
+     * Gets canWalk
+     * 
+     * @return Boolean value of canWalk
+     */
     public boolean isCanWalk()
     {
         return canWalk;
     }
     
+    /**
+     * Sets canWalk
+     * 
+     * @param canWalk Value to set canWalk
+     */
     public void setCanWalk(boolean canWalk)
     {
         this.canWalk = canWalk;
     }
     
+    /**
+     * Gets canAttack
+     * 
+     * @return Boolean canAttack
+     */
     public boolean isCanAttack()
     {
         return canAttack;
     }
     
+    /**
+     * Sets canAttack
+     * 
+     * @param canAttack
+     */
     public void setCanAttack(boolean canAttack)
     {
         this.canAttack = canAttack;
     }
     
+    /**
+     * Gets isAttacking
+     * 
+     * @return isAttacking
+     */
     public boolean isAttacking()
     {
         return attacking;
     }
     
+    /**
+     * Sets isAttacking
+     * 
+     * @param attacking Value to set
+     */
     public void setAttacking(boolean attacking)
     {
         this.attacking = attacking;
     }
     
+    /**
+     * Gets otherPlayers
+     * 
+     * @return otherPlayers
+     */
     public Players getOtherPlayers()
     {
         return otherPlayers;
     }
     
+    /**
+     * Sets otherPlayers
+     * 
+     * @param otherPlayers Value to set
+     */
     public void setOtherPlayers(Players otherPlayers)
     {
         this.otherPlayers = otherPlayers;

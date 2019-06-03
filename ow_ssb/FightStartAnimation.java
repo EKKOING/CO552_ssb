@@ -1,11 +1,12 @@
-import java.awt.*;
-import java.awt.image.*;
-import java.io.*;
-import javax.imageio.*;
+import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
+
+import javax.imageio.ImageIO;
 
 /**
  * @author Nicholas Lorentzen
@@ -129,11 +130,14 @@ public class FightStartAnimation implements Animator
     }
     
     
+    /**
+     * Render Class
+     */
     class Renderer extends TimerTask
     {
         
         /**
-         *
+         * Renders Frames
          */
         public void run()
         {

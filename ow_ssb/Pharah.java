@@ -1,11 +1,4 @@
-import java.awt.event.KeyEvent;
-import java.awt.*;
-import java.awt.image.*;
-import java.io.*;
-import javax.imageio.*;
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Timer;
+import java.awt.image.BufferedImage;
 
 /**
  * Class for the Pharah character inherits from player
@@ -15,6 +8,24 @@ import java.util.Timer;
  */
 public class Pharah extends Player
 {
+    
+    // Cooldowns
+    /** Cooldown for Attack */
+    public static final long ATTACK_CD = 600;
+    /** Cooldown for Walk */
+    public static final long walkCD = 10;
+    /** Cooldown for Double Jump */
+    private static final int DOUBLEJUMP_CD = 150;
+    /** Cooldown for Jump */
+    private static final int JUMP_CD = 300;
+    /** Length of Attack Animation */
+    private static final int ATTACK_ANIMATION_LENGTH = 150;
+    
+    // Velocities
+    /** Velocity of Jump */
+    private static final int JUMP_V = 30;
+    /** Velocity of Double Jump */
+    private static final int DOUBLEJUMP_V = 20;
     
     /** Image to draw */
     private BufferedImage myImage;
@@ -28,10 +39,6 @@ public class Pharah extends Player
     public static final int MY_WIDTH = 166;
     /** Width of Pharah in pixels */
     public static final int STARTHEALTH = 400;
-    
-    /** Cooldowns for Pharah */
-    public static final long attackCD = 600;
-    public static final long walkCD = 10;
     
     /**
      * Constructs a player of type pharah
@@ -63,11 +70,12 @@ public class Pharah extends Player
         int newX = -PharahRocket.PHARAH_ARM_OFFSET;
         if (isFacingRight())
         { newX = -newX; }
-        getOtherPlayers().getMyPlayers().add(new PharahRocket(getMyId() * 100 + 1, (int) getMyPos().getX() + newX,
-            (int) (getMyPos().getY() - 124), getOtherPlayers(), isFacingRight(), getEnemyId()));
+        getOtherPlayers().getMyPlayers()
+            .add(new PharahRocket(getMyId() * PharahRocket.IDENTIFIER, (int) getMyPos().getX() + newX,
+                (int) (getMyPos().getY() - 124), getOtherPlayers(), isFacingRight(), getEnemyId()));
         setCanAttack(false);
-        new CooldownTracker(this, (long) attackCD, "canAttack");
-        new CooldownTracker(this, (long) 150, "attacking");
+        new CooldownTracker(this, (long) ATTACK_CD, "canAttack");
+        new CooldownTracker(this, (long) ATTACK_ANIMATION_LENGTH, "attacking");
         return true;
     }
     
@@ -95,16 +103,16 @@ public class Pharah extends Player
     {
         if (isOnGround())
         {
-            getMyVector().setY(-30);
+            getMyVector().setY(-JUMP_V);
             setOnGround(false);
             setDoubleJump(false);
-            new CooldownTracker(this, (long) 300, "doubleJump");
+            new CooldownTracker(this, (long) JUMP_CD, "doubleJump");
         }
         else if (isDoubleJump())
         {
-            getMyVector().setY(getMyVector().getY() - 20);
+            getMyVector().setY(getMyVector().getY() - DOUBLEJUMP_V);
             setDoubleJump(false);
-            new CooldownTracker(this, (long) 150, "doubleJump");
+            new CooldownTracker(this, (long) DOUBLEJUMP_CD, "doubleJump");
         }
     }
     
@@ -141,7 +149,7 @@ public class Pharah extends Player
     @Override
     public long getAttackCD()
     {
-        return attackCD;
+        return ATTACK_CD;
     }
     
     @Override

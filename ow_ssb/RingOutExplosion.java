@@ -1,11 +1,12 @@
-import java.awt.*;
-import java.awt.image.*;
-import java.io.*;
-import javax.imageio.*;
+import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
+
+import javax.imageio.ImageIO;
 
 /**
  * @author Nicholas Lorentzen
@@ -51,7 +52,11 @@ public class RingOutExplosion implements Animator
     private Coord myLocation;
     
     /**
+     * Constructs A New Ring Out Explosion
      * 
+     * @param myGameScreen GameScreen Passthrough
+     * @param scaler       Scaler for Game
+     * @param direction    Direction of Explosion
      */
     public RingOutExplosion(GameScreen myGameScreen, double scaler, String direction)
     {

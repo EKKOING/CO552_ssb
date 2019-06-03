@@ -1,9 +1,10 @@
-import java.awt.image.*;
-import java.io.*;
-import javax.imageio.*;
-import java.io.File;
 import java.awt.Graphics2D;
 import java.awt.event.MouseEvent;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
 
 /**
  * @author Nicholas Lorentzen
@@ -105,5 +106,4 @@ public class CharacterMenuIcon
 	{
 		this.myName = myName;
 	}
-	
 }
