@@ -20,7 +20,7 @@ public interface Animator
     /**
      * Draws the animation
      * 
-     * @param g2
+     * @param g2 Graphics Passthrough
      */
     public void drawMe(Graphics2D g2);
 }

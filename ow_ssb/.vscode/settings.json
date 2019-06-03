@@ -1,4 +1,5 @@
 {
     "java.format.settings.url": "https://ekkoing.github.io/CO552_ssb/Formatter.xml",
-    "java.format.settings.profile": "CO552 Style Guide"
+    "java.format.settings.profile": "CO552 Style Guide",
+    "java.dependency.packagePresentation": "flat"
 }

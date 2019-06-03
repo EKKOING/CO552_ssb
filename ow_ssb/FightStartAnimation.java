@@ -87,6 +87,11 @@ public class FightStartAnimation implements Animator
         shouldPlay = true;
     }
     
+    /**
+     * Gets rendered
+     * 
+     * @return boolean rendered
+     */
     public boolean isRendered()
     {
         return rendered;

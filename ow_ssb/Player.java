@@ -998,7 +998,7 @@ public class Player
     /**
      * Sets canAttack
      * 
-     * @param canAttack
+     * @param canAttack Value to set
      */
     public void setCanAttack(boolean canAttack)
     {

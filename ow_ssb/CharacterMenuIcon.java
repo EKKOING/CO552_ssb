@@ -12,30 +12,50 @@ import javax.imageio.ImageIO;
  */
 public class CharacterMenuIcon
 {
-	
+	//Directories
+	/** Base Directory for Images */
 	public static final String BASE_DIREC = "./graphics/menus/character";
+	/** Additional Directory for Icons */
 	public static final String ICON_DIREC = "/icons/";
+	/** Additional Directory for Previews */
 	public static final String PREVIEW_DIREC = "/previews/";
+
+	//Icon Size Settings
+	/** Height of Icon */
 	public static final double HEIGHT = 140;
+	/** Width of Icon */
 	public static final double WIDTH = 109;
 	
+	//Layout Settings
+	/** Gap Between Icons Y*/
 	public static final double YGAP = 40;
+	/** Gap Between Icons X */
 	public static final double XGAP = 20;
 	
+	//Images
+	/** Icon Image */
 	private BufferedImage myIcon;
-	
+	/** Preview Image */
 	private BufferedImage myPreview;
 	
+	//Position
+	/** X Position */
 	private double xPos;
-	
+	/** Y Position */
 	private double yPos;
 	
+	/** Scale */
 	private double scale;
 	
+	/** Name */
 	private String myName;
 	
 	/**
-	 * 
+	 * Constructor for Icon
+	 * @param name Name of Character to Represent
+	 * @param s Scale
+	 * @param x X Location
+	 * @param y Y Location
 	 */
 	public CharacterMenuIcon(String name, double s, double x, double y)
 	{
@@ -73,6 +93,11 @@ public class CharacterMenuIcon
 		}
 	}
 	
+	/**
+	 * Checks if MouseEvent is within the icon
+	 * @param e MouseEvent to check
+	 * @return True If Icon Contains e, Else False
+	 */
 	public boolean contains(MouseEvent e)
 	{
 		int x = e.getX();
@@ -87,23 +112,30 @@ public class CharacterMenuIcon
 		return false;
 	}
 	
+	/**
+	 * Draws Icon
+	 * @param g2 Graphics Object passthrough
+	 */
 	public void drawMe(Graphics2D g2)
 	{
 		g2.drawImage(myIcon, (int) (xPos * scale), (int) (yPos * scale), null);
 	}
 	
+	/**
+	 * Gets the Preview
+	 * @return myPreview
+	 */
 	public BufferedImage getPreview()
 	{
 		return myPreview;
 	}
 	
+	/**
+	 * Gets Name
+	 * @return myName
+	 */
 	public String getMyName()
 	{
 		return myName;
-	}
-	
-	public void setMyName(String myName)
-	{
-		this.myName = myName;
 	}
 }

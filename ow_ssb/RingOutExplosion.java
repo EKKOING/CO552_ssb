@@ -14,9 +14,22 @@ import javax.imageio.ImageIO;
  */
 public class RingOutExplosion implements Animator
 {
+
+    /** Convert Source to 1440*900 */
+    private static final double SOURCE_SCALE = .35;
     
     /** Number of Ringout Animations */
     public static final double NUM_RINGOUTS = 4;
+
+    //Image Controls
+    /** Amount to Step Frames By */
+    private static final double FRAME_STEPPER = 0.2;
+    /** Normal Edge Offset */
+    private static final int EDGE_OFFSET = 1576;
+    /** Offset From Center */
+    private static final int CENTER_OFFSET = 560;
+    /** Alternate Offset */
+    private static final int ALT_OFFSET = 280;
     
     /** Stage Path */
     public final String BASE_DIREC = "./graphics/ingame/animations/ringout";
@@ -76,23 +89,27 @@ public class RingOutExplosion implements Animator
         
     }
     
+    /**
+     * Plays Animation
+     * @param myPos Position to Play At
+     */
     public void play(Coord myPos)
     {
         myLocation = new Coord(myPos.getX(), myPos.getY());
         if (direcFacing.equals("left"))
         {
-            myLocation.setX(0 - 280 * .35);
-            myLocation.setY(myLocation.getY() - 560 * .35);
+            myLocation.setX(0 - ALT_OFFSET * SOURCE_SCALE);
+            myLocation.setY(myLocation.getY() - CENTER_OFFSET * SOURCE_SCALE);
         }
         else if (direcFacing.equals("right"))
         {
-            myLocation.setX(SmashGame.APP_WIDTH - 1576 * .35);
-            myLocation.setY(myLocation.getY() - 560 * .35);
+            myLocation.setX(SmashGame.APP_WIDTH - EDGE_OFFSET * SOURCE_SCALE);
+            myLocation.setY(myLocation.getY() - CENTER_OFFSET * SOURCE_SCALE);
         }
         else
         {
-            myLocation.setY(SmashGame.APP_HEIGHT - 1576 * .35);
-            myLocation.setX(myLocation.getX() - 560 * .35);
+            myLocation.setY(SmashGame.APP_HEIGHT - EDGE_OFFSET * SOURCE_SCALE);
+            myLocation.setX(myLocation.getX() - CENTER_OFFSET * SOURCE_SCALE);
         }
         myScreen.getMyAnimations().add(this);
     }
@@ -115,7 +132,7 @@ public class RingOutExplosion implements Animator
         {
             if (myAnimationFrame < images.size() - 1)
             {
-                myAnimationFrame = myAnimationFrame + 0.2;
+                myAnimationFrame = myAnimationFrame + FRAME_STEPPER;
                 g2.drawImage(images.get((int) myAnimationFrame), (int) (myLocation.getX() * scale),
                     (int) (myLocation.getY() * scale), null);
             }
@@ -126,10 +143,14 @@ public class RingOutExplosion implements Animator
         }
     }
     
-    
+    /**
+     * Render Class
+     */
     class Renderer extends TimerTask
     {
-        
+        /**
+         * Render Images
+         */
         public void run()
         {
             ArrayList<BufferedImage> temp = new ArrayList<BufferedImage>();
@@ -149,7 +170,7 @@ public class RingOutExplosion implements Animator
                     
                     // Create Image
                     File image = new File(fileDirectory);
-                    myImage = ImageResizer.resizeImage(ImageIO.read(image), scale * 0.35);
+                    myImage = ImageResizer.resizeImage(ImageIO.read(image), scale * SOURCE_SCALE);
                     temp.add(myImage);
                 }
                 catch (IOException ioe)
