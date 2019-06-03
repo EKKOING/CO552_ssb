@@ -7,30 +7,30 @@ import java.util.TimerTask;
  * Manages the players in a Smash Game
  * 
  * @author Nicholas Lorentzen
- * @version 05/06/2019
+ * @version 20190602
  */
 public class Players
 {
-    
     /** State of the game */
-    public static boolean gameRunning;
+    private boolean gameRunning;
     /** Number of players */
     public static final int NUM_PLAYERS = 2;
     /** Time between updates in ms */
     public static final int UPDATE_DELAY = 10;
     
     /** List of players */
-    public ArrayList<Player> myPlayers;
+    private ArrayList<Player> myPlayers;
     /** Num of players int */
     private int myNumPlayers;
     
     /** Timer reference */
     private Timer myTimer;
+
     /** Orb App */
-    public SmashGame myGame;
+    private SmashGame myGame;
     
     /** Keyput passthrough */
-    public Keyput myKeyput;
+    private Keyput myKeyput;
     
     /**
      * Creates new collection
@@ -91,11 +91,11 @@ public class Players
             Player temp = new Player(0, 0, 0, this);
             if (idx == 1)
             {
-                currentPlayer = myGame.player1;
+                currentPlayer = myGame.getPlayer1();
             }
             else
             {
-                currentPlayer = myGame.player2;
+                currentPlayer = myGame.getPlayer2();
             }
             
             switch (currentPlayer)
@@ -105,16 +105,16 @@ public class Players
                     break;
             }
             
-            temp.myId = idx;
+            temp.setMyId(idx);
             temp.setKeybindings();
             
             if (idx == 1)
             {
-                temp.myPos = new Coord(Stage.FLOOR_GAP + temp.getWidth(), Stage.FLOOR_TOP);
+                temp.setMyPos(new Coord(Stage.FLOOR_GAP + temp.getWidth(), Stage.FLOOR_TOP));
             }
             else
             {
-                temp.myPos = new Coord(SmashGame.APP_WIDTH - Stage.FLOOR_GAP - temp.getWidth(), Stage.FLOOR_TOP);
+                temp.setMyPos(new Coord(SmashGame.APP_WIDTH - Stage.FLOOR_GAP - temp.getWidth(), Stage.FLOOR_TOP));
             }
             temp.setLives(SmashGame.NUM_LIVES);
             myPlayers.add(temp);
@@ -131,7 +131,7 @@ public class Players
     {
         for (Player temp : myPlayers)
         {
-            if (temp.myId == id)
+            if (temp.getMyId() == id)
             { return temp; }
         }
         return null;
@@ -164,7 +164,7 @@ public class Players
                         {
                             // temp.setLives(-1);
                             myGame.screenSwitcher("End");
-                            myGame.myWinScreen.run(temp);
+                            myGame.getMyWinScreen().run(temp);
                             gameRunning = false;
                             myPlayers.clear();
                             break;
@@ -178,5 +178,25 @@ public class Players
                 }
             }
         }
+    }
+    
+    public ArrayList<Player> getMyPlayers()
+    {
+        return myPlayers;
+    }
+    
+    public void setMyPlayers(ArrayList<Player> myPlayers)
+    {
+        this.myPlayers = myPlayers;
+    }
+    
+    public SmashGame getMyGame()
+    {
+        return myGame;
+    }
+    
+    public void setMyGame(SmashGame myGame)
+    {
+        this.myGame = myGame;
     }
 }

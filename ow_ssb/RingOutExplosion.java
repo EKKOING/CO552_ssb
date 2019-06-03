@@ -8,8 +8,8 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 /**
- * @author student
- *
+ * @author Nicholas Lorentzen
+ * @version 20190602
  */
 public class RingOutExplosion implements Animator
 {
@@ -21,31 +21,31 @@ public class RingOutExplosion implements Animator
     public final String BASE_DIREC = "./graphics/ingame/animations/ringout";
     
     /* Current Image Representation **/
-    public BufferedImage myImage;
+    private BufferedImage myImage;
     
     /* Animation Counter **/
-    public double myAnimationFrame;
+    private double myAnimationFrame;
     
     /* String to Fetch Image **/
-    public int animationDirec;
+    private int animationDirec;
     
     /** Direction Facing String */
-    public String direcFacing;
+    private String direcFacing;
     
     /** Timer Thread */
-    public Timer timer;
+    private Timer timer;
     
     /* ArrayList of Images **/
-    public ArrayList<BufferedImage> images;
+    private ArrayList<BufferedImage> images;
     
     /** Screen Created From */
-    public GameScreen myScreen;
+    private GameScreen myScreen;
     
     /** Scale */
-    public double scale;
+    private double scale;
     
     /** False if currently rendering */
-    public boolean rendered;
+    private boolean rendered;
     
     /** Location */
     private Coord myLocation;
@@ -89,13 +89,13 @@ public class RingOutExplosion implements Animator
             myLocation.setY(SmashGame.APP_HEIGHT - 1576 * .35);
             myLocation.setX(myLocation.getX() - 560 * .35);
         }
-        myScreen.myAnimations.add(this);
+        myScreen.getMyAnimations().add(this);
     }
     
     @Override
     public void endAnimation()
     {
-        myScreen.myAnimations.remove(this);
+        myScreen.getMyAnimations().remove(this);
         myAnimationFrame = 1;
         rendered = false;
         animationDirec = (int) (Math.random() * NUM_RINGOUTS) + 1;

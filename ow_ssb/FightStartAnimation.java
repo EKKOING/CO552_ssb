@@ -8,8 +8,8 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 /**
- * @author student
- *
+ * @author Nicholas Lorentzen
+ * @version 20190602
  */
 public class FightStartAnimation implements Animator
 {
@@ -18,29 +18,28 @@ public class FightStartAnimation implements Animator
     public final String BASE_DIREC = "./graphics/ingame/animations/fightstart/Layer ";
     
     /* Current Image Representation **/
-    public BufferedImage loadingScreen;
+    private BufferedImage loadingScreen;
     
     /* Animation Counter **/
-    public double myAnimationFrame;
+    private double myAnimationFrame;
     
     /** Timer Thread */
-    public Timer timer;
+    private Timer timer;
     
     /* ArrayList of Images **/
-    public ArrayList<BufferedImage> images;
+    private ArrayList<BufferedImage> images;
     
     /** Screen Created From */
-    public GameScreen myScreen;
+    private GameScreen myScreen;
     
     /** Scale */
-    public double scale;
+    private double scale;
     
     /** False if currently rendering */
-    public boolean rendered;
+    private boolean rendered;
     
     /** True when Playing Should Start */
-    
-    public boolean shouldPlay;
+    private boolean shouldPlay;
     
     /** X Location of the animation */
     private static final int TOP_L_X = -80;

@@ -8,11 +8,10 @@ import java.io.*;
 import javax.imageio.*;
 
 /**
- * Class to be able to understand multiple keystrokes and store them in an
- * ArrayList for exporting
+ * Game Screen Class for when the game is actually running
  * 
  * @author Nicholas Lorentzen
- * @version 2019/05/21
+ * @version 20190602
  */
 public class GameScreen extends JPanel
 {
@@ -20,14 +19,14 @@ public class GameScreen extends JPanel
     private static final long serialVersionUID = 3412334407377724982L;
     
     /** Keyput class for handling User Input */
-    public Keyput myKeyput;
+    private Keyput myKeyput;
     /** Players class for managing the players */
-    public Players myPlayers;
+    private Players myPlayers;
     /** Passthrough of the SmashGame class to allow reference to the gamestate */
-    public SmashGame myGame;
+    private SmashGame myGame;
     
     /** Stage */
-    public Stage myStage;
+    private Stage myStage;
     
     /** Base Directory for Images */
     public static final String BASE_DIRECTORY = "./graphics/ingame/topIcon/";
@@ -39,13 +38,13 @@ public class GameScreen extends JPanel
     private BufferedImage background;
     
     /** Animations List */
-    public ArrayList<Animator> myAnimations;
+    private ArrayList<Animator> myAnimations;
     
     /** Boolean State of Game */
-    public boolean gameStarted;
+    private boolean gameStarted;
     
     /** Scale */
-    public double scale;
+    private double scale;
     
     /**
      * Constructs a GameScreen
@@ -64,7 +63,7 @@ public class GameScreen extends JPanel
         gameStarted = false;
         myAnimations = new ArrayList<Animator>();
         myAnimations.clear();
-        scale = myGame.scale;
+        scale = myGame.getScale();
         FightStartAnimation startGameAnimation = new FightStartAnimation(this, scale);
         myAnimations.add(startGameAnimation);
         myStage = new Stage("gibraltar", this);
@@ -78,7 +77,7 @@ public class GameScreen extends JPanel
             {
                 // Create Image
                 File image = new File(BASE_DIRECTORY + fileDirectory);
-                BufferedImage tempImage = myGame.iR.resizeImage(ImageIO.read(image));
+                BufferedImage tempImage = ImageResizer.resizeImage(ImageIO.read(image), scale);
                 switch (fileDirectory)
                 {
                     case "bg.png":
@@ -234,5 +233,25 @@ public class GameScreen extends JPanel
                 }
             }
         }
+    }
+    
+    public SmashGame getMyGame()
+    {
+        return myGame;
+    }
+    
+    public void setMyGame(SmashGame myGame)
+    {
+        this.myGame = myGame;
+    }
+    
+    public ArrayList<Animator> getMyAnimations()
+    {
+        return myAnimations;
+    }
+    
+    public void setMyAnimations(ArrayList<Animator> myAnimations)
+    {
+        this.myAnimations = myAnimations;
     }
 }

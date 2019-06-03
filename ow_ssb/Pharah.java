@@ -11,13 +11,13 @@ import java.util.Timer;
  * Class for the Pharah character inherits from player
  * 
  * @author Nicholas Lorentzen
- * @version 2019/05/21
+ * @version 20190602
  */
 public class Pharah extends Player
 {
     
     /** Image to draw */
-    public BufferedImage myImage;
+    private BufferedImage myImage;
     
     /** Image Directory */
     public final String BASE_DIREC = "./graphics/characters/pharah";
@@ -55,17 +55,17 @@ public class Pharah extends Player
     @Override
     public boolean attack()
     {
-        attacking = true;
+        setAttacking(true);
         
-        if (onGround)
-        { myVector.setX(0); }
+        if (isOnGround())
+        { getMyVector().setX(0); }
         
         int newX = -PharahRocket.PHARAH_ARM_OFFSET;
-        if (facingRight)
+        if (isFacingRight())
         { newX = -newX; }
-        otherPlayers.myPlayers.add(new PharahRocket(myId * 100 + 1, (int) myPos.getX() + newX,
-            (int) (myPos.getY() - 124), otherPlayers, facingRight, enemyId));
-        canAttack = false;
+        getOtherPlayers().getMyPlayers().add(new PharahRocket(getMyId() * 100 + 1, (int) getMyPos().getX() + newX,
+            (int) (getMyPos().getY() - 124), getOtherPlayers(), isFacingRight(), getEnemyId()));
+        setCanAttack(false);
         new CooldownTracker(this, (long) attackCD, "canAttack");
         new CooldownTracker(this, (long) 150, "attacking");
         return true;
@@ -75,8 +75,8 @@ public class Pharah extends Player
     public void createDirectoryString()
     {
         super.createDirectoryString();
-        if (onGround && attacking)
-        { animationDirec = "/standingshooting"; }
+        if (isOnGround() && isAttacking())
+        { setAnimationDirec("/standingshooting"); }
     }
     
     /**
@@ -93,17 +93,17 @@ public class Pharah extends Player
     @Override
     public void jump()
     {
-        if (onGround)
+        if (isOnGround())
         {
-            myVector.setY(-30);
-            onGround = false;
-            doubleJump = false;
+            getMyVector().setY(-30);
+            setOnGround(false);
+            setDoubleJump(false);
             new CooldownTracker(this, (long) 300, "doubleJump");
         }
-        else if (doubleJump)
+        else if (isDoubleJump())
         {
-            myVector.setY(myVector.getY() - 20);
-            doubleJump = false;
+            getMyVector().setY(getMyVector().getY() - 20);
+            setDoubleJump(false);
             new CooldownTracker(this, (long) 150, "doubleJump");
         }
     }

@@ -2,7 +2,7 @@
  * Class to hold a set of XY Coordinates
  * 
  * @author Nicholas Lorentzen
- * @version 2019/03/25
+ * @version 20190325
  */
 public class Coord
 {

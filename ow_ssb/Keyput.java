@@ -11,19 +11,19 @@ import java.util.TimerTask;
  * ArrayList for exporting
  * 
  * @author Nicholas Lorentzen
- * @version 2019/05/21
+ * @version 20190521
  */
 public class Keyput implements KeyListener
 {
    
    /** List of keys pressed */
-   public ArrayList<Key> dictionary;
+   private ArrayList<Key> dictionary;
    /** Temporary key used in multimethod operations */
-   public Key keyTemp;
+   private Key keyTemp;
    /** SmashGame passthrough for gamestate */
    private SmashGame myGame;
    /** Index of the last key used */
-   public int lastKeyIdx;
+   private int lastKeyIdx;
    
    /** Delay between adding time to each keys press */
    private static final long INCREMENT = 10;
@@ -90,7 +90,7 @@ public class Keyput implements KeyListener
       if (code == KeyEvent.VK_ESCAPE)
       {
          myGame.screenSwitcher("Menu");
-         myGame.myTitleScreen.run();
+         myGame.getMyTitleScreen().run();
       }
       
       Key temp = getKey(code);

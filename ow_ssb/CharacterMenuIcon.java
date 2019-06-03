@@ -6,8 +6,8 @@ import java.awt.Graphics2D;
 import java.awt.event.MouseEvent;
 
 /**
- * @author student
- *
+ * @author Nicholas Lorentzen
+ * @version 20190602
  */
 public class CharacterMenuIcon
 {
@@ -21,17 +21,17 @@ public class CharacterMenuIcon
 	public static final double YGAP = 40;
 	public static final double XGAP = 20;
 	
-	public BufferedImage myIcon;
+	private BufferedImage myIcon;
 	
-	public BufferedImage myPreview;
+	private BufferedImage myPreview;
 	
-	public double xPos;
+	private double xPos;
 	
-	public double yPos;
+	private double yPos;
 	
-	public double scale;
+	private double scale;
 	
-	public String myName;
+	private String myName;
 	
 	/**
 	 * 
@@ -94,6 +94,16 @@ public class CharacterMenuIcon
 	public BufferedImage getPreview()
 	{
 		return myPreview;
+	}
+	
+	public String getMyName()
+	{
+		return myName;
+	}
+	
+	public void setMyName(String myName)
+	{
+		this.myName = myName;
 	}
 	
 }

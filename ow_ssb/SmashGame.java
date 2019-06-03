@@ -5,7 +5,7 @@ import javax.swing.*;
  * Class to run the Super Smash Bros Game
  * 
  * @author Nicholas Lorentzen
- * @version 2019/05/04
+ * @version 20190602
  */
 public class SmashGame
 {
@@ -28,40 +28,37 @@ public class SmashGame
    public static final int NUM_LIVES = 3;
    
    /** JFrame that holds the entirety of the game */
-   public JFrame myApp;
+   private JFrame myApp;
    
    /** Screen for when the game is running */
-   public GameScreen myGameScreen;
+   private GameScreen myGameScreen;
    
    /** TitleScreen */
-   public TitleScreen myTitleScreen;
+   private TitleScreen myTitleScreen;
    
    /** Game End Screen */
-   public WinScreen myWinScreen;
+   private WinScreen myWinScreen;
    
    /** App panel */
    private JPanel myAppPanel;
    
    /** Stage to Play */
-   public int stage;
+   private int stage;
    
    /** Player 1 Character */
-   public int player1;
+   private int player1;
    
    /** Player 2 Character */
-   public int player2;
+   private int player2;
    
    /** Master pause state */
-   public boolean isPaused;
-   
-   /** Image Resizer */
-   public ImageResizer iR;
+   private boolean isPaused;
    
    /** Scale */
-   public double scale;
+   private double scale;
    
    /** Monitor Running On */
-   public GraphicsDevice gd;
+   private GraphicsDevice gd;
    
    public static void main(String[] args)
    {
@@ -113,9 +110,8 @@ public class SmashGame
    {
       isPaused = false;
       setupFrame();
-      iR = new ImageResizer(this);
       scale = getScale();
-      scale = 0.85; // Manually set Scale
+      //scale = 0.85; // Manually set Scale
       myTitleScreen.run();
    }
    
@@ -170,5 +166,70 @@ public class SmashGame
    {
       CardLayout layout = (CardLayout) myAppPanel.getLayout();
       layout.show(myAppPanel, screenName);
+   }
+   
+   public GameScreen getMyGameScreen()
+   {
+      return myGameScreen;
+   }
+   
+   public void setMyGameScreen(GameScreen myGameScreen)
+   {
+      this.myGameScreen = myGameScreen;
+   }
+   
+   public TitleScreen getMyTitleScreen()
+   {
+      return myTitleScreen;
+   }
+   
+   public void setMyTitleScreen(TitleScreen myTitleScreen)
+   {
+      this.myTitleScreen = myTitleScreen;
+   }
+   
+   public WinScreen getMyWinScreen()
+   {
+      return myWinScreen;
+   }
+   
+   public void setMyWinScreen(WinScreen myWinScreen)
+   {
+      this.myWinScreen = myWinScreen;
+   }
+   
+   public int getStage()
+   {
+      return stage;
+   }
+   
+   public void setStage(int stage)
+   {
+      this.stage = stage;
+   }
+   
+   public int getPlayer1()
+   {
+      return player1;
+   }
+   
+   public void setPlayer1(int player1)
+   {
+      this.player1 = player1;
+   }
+   
+   public int getPlayer2()
+   {
+      return player2;
+   }
+   
+   public void setPlayer2(int player2)
+   {
+      this.player2 = player2;
+   }
+   
+   public void setScale(double scale)
+   {
+      this.scale = scale;
    }
 }

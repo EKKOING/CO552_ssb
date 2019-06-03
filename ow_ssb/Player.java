@@ -12,44 +12,44 @@ import java.util.TimerTask;
  * Class from which all characters inherit properties from
  * 
  * @author Nicholas Lorentzen
- * @version 2019/05/21
+ * @version 20190602
  *
  */
 public class Player
 {
     
     /** Coord object that holds the postion of the player */
-    public Coord myPos;
+    private Coord myPos;
     
     /** Velocity vector for physics based movement system */
-    public Coord myVector;
+    private Coord myVector;
     
     /* Id number to identify which player this represents **/
-    public int myId;
+    private int myId;
     
     /* Id number of opponent **/
-    public int enemyId;
+    private int enemyId;
     
     /* Int to hold the health stat **/
-    public double healthAmt;
+    private double healthAmt;
     /* Int to hold the damage done stat **/
-    public int dmgDone;
+    private int dmgDone;
     /* Int to hold the damage taken stat **/
-    public int dmgTaken;
+    private int dmgTaken;
     
     /* Image Representation **/
-    public BufferedImage myImage;
+    private BufferedImage myImage;
     
     /** Thread Manager for Rendering */
-    public Timer timer;
+    private Timer timer;
     
     /* Key Bindings **/
-    public int moveLeft;
-    public int moveRight;
-    public int moveAttack;
-    public int moveSpecial;
-    public int moveJump;
-    public int moveDown;
+    private int moveLeft;
+    private int moveRight;
+    private int moveAttack;
+    private int moveSpecial;
+    private int moveJump;
+    private int moveDown;
     
     /* Base Directory of Images **/
     public final String BASE_DIREC = "./graphics/characters/";
@@ -58,28 +58,28 @@ public class Player
     public final String BANNER_DIREC = "./graphics/ingame/banner/";
     
     /* ArrayList of Images **/
-    public ArrayList<BufferedImage> images;
+    private ArrayList<BufferedImage> images;
     
     /** Directory for direction facing */
-    public String facingDirec;
+    private String facingDirec;
     
     /** Directory for animation */
-    public String animationDirec;
+    private String animationDirec;
     
     /** Directory of previous animation */
-    public String prevDirec;
+    private String prevDirec;
     
     /** Animation Frame Number */
-    public double myAnimationFrame;
+    private double myAnimationFrame;
     
     /** Direction currently facing */
-    public boolean facingRight;
+    private boolean facingRight;
     
     /** On the ground or not */
-    public boolean onGround;
+    private boolean onGround;
     
     /** Has the double jump available */
-    public boolean doubleJump;
+    private boolean doubleJump;
     
     // All Variable Below Should be Overridden by any Child Classes
     /** Default Height and Width */
@@ -87,10 +87,10 @@ public class Player
     public static final int MY_WIDTH = 166;
     
     /* Cooldowns for moves **/
-    public boolean canWalk;
+    private boolean canWalk;
     public static final long walkCD = 10;
-    public boolean canAttack;
-    public boolean attacking;
+    private boolean canAttack;
+    private boolean attacking;
     public static final long attackCD = 500;
     public static final long respawnCD = 5000;
     
@@ -98,13 +98,13 @@ public class Player
     public static final int MAX_WALKV = 80;
     
     /** Boolean Dead State */
-    public boolean dead;
+    private boolean dead;
     
     /** Boolean Invincibilty */
-    public boolean invincible;
+    private boolean invincible;
     
     /* Passthrough of Players class to be able to interact with others **/
-    public Players otherPlayers;
+    private Players otherPlayers;
     
     /* Int to hold the default health to start with **/
     public static final double STARTHEALTH = 100;
@@ -120,7 +120,7 @@ public class Player
     private RingOutExplosion ringOutDown;
     
     /* Image Resizer **/
-    public double scale;
+    private double scale;
     
     /**
      * @param playerNum Id number to assign the player (1 or 2)
@@ -150,7 +150,7 @@ public class Player
         prevDirec = "";
         setKeybindings();
         // System.out.print("Player of type ");
-        scale = otherPlayers.myGame.scale;
+        scale = otherPlayers.getMyGame().getScale();
         livesLeft = SmashGame.NUM_LIVES;
     }
     
@@ -218,9 +218,9 @@ public class Player
         
         if (myId == 1 || myId == 2)
         {
-            ringOutLeft = new RingOutExplosion(otherPlayers.myGame.myGameScreen, scale, "left");
-            ringOutRight = new RingOutExplosion(otherPlayers.myGame.myGameScreen, scale, "right");
-            ringOutDown = new RingOutExplosion(otherPlayers.myGame.myGameScreen, scale, "down");
+            ringOutLeft = new RingOutExplosion(otherPlayers.getMyGame().getMyGameScreen(), scale, "left");
+            ringOutRight = new RingOutExplosion(otherPlayers.getMyGame().getMyGameScreen(), scale, "right");
+            ringOutDown = new RingOutExplosion(otherPlayers.getMyGame().getMyGameScreen(), scale, "down");
         }
     }
     
@@ -775,5 +775,125 @@ public class Player
             images = temp;
             timer.cancel();
         }
+    }
+    
+    public Coord getMyPos()
+    {
+        return myPos;
+    }
+    
+    public void setMyPos(Coord myPos)
+    {
+        this.myPos = myPos;
+    }
+    
+    public Coord getMyVector()
+    {
+        return myVector;
+    }
+    
+    public void setMyVector(Coord myVector)
+    {
+        this.myVector = myVector;
+    }
+    
+    public int getMyId()
+    {
+        return myId;
+    }
+    
+    public void setMyId(int myId)
+    {
+        this.myId = myId;
+    }
+    
+    public int getEnemyId()
+    {
+        return enemyId;
+    }
+    
+    public void setEnemyId(int enemyId)
+    {
+        this.enemyId = enemyId;
+    }
+    
+    public String getAnimationDirec()
+    {
+        return animationDirec;
+    }
+    
+    public void setAnimationDirec(String animationDirec)
+    {
+        this.animationDirec = animationDirec;
+    }
+    
+    public boolean isFacingRight()
+    {
+        return facingRight;
+    }
+    
+    public void setFacingRight(boolean facingRight)
+    {
+        this.facingRight = facingRight;
+    }
+    
+    public boolean isOnGround()
+    {
+        return onGround;
+    }
+    
+    public void setOnGround(boolean onGround)
+    {
+        this.onGround = onGround;
+    }
+    
+    public boolean isDoubleJump()
+    {
+        return doubleJump;
+    }
+    
+    public void setDoubleJump(boolean doubleJump)
+    {
+        this.doubleJump = doubleJump;
+    }
+    
+    public boolean isCanWalk()
+    {
+        return canWalk;
+    }
+    
+    public void setCanWalk(boolean canWalk)
+    {
+        this.canWalk = canWalk;
+    }
+    
+    public boolean isCanAttack()
+    {
+        return canAttack;
+    }
+    
+    public void setCanAttack(boolean canAttack)
+    {
+        this.canAttack = canAttack;
+    }
+    
+    public boolean isAttacking()
+    {
+        return attacking;
+    }
+    
+    public void setAttacking(boolean attacking)
+    {
+        this.attacking = attacking;
+    }
+    
+    public Players getOtherPlayers()
+    {
+        return otherPlayers;
+    }
+    
+    public void setOtherPlayers(Players otherPlayers)
+    {
+        this.otherPlayers = otherPlayers;
     }
 }

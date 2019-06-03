@@ -12,22 +12,22 @@ import java.util.Timer;
 import javax.imageio.*;
 
 /**
- * @author student
- *
+ * @author Nicholas Lorentzen
+ * @version 20190602
  */
 public class TitleScreen extends JPanel
 {
 	
 	/** Game Passthrough */
-	public SmashGame myGame;
+	private SmashGame myGame;
 	
-	/* Background Layer **/
+	/** Background Layer */
 	private BufferedImage background;
 	
-	/* Static Foreground Layer **/
+	/** Static Foreground Layer */
 	private BufferedImage staticForeground;
 	
-	/* Dynamic Character Preview **/
+	/** Dynamic Character Preview */
 	private BufferedImage characterPreview;
 	
 	/** Character Preview Placeholder */
@@ -37,10 +37,10 @@ public class TitleScreen extends JPanel
 	private BufferedImage currentPicker;
 	
 	/** Boolean State of Main Menu */
-	public boolean onMainMenu;
+	private boolean onMainMenu;
 	
 	/** Boolean State of Character Menu */
-	public boolean onCharacterMenu;
+	private boolean onCharacterMenu;
 	
 	/** Boolean State of Instruction Menu */
 	private boolean onInstructionMenu;
@@ -62,13 +62,13 @@ public class TitleScreen extends JPanel
 	
 	private boolean isPlayer2;
 	
-	public double scale;
+	private double scale;
 	
-	public Timer myTimer;
+	private Timer myTimer;
 	
-	public boolean canClick;
+	private boolean canClick;
 	
-	public ArrayList<CharacterMenuIcon> myIcons;
+	private ArrayList<CharacterMenuIcon> myIcons;
 	
 	public static final double ICON_X = 56.00;
 	
@@ -105,7 +105,7 @@ public class TitleScreen extends JPanel
 	
 	public void run()
 	{
-		scale = myGame.scale;
+		scale = myGame.getScale();
 		this.requestFocusInWindow(true);
 		mainMenu();
 		canClick = true;
@@ -128,7 +128,7 @@ public class TitleScreen extends JPanel
 		try
 		{
 			File image = new File(MAIN_MENU);
-			background = myGame.iR.resizeImage(ImageIO.read(image));
+			background = ImageResizer.resizeImage(ImageIO.read(image), scale);
 		}
 		catch (IOException ioe)
 		{
@@ -142,7 +142,7 @@ public class TitleScreen extends JPanel
 		try
 		{
 			File image = new File(CHARACTER_MENU + "StaticForeground.png");
-			staticForeground = myGame.iR.resizeImage(ImageIO.read(image));
+			staticForeground = ImageResizer.resizeImage(ImageIO.read(image), scale);
 		}
 		catch (IOException e)
 		{
@@ -152,7 +152,7 @@ public class TitleScreen extends JPanel
 		try
 		{
 			File image = new File(CHARACTER_MENU + "noCharacterPreviewed.png");
-			noCharacterPreviewed = myGame.iR.resizeImage(ImageIO.read(image));
+			noCharacterPreviewed = ImageResizer.resizeImage(ImageIO.read(image), scale);
 		}
 		catch (IOException e)
 		{
@@ -164,7 +164,7 @@ public class TitleScreen extends JPanel
 			try
 			{
 				File image = new File(CHARACTER_MENU + "1.png");
-				currentPicker = myGame.iR.resizeImage(ImageIO.read(image));
+				currentPicker = ImageResizer.resizeImage(ImageIO.read(image), scale);
 			}
 			catch (IOException e)
 			{
@@ -176,7 +176,7 @@ public class TitleScreen extends JPanel
 			try
 			{
 				File image = new File(CHARACTER_MENU + "2.png");
-				currentPicker = myGame.iR.resizeImage(ImageIO.read(image));
+				currentPicker = ImageResizer.resizeImage(ImageIO.read(image), scale);
 			}
 			catch (IOException e)
 			{
@@ -209,7 +209,7 @@ public class TitleScreen extends JPanel
 		try
 		{
 			File image = new File(INSTRUCTION_MENU);
-			background = myGame.iR.resizeImage(ImageIO.read(image));
+			background = ImageResizer.resizeImage(ImageIO.read(image), scale);
 		}
 		catch (IOException ioe)
 		{
@@ -227,7 +227,7 @@ public class TitleScreen extends JPanel
 				if (currentIcon.contains(e))
 				{
 					int currentCharacter = 0;
-					switch (currentIcon.myName)
+					switch (currentIcon.getMyName())
 					{
 						case "pharah":
 							currentCharacter = 1;
@@ -238,17 +238,17 @@ public class TitleScreen extends JPanel
 					}
 					if (isPlayer2 && currentCharacter != 0)
 					{
-						myGame.player2 = currentCharacter;
+						myGame.setPlayer2(currentCharacter);
 						isPlayer2 = false;
 						this.setVisible(false);
 						myGame.screenSwitcher("Game");
-						myGame.myGameScreen.run();
+						myGame.getMyGameScreen().run();
 						onCharacterMenu = false;
 					}
 					
 					if (isPlayer1 && currentCharacter != 0)
 					{
-						myGame.player1 = currentCharacter;
+						myGame.setPlayer1(currentCharacter);
 						isPlayer1 = false;
 						isPlayer2 = true;
 						canClick = false;
@@ -265,7 +265,7 @@ public class TitleScreen extends JPanel
 	{
 		int posY = e.getY();
 		int posX = e.getX();
-		double scale = myGame.scale;
+		double scale = myGame.getScale();
 		if (posX > scale * 153 && posX < scale * 258)
 		{
 			if (posY > scale * 326 && posY < scale * 381)

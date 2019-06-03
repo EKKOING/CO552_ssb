@@ -6,8 +6,8 @@ import java.io.File;
 import java.util.ArrayList;
 
 /**
- * @author student
- *
+ * @author Nicholas Lorentzen
+ * @version 20190602
  */
 public class Stage
 {
@@ -28,22 +28,22 @@ public class Stage
 	public final String BASE_DIREC = "./graphics/stages/";
 	
 	/* Current Image Representation **/
-	public BufferedImage myImage;
+	private BufferedImage myImage;
 	
 	/* Animation Counter **/
-	public int myAnimationFrame;
+	private int myAnimationFrame;
 	
 	/* String to Fetch Image **/
-	public String animationDirec;
+	private String animationDirec;
 	
 	/* ArrayList of Images **/
-	public ArrayList<BufferedImage> images;
+	private ArrayList<BufferedImage> images;
 	
 	/** Screen Created From */
-	public GameScreen myScreen;
+	private GameScreen myScreen;
 	
 	/** Scale */
-	public double scale;
+	private double scale;
 	
 	/**
 	 * 
@@ -53,7 +53,7 @@ public class Stage
 		myAnimationFrame = 1;
 		animationDirec = name;
 		myScreen = screen;
-		scale = myScreen.myGame.scale;
+		scale = myScreen.getMyGame().getScale();
 		
 		images = new ArrayList<BufferedImage>();
 		
@@ -70,7 +70,7 @@ public class Stage
 				
 				// Create Image
 				File image = new File(fileDirectory);
-				myImage = myScreen.myGame.iR.resizeImage(ImageIO.read(image));
+				myImage = ImageResizer.resizeImage(ImageIO.read(image), scale);
 				images.add(myImage);
 			}
 			catch (IOException ioe)

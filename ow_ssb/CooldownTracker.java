@@ -6,17 +6,17 @@ import java.util.TimerTask;
  * period
  * 
  * @author Nicholas Lorentzen
- * @version 05/07/2019
+ * @version 20190507
  */
 public class CooldownTracker
 {
     
     /** Timer thread */
-    public Timer timer;
+    private Timer timer;
     /** Name of CD being tracked */
-    public String whichCD;
+    private String whichCD;
     /** Player whom the CD belongs to */
-    public Player myPlayer;
+    private Player myPlayer;
     
     /**
      * Constructs a new CD activator
@@ -44,15 +44,15 @@ public class CooldownTracker
             switch (whichCD)
             {
                 case "canWalk":
-                    myPlayer.canWalk = true;
+                    myPlayer.setCanWalk(true);
                     break;
                 
                 case "canAttack":
-                    myPlayer.canAttack = true;
+                    myPlayer.setCanAttack(true);
                     break;
                 
                 case "doubleJump":
-                    myPlayer.doubleJump = true;
+                    myPlayer.setDoubleJump(true);
                     break;
                 
                 case "respawn":
@@ -60,7 +60,7 @@ public class CooldownTracker
                     break;
                 
                 case "attacking":
-                    myPlayer.attacking = false;
+                    myPlayer.setAttacking(false);
                     break;
                 
                 default:

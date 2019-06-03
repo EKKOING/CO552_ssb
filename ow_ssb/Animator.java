@@ -1,8 +1,8 @@
 import java.awt.Graphics2D;
 
 /**
- * @author student
- *
+ * @author Nicholas Lorentzen
+ * @version 20190602
  */
 public interface Animator
 {

@@ -7,8 +7,8 @@ import javax.imageio.*;
 import java.util.ArrayList;
 
 /**
- * @author student
- *
+ * @author Nicholas Lorentzen
+ * @version 20190529
  */
 public class PharahRocket extends Player
 {
@@ -34,15 +34,15 @@ public class PharahRocket extends Player
 	public PharahRocket(int myId, int xStart, int yStart, Players list, boolean facingR, int enemy)
 	{
 		super(myId, xStart, yStart, list);
-		enemyId = enemy;
-		facingRight = facingR;
-		if (facingRight)
+		setEnemyId(enemy);
+		setFacingRight(facingR);
+		if (isFacingRight())
 		{
-			myVector.setX(SPEED);
+			getMyVector().setX(SPEED);
 		}
 		else
 		{
-			myVector.setX(-SPEED);
+			getMyVector().setX(-SPEED);
 		}
 		hitSomething = false;
 		// System.out.print("Pharah Rocket Created");
@@ -56,16 +56,16 @@ public class PharahRocket extends Player
 	@Override
 	public boolean attack()
 	{
-		Player enemy = otherPlayers.findPlayer(enemyId);
+		Player enemy = getOtherPlayers().findPlayer(getEnemyId());
 		Coord enemyPos = enemy.getPos();
-		Coord distToEnemy = myPos.checkDistance(enemyPos);
+		Coord distToEnemy = getMyPos().checkDistance(enemyPos);
 		if (distToEnemy.getX() < (enemy.getWidth() / 2) && distToEnemy.getX() > (-enemy.getWidth() / 2))
 		{
-			if (distToEnemy.getY() < enemy.getHeight() && distToEnemy.getY() > 0 && myPos.getY() < enemyPos.getY())
+			if (distToEnemy.getY() < enemy.getHeight() && distToEnemy.getY() > 0 && getMyPos().getY() < enemyPos.getY())
 			{
 				
 				// Knockback
-				if (facingRight)
+				if (isFacingRight())
 				{
 					enemy.knockBackX(30 + Math.random() * 7);
 				}
@@ -78,7 +78,7 @@ public class PharahRocket extends Player
 				enemy.getDamaged(20 + (Math.random() * 20 - 10));
 				
 				// Stop Duplication of Attacks
-				canAttack = false;
+				setCanAttack(false);
 				hitSomething = true;
 				explode();
 				return true;
@@ -90,14 +90,14 @@ public class PharahRocket extends Player
 	@Override
 	public void checkBoundaries()
 	{
-		if (myPos.getX() < 0 || myPos.getX() > SmashGame.APP_WIDTH)
+		if (getMyPos().getX() < 0 || getMyPos().getX() > SmashGame.APP_WIDTH)
 		{ kill("outOfBoundaries"); }
 	}
 	
 	@Override
 	public void kill(String type)
 	{
-		otherPlayers.removeObject(this);
+		getOtherPlayers().removeObject(this);
 	}
 	
 	public void explode()
@@ -116,9 +116,9 @@ public class PharahRocket extends Player
 		if (!(hitSomething))
 		{
 			checkBoundaries();
-			if (canAttack)
+			if (isCanAttack())
 			{ attack(); }
-			myPos.setX(myPos.getX() + myVector.getX() / 10);
+			getMyPos().setX(getMyPos().getX() + getMyVector().getX() / 10);
 		}
 	}
 	
@@ -133,9 +133,9 @@ public class PharahRocket extends Player
 		if (!(hitSomething))
 		{
 			// TODO: Place Images
-			Rectangle2D me = new Rectangle2D.Double(otherPlayers.myGame.scale * (myPos.getX() - 10),
-				otherPlayers.myGame.scale * (myPos.getY() - 2.5), otherPlayers.myGame.scale * 20,
-				otherPlayers.myGame.scale * 10);
+			Rectangle2D me = new Rectangle2D.Double(getOtherPlayers().getMyGame().getScale() * (getMyPos().getX() - 10),
+				getOtherPlayers().getMyGame().getScale() * (getMyPos().getY() - 2.5), getOtherPlayers().getMyGame().getScale() * 20,
+				getOtherPlayers().getMyGame().getScale() * 10);
 			g2.setColor(Color.YELLOW);
 			g2.fill(me);
 		}

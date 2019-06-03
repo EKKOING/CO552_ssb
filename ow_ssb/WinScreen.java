@@ -12,14 +12,14 @@ import java.util.Timer;
 import javax.imageio.*;
 
 /**
- * @author student
- *
+ * @author Nicholas Lorentzen
+ * @version 20190602
  */
 public class WinScreen extends JPanel
 {
 	
 	/** Animation Path */
-	public final String BASE_DIREC = "./graphics/endgame/";
+	private final String BASE_DIREC = "./graphics/endgame/";
 	
 	/** Iteration Amount for Animatioon */
 	private static final double FRAME_GAP = 0.2;
@@ -50,13 +50,13 @@ public class WinScreen extends JPanel
 	private double scale;
 	
 	/** False if currently rendering */
-	public boolean rendered;
+	private boolean rendered;
 	
 	/** True when Playing Should Start */
-	public boolean shouldPlay;
+	private boolean shouldPlay;
 	
 	/* ArrayList of Images **/
-	public ArrayList<BufferedImage> images;
+	private ArrayList<BufferedImage> images;
 	
 	/** Loading Screen */
 	private BufferedImage loadingScreen;
@@ -96,7 +96,7 @@ public class WinScreen extends JPanel
 		characterName = winner.getClass().getSimpleName().toLowerCase();
 		myAnimationFrame = 0;
 		// System.out.println(characterName);
-		scale = myGame.scale;
+		scale = myGame.getScale();
 		this.requestFocusInWindow(true);
 		highlightNum = (int) (Math.random() * NUM_HIGHLIGHTS) + 1;
 		try
@@ -119,7 +119,7 @@ public class WinScreen extends JPanel
 		
 		try
 		{
-			File image = new File(BASE_DIREC + winner.enemyId + ".png");
+			File image = new File(BASE_DIREC + winner.getEnemyId() + ".png");
 			playerNum = ImageResizer.resizeImage(ImageIO.read(image), scale * BASE_SCALE);
 		}
 		catch (IOException ioe)
@@ -239,7 +239,7 @@ public class WinScreen extends JPanel
 			if (animationDone)
 			{
 				myGame.screenSwitcher("Menu");
-				myGame.myTitleScreen.run();
+				myGame.getMyTitleScreen().run();
 			}
 		}
 		
