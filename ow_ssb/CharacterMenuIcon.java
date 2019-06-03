@@ -7,6 +7,7 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 
 /**
+ * Icons For A Character Menu
  * @author Nicholas Lorentzen
  * @version 20190602
  */

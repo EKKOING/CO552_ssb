@@ -9,6 +9,7 @@ import java.util.TimerTask;
 import javax.imageio.ImageIO;
 
 /**
+ * Animation for Brawl Starts
  * @author Nicholas Lorentzen
  * @version 20190602
  */

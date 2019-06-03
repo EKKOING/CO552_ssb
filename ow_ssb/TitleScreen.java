@@ -15,6 +15,7 @@ import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 
 /**
+ * Title Screen Class For Opening Menus
  * @author Nicholas Lorentzen
  * @version 20190602
  */

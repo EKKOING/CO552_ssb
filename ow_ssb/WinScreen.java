@@ -15,6 +15,7 @@ import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 
 /**
+ * Win Screen To Manage Post-Game Events
  * @author Nicholas Lorentzen
  * @version 20190602
  */

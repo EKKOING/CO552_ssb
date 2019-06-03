@@ -3,6 +3,7 @@ import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
 
 /**
+ * Class to Handle Resizing of Images
  * @author Nicholas Lorentzen
  * @version 20190602
  */

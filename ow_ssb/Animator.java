@@ -1,6 +1,7 @@
 import java.awt.Graphics2D;
 
 /**
+ * Interface for Animations
  * @author Nicholas Lorentzen
  * @version 20190602
  */

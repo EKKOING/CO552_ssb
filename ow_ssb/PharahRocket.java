@@ -4,6 +4,7 @@ import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 
 /**
+ * Player of Type Pharah Rocket As A Projectile Attack
  * @author Nicholas Lorentzen
  * @version 20190529
  */

@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import javax.imageio.ImageIO;
 
 /**
+ * Stage Class For Managing A Brawl Stage
  * @author Nicholas Lorentzen
  * @version 20190602
  */
